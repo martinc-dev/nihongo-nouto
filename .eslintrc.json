@@ -52,7 +52,7 @@
         "before": true
       }
     ],
-    "indent": ["warn", 2],
+    // "indent": ["warn", 2],
     "jsx-quotes": ["warn", "prefer-single"],
     "key-spacing": [
       "warn",
@@ -123,7 +123,7 @@
     "no-await-in-loop": 2,
     "no-bitwise": 2,
     "no-case-declarations": 2,
-    "no-console": 2,
+    "no-console": 1,
     "no-const-assign": 2,
     "no-eq-null": 2,
     "no-eval": 2,
