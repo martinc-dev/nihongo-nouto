@@ -1,6 +1,6 @@
 /* eslint-disable new-cap, no-console */
 const Sequelize = require('sequelize')
-const env = require('../env')
+const env = require('../../env')
 
 class DBManage {
   constructor() {
