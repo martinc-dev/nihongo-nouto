@@ -2,17 +2,7 @@
 class BaseService {
   model = null
 
-  deepCopyResult(result) {
-    try {
-      return JSON.parse(JSON.stringify(result))
-    } catch (error) {
-      console.error(error)
-
-      return null
-    }
-  }
-
-  async queryAsync({ conditionKV = null, orderBy = 'id', isAsc = false, limit = 0, page = 0 }) {
+  async queryAsync({ conditionKV = null, orderBy = 'id', isAsc = false, limit = 0, page = 0 } = {}) {
     try {
       const pagination =
         limit >= 1 && page >= 1
@@ -23,9 +13,15 @@ class BaseService {
           : {}
       let result = null
 
-      result = conditionKV ? await this.model.findAndCountAll({ where: conditionKV, order: [[orderBy, isAsc ? 'ASC' : 'DESC']], ...pagination }) : await this.model.findAndCountAll()
+      result = conditionKV
+        ? await this.model.findAndCountAll({
+            where: conditionKV,
+            order: [[orderBy, isAsc ? 'ASC' : 'DESC']],
+            ...pagination
+          })
+        : await this.model.findAndCountAll()
 
-      return this.deepCopyResult(result)
+      return result
     } catch (error) {
       console.error(error)
 
@@ -33,9 +29,11 @@ class BaseService {
     }
   }
 
-  async createAsync({ fieldKV }) {
+  async createAsync({ fieldKV, editableFields = null }) {
     try {
-      return this.deepCopyResult(this.model.create(fieldKV))
+      if (editableFields?.length) return this.model.create(fieldKV, { fields: editableFields })
+
+      return this.model.create(fieldKV)
     } catch (error) {
       console.error(error)
 
@@ -43,9 +41,16 @@ class BaseService {
     }
   }
 
-  async updateAsync({ fieldKV, conditionKV }) {
+  async updateAsync({ fieldKV, conditionKV, editableFields = null }) {
     try {
-      return this.deepCopyResult(this.model.update(fieldKV, { where: conditionKV }))
+      if (editableFields?.length) {
+        return this.model.update(fieldKV, {
+          where: conditionKV,
+          fields: editableFields.filter(t => Object.keys(fieldKV).includes(t))
+        })
+      }
+
+      return this.model.update(fieldKV, { where: conditionKV })
     } catch (error) {
       console.error(error)
 
@@ -55,7 +60,7 @@ class BaseService {
 
   async removeAsync({ conditionKV }) {
     try {
-      return this.deepCopyResult(this.model.destroy({ where: conditionKV }))
+      return this.model.destroy({ where: conditionKV })
     } catch (error) {
       console.error(error)
 
