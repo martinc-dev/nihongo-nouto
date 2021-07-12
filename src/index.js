@@ -1,11 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './style/setup/index.scss'
-import App from './modules/common/App'
+import { ConnectedRouter } from 'connected-react-router'
+
+import 'src/style/index.scss'
+import { history } from 'src/store/store'
+import StoreProvider from 'src/store/StoreProvider'
+import App from 'src/components/common/App'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <StoreProvider>
+    <React.StrictMode>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </React.StrictMode>
+  </StoreProvider>,
   document.getElementById('root')
 )

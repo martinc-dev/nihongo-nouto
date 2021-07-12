@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 // Base on the work of Pomax's node-jp-conjugations
 // Github: https://github.com/Pomax/node-jp-conjugations
 

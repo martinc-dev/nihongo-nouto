@@ -1,0 +1,20 @@
+export const colors = {
+  white: '#fff',
+  black: '#000',
+  sakuraPink: '#d9a3bc',
+  ichigoRed: '#f23847',
+  mikanOrange: '#f28705',
+  yuzuYellow: '#ffc800',
+  shinmeGreen: '#d2d904',
+  shibafuGreen: '#a9bf04',
+  oliveGreen: '#7c8c03',
+  kooriBlue: '#79baf2',
+  soraBlue: '#4393d9',
+  toukaPurple: '#c9528c',
+  kamiGray: '#f2f2f2',
+  kumoriGray: '#d9d9d9',
+  arashiGray: '#bfbfbf',
+  iwaGray: '#a6a6a6',
+  haiGray: '#8c8c8c',
+  transparent: 'transparent'
+}
