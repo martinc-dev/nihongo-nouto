@@ -3,7 +3,7 @@ const { logError } = require('../utils/logger')
 const { NounTagService } = require('../services/NounTagService')
 const { NounTagRelService } = require('../services/NounTagRelService')
 const { NounService } = require('../services/NounService')
-const { AdvService } = require('../services/AdvService')
+const { OtherService } = require('../services/OtherService')
 const { AdjService } = require('../services/AdjService')
 const { VerbService } = require('../services/VerbService')
 const { BaseController } = require('./BaseController')
@@ -36,8 +36,8 @@ class NounController extends BaseController {
   }
 }
 
-class AdvController extends BaseController {
-  service = new AdvService()
+class OtherController extends BaseController {
+  service = new OtherService()
   editableFields = ['word', 'romaji', 'sense']
 }
 
@@ -67,7 +67,7 @@ module.exports = {
   NounTagController,
   NounTagRelController,
   NounController,
-  AdvController,
+  OtherController,
   AdjController,
   VerbController
 }

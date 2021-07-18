@@ -86,8 +86,8 @@ const NounTagRel = connection.define(
     underscored: true
   }
 )
-const Adv = connection.define(
-  'adv',
+const Other = connection.define(
+  'other',
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -226,7 +226,7 @@ module.exports = {
   NounTag,
   Noun,
   NounTagRel,
-  Adv,
+  Other,
   Adj,
   Verb
 }

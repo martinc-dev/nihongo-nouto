@@ -136,6 +136,7 @@ module.exports = {
     'no-tabs': 2,
     'no-template-curly-in-string': 2,
     'no-this-before-super': 2,
+    'no-throw-literal': 0,
     'no-trailing-spaces': [
       'error',
       {

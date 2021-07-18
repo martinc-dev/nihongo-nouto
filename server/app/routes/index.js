@@ -3,7 +3,7 @@ const {
   NounTagController,
   NounTagRelController,
   NounController,
-  AdvController,
+  OtherController,
   AdjController,
   VerbController
 } = require('../controllers')
@@ -25,7 +25,7 @@ const router = Router()
 router.use('/noun_tag', registerCRUDEndpoints(new NounTagController()))
 router.use('/noun', registerCRUDEndpoints(new NounController()))
 router.use('/noun_tag_rel', registerCRUDEndpoints(new NounTagRelController()))
-router.use('/adv', registerCRUDEndpoints(new AdvController()))
+router.use('/other', registerCRUDEndpoints(new OtherController()))
 router.use('/adj', registerCRUDEndpoints(new AdjController()))
 router.use('/verb', registerCRUDEndpoints(new VerbController()))
 
