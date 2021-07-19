@@ -4,11 +4,13 @@ const { NotFoundError, InternalServiceError } = require('../constants/exceptions
 class BaseController {
   service = null
   editableFields = null
+  queryOption = null
 
   getOne = async (req, res) => {
     try {
       const { id } = req.params
-      const result = await this.service.queryAsync({ conditionKV: { id } })
+      const option = this.queryOption ? { options: this.queryOption } : null
+      const result = await this.service.queryAsync({ conditionKV: { id }, ...option })
 
       if (!result?.count) throw new NotFoundError({ message: 'No record found' })
 
@@ -25,8 +27,9 @@ class BaseController {
       const limit = Math.abs(parseInt(req.query?.limit ?? 0))
       const page = Math.abs(parseInt(req.query?.page ?? 0))
       const isAsc = (req.query?.asc ?? 'false').toLowerCase() === 'true'
+      const option = this.queryOption ? { options: this.queryOption } : null
 
-      const result = await this.service.queryAsync({ limit, page, isAsc })
+      const result = await this.service.queryAsync({ limit, page, isAsc, ...option })
 
       return res.json(result.rows.map(t => t.dataValues))
     } catch (error) {

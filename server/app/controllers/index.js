@@ -1,5 +1,6 @@
 const { InternalServiceError } = require('../constants/exceptions')
 const { logError } = require('../utils/logger')
+const { NounTagRel } = require('../models')
 const { NounTagService } = require('../services/NounTagService')
 const { NounTagRelService } = require('../services/NounTagRelService')
 const { NounService } = require('../services/NounService')
@@ -21,6 +22,7 @@ class NounTagRelController extends BaseController {
 class NounController extends BaseController {
   service = new NounService()
   editableFields = ['word', 'romaji', 'sense']
+  queryOption = { include: [{ model: NounTagRel, as: 'nounTagRel' }] }
 
   createOne = async (req, res) => {
     try {

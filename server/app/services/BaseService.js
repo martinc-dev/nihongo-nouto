@@ -2,7 +2,7 @@
 class BaseService {
   model = null
 
-  async queryAsync({ conditionKV = null, orderBy = 'id', isAsc = false, limit = 0, page = 0 } = {}) {
+  async queryAsync({ conditionKV = null, orderBy = 'id', isAsc = false, limit = 0, page = 0, options = {} } = {}) {
     try {
       const pagination =
         limit >= 1 && page >= 1
@@ -17,9 +17,10 @@ class BaseService {
         ? await this.model.findAndCountAll({
             where: conditionKV,
             order: [[orderBy, isAsc ? 'ASC' : 'DESC']],
+            ...options,
             ...pagination
           })
-        : await this.model.findAndCountAll()
+        : await this.model.findAndCountAll({ ...options })
 
       return result
     } catch (error) {

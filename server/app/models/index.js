@@ -222,6 +222,9 @@ const Verb = connection.define(
   }
 )
 
+Noun.hasMany(NounTagRel, { as: 'nounTagRel', foreignKey: 'nounId' })
+NounTagRel.hasMany(NounTag, { as: 'nounTag', foreignKey: 'tagId' })
+
 module.exports = {
   NounTag,
   Noun,

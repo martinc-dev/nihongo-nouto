@@ -25,7 +25,7 @@ export const updateWordInWordListAction = payload => ({
   payload
 })
 
-export const removeWordFromWordListAction = payload => ({
+export const removeWordInWordListAction = payload => ({
   type: 'WORD_LIST:REMOVE',
   payload
 })
