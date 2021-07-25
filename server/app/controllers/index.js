@@ -12,11 +12,13 @@ const { BaseController } = require('./BaseController')
 class NounTagController extends BaseController {
   service = new NounTagService()
   editableFields = ['name']
+  isSearchable = false
 }
 
 class NounTagRelController extends BaseController {
   service = new NounTagRelService()
   editableFields = ['nounId', 'tagId']
+  isSearchable = false
 }
 
 class NounController extends BaseController {
@@ -26,11 +28,17 @@ class NounController extends BaseController {
 
   createOne = async (req, res) => {
     try {
-      const result = await this.service.insertNoun({ ...req.body })
+      let result = await this.service.insertNoun({ ...req.body })
 
       if (!result?.dataValues?.id) throw new InternalServiceError({ message: 'Cannot create record' })
 
-      return res.json(result.dataValues)
+      const { id } = result.dataValues
+
+      result = await this.service.queryAsync({ conditionKV: { id }, options: this.queryOption })
+
+      if (!result?.count) throw new InternalServiceError({ message: 'Cannot find new record' })
+
+      return res.json(result.rows[0].dataValues)
     } catch (error) {
       logError(error)
       res.status(error.status || 500).json(error)

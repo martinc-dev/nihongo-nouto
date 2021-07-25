@@ -8,7 +8,15 @@ const {
   VerbController
 } = require('../controllers')
 
-const registerCRUDEndpoints = ({ getMultiple, getOne, createOne, updateOne, deleteOne }) => {
+const registerCRUDEndpoints = ({
+  isSearchable,
+  getMultiple,
+  getOne,
+  createOne,
+  updateOne,
+  deleteOne,
+  getMultipleByWord
+}) => {
   const router = Router()
 
   router.get('/', (req, res) => getMultiple(req, res))
@@ -16,6 +24,8 @@ const registerCRUDEndpoints = ({ getMultiple, getOne, createOne, updateOne, dele
   router.post('/', (req, res) => createOne(req, res))
   router.patch('/:id', (req, res) => updateOne(req, res))
   router.delete('/:id', (req, res) => deleteOne(req, res))
+
+  if (isSearchable) router.get('/search', (req, res) => getMultipleByWord(req, res))
 
   return router
 }

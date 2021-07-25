@@ -14,14 +14,15 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       display: 'flex',
-      flexDirection: 'column'
+      flexDirection: 'column',
+      backgroundColor: customTheme.palette.sameGray.main,
+      color: customTheme.palette.white.main
     },
     content: {
       flexGrow: 1,
       minHeight: `calc(100vh - ${sizes.footerHeight}px)`,
       padding: customTheme.spacing(3),
-      paddingTop: sizes.headerHeight + customTheme.spacing(3),
-      background: customTheme.palette.background.paper
+      paddingTop: sizes.headerHeight + customTheme.spacing(3)
     }
   })
 )

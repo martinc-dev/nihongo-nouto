@@ -5,6 +5,7 @@ class BaseController {
   service = null
   editableFields = null
   queryOption = null
+  isSearchable = true // Must have a "word" field
 
   getOne = async (req, res) => {
     try {
@@ -15,6 +16,25 @@ class BaseController {
       if (!result?.count) throw new NotFoundError({ message: 'No record found' })
 
       return res.json(result.rows[0].dataValues)
+    } catch (error) {
+      logError(error)
+      res.status(error.status || 500).json(error)
+    }
+  }
+
+  getMultipleByWord = async (req, res) => {
+    if (!this.isSearchable) throw new NotFoundError({ message: 'Not a searchable resource' })
+
+    try {
+      const { word } = req.query
+      const limit = Math.abs(parseInt(req.query?.limit ?? 0))
+      const page = Math.abs(parseInt(req.query?.page ?? 0))
+      const isAsc = (req.query?.asc ?? 'false').toLowerCase() === 'true'
+      const option = this.queryOption ? { options: this.queryOption } : null
+
+      const result = await this.service.queryAsync({ conditionKV: { word }, limit, page, isAsc, ...option })
+
+      return res.json(result.rows.map(t => t.dataValues))
     } catch (error) {
       logError(error)
       res.status(error.status || 500).json(error)
@@ -54,15 +74,19 @@ class BaseController {
   updateOne = async (req, res) => {
     try {
       const { id } = req.params
-      const result = await this.service.updateAsync({
+
+      await this.service.updateAsync({
         conditionKV: { id },
         fieldKV: { ...req.body },
         editableFields: this.editableFields
       })
 
-      if (!result?.dataValues?.id) throw new NotFoundError({ message: 'No record found' })
+      const option = this.queryOption ? { options: this.queryOption } : null
+      const result = await this.service.queryAsync({ conditionKV: { id }, ...option })
 
-      return res.json(result.dataValues)
+      if (!result?.count) throw new NotFoundError({ message: 'No record found' })
+
+      return res.json(result.rows[0].dataValues)
     } catch (error) {
       logError(error)
       res.status(error.status || 500).json(error)

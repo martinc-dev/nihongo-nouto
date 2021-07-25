@@ -35,7 +35,7 @@
     "test": "craco test",
     "lint": "eslint src/ server/ --ext .js,.jsx",
     "prettier:fix": "prettier --write '**/@(*.js|*.jsx|*.md|*.json|*.scss)'",
-    "serve:dev": "nodemon ./server/app/index.js"
+    "serve:dev": "nodemon --watch ./server ./server/app/index.js"
   },
   "eslintConfig": {
     "extends": [

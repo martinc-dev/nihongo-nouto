@@ -10,8 +10,8 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'flex-end',
     minHeight: sizes.footerHeight,
-    backgroundColor: theme.palette.kumoriGray.main,
-    color: theme.palette.kumoriGray.haiGray
+    backgroundColor: theme.palette.metalBlue.main,
+    color: theme.palette.white.main
   },
   footNote: {
     padding: '40px 40px 0 0',
