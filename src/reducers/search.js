@@ -5,7 +5,11 @@ import {
   fetchWordDupeAction,
   fetchWordDupeActionOK,
   fetchWordDupeActionError,
-  fetchWordDupeActionReset
+  fetchWordDupeActionReset,
+  fetchWordSearchAction,
+  fetchWordSearchActionOK,
+  fetchWordSearchActionError,
+  fetchWordSearchActionReset
 } from 'src/actions/search'
 
 const wordDupeData = (state = [], action) => {
@@ -42,9 +46,47 @@ const wordDupeStatus = (state = requestStatus.INITIAL, action) => {
   }
 }
 
+const wordSearchData = (state = {}, action) => {
+  switch (action.type) {
+    case fetchWordSearchAction().type:
+    case fetchWordSearchActionError().type:
+    case fetchWordSearchActionReset().type:
+      return {}
+
+    case fetchWordSearchActionOK().type:
+      return action.payload
+
+    default:
+      return state
+  }
+}
+
+const wordSearchStatus = (state = requestStatus.INITIAL, action) => {
+  switch (action.type) {
+    case fetchWordSearchAction().type:
+      return requestStatus.PROGRESS
+
+    case fetchWordSearchActionOK().type:
+      return requestStatus.OK
+
+    case fetchWordSearchActionError().type:
+      return requestStatus.ERROR
+
+    case fetchWordSearchActionReset().type:
+      return requestStatus.INITIAL
+
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   dupe: combineReducers({
     data: wordDupeData,
     status: wordDupeStatus
+  }),
+  search: combineReducers({
+    data: wordSearchData,
+    status: wordSearchStatus
   })
 })

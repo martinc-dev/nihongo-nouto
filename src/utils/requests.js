@@ -18,7 +18,7 @@ export const sendGet = async ({ url, data = {} }) => {
 
     if (!ok) throw { error: body, status: resp.status }
 
-    return camelCase(body)
+    return camelCase(body, { deep: true })
   } catch (error) {
     logError(error)
 
@@ -41,7 +41,7 @@ export const sendPost = async ({ url, data, isRespJson = true }) => {
 
     if (!ok) throw { error: body, status: resp.status }
 
-    return isRespJson ? camelCase(body) : body
+    return isRespJson ? camelCase(body, { deep: true }) : body
   } catch (error) {
     logError(error)
 
@@ -64,7 +64,7 @@ export const sendPatch = async ({ url, data, isRespJson = true }) => {
 
     if (!ok) throw { error: body, status: resp.status }
 
-    return isRespJson ? camelCase(body) : body
+    return isRespJson ? camelCase(body, { deep: true }) : body
   } catch (error) {
     logError(error)
 
@@ -91,7 +91,7 @@ export const sendDelete = async ({ url, data = {} }) => {
 
     if (!ok) throw { error: body, status: resp.status }
 
-    return camelCase(body)
+    return camelCase(body, { deep: true })
   } catch (error) {
     logError(error)
 
