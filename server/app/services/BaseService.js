@@ -2,7 +2,14 @@
 class BaseService {
   model = null
 
-  async queryAsync({ conditionKV = null, orderBy = 'id', isAsc = false, limit = 0, page = 0, options = {} } = {}) {
+  async queryAsync({
+    conditionKV = null,
+    orderBy = 'id',
+    isAsc = false,
+    limit = 0,
+    page = 0,
+    options = {}
+  } = {}) {
     try {
       const pagination =
         limit >= 1 && page >= 1
@@ -32,7 +39,8 @@ class BaseService {
 
   async createAsync({ fieldKV, editableFields = null }) {
     try {
-      if (editableFields?.length) return this.model.create(fieldKV, { fields: editableFields })
+      if (editableFields?.length)
+        return this.model.create(fieldKV, { fields: editableFields })
 
       return this.model.create(fieldKV)
     } catch (error) {

@@ -1,4 +1,5 @@
 import { QueryClientProvider } from 'react-query'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import { responsiveFontSizes, ThemeProvider } from '@material-ui/core/styles'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
@@ -9,6 +10,7 @@ import { sizes } from 'src/themes/sizes'
 import queryClient from 'src/singletons/queryClient'
 import Header from 'src/components/common/Header'
 import Footer from 'src/components/common/Footer'
+import WordDashboard from 'src/components/WordDashboard'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -37,7 +39,16 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <div className={classes.root}>
           <Header />
-          <main className={classes.content}>Project</main>
+          <main className={classes.content}>
+            <Switch>
+              <Route component={WordDashboard} exact key='dashboard' path='/' />
+              <Route component={WordDashboard} exact key='dashboard' path='/verbs' />
+              <Route component={WordDashboard} exact key='dashboard' path='/adjectives' />
+              <Route component={WordDashboard} exact key='dashboard' path='/nouns' />
+              <Route component={WordDashboard} exact key='dashboard' path='/others' />
+              <Redirect from='*' to='/' />
+            </Switch>
+          </main>
           <Footer />
         </div>
       </ThemeProvider>

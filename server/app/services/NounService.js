@@ -17,12 +17,15 @@ class NounService extends BaseService {
     })
     const id = newWord?.dataValues?.id ?? 0
 
-    if (!id) throw new InternalServiceError({ message: 'Cannot establish new noun record' })
+    if (!id)
+      throw new InternalServiceError({ message: 'Cannot establish new noun record' })
 
     const nounTagRelService = new NounTagRelService()
     const nounTagService = new NounTagService()
     const allTagIds = (await nounTagService.queryAsync())?.rows ?? []
-    const verifiedTagIds = tagIds.filter(t => t && allTagIds.map(k => k?.dataValues?.id ?? null).includes(t))
+    const verifiedTagIds = tagIds.filter(
+      t => t && allTagIds.map(k => k?.dataValues?.id ?? null).includes(t)
+    )
 
     await Promise.all(
       verifiedTagIds.map(t =>

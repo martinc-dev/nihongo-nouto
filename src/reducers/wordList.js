@@ -25,7 +25,9 @@ const wordListData = (state = [], action) => {
       return [...state, action.payload]
 
     case updateWordInWordListAction().type:
-      return state.map(t => (t.id === action.payload.id ? { ...t, ...action.payload } : t))
+      return state.map(t =>
+        t.id === action.payload.id ? { ...t, ...action.payload } : t
+      )
 
     case removeWordInWordListAction().type:
       return state.filter(t => t.id !== action.payload.id)

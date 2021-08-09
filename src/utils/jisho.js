@@ -28,7 +28,8 @@ export const parseVerbProp = ({ partsOfSpeechArray, word }) => {
   })
 
   if (verbProp.verbType && !verbProp.verbClassification) {
-    if (verbProp.verbType === 'V5') verbProp.verbClassification = verbClassificationNaiveGuess[word.slice(-1)] || null
+    if (verbProp.verbType === 'V5')
+      verbProp.verbClassification = verbClassificationNaiveGuess[word.slice(-1)] || null
     else verbProp.verbClassification = verbProp.verbType
   }
 

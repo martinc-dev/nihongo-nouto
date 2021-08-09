@@ -1,4 +1,4 @@
-import React from 'react'
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import { ConnectedRouter } from 'connected-react-router'
 
@@ -9,11 +9,11 @@ import App from 'src/components/common/App'
 
 ReactDOM.render(
   <StoreProvider>
-    <React.StrictMode>
+    <StrictMode>
       <ConnectedRouter history={history}>
         <App />
       </ConnectedRouter>
-    </React.StrictMode>
+    </StrictMode>
   </StoreProvider>,
   document.getElementById('root')
 )

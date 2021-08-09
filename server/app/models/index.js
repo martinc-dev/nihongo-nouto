@@ -171,7 +171,20 @@ const Verb = connection.define(
       defaultValue: ''
     },
     group: {
-      type: DataTypes.ENUM(['V5U', 'V5K', 'V5G', 'V5S', 'V5T', 'V5M', 'V5B', 'V5N', 'V5R', 'V1', 'IRS', 'IRK']),
+      type: DataTypes.ENUM([
+        'V5U',
+        'V5K',
+        'V5G',
+        'V5S',
+        'V5T',
+        'V5M',
+        'V5B',
+        'V5N',
+        'V5R',
+        'V1',
+        'IRS',
+        'IRK'
+      ]),
       allowNull: true,
       defaultValue: null
     },

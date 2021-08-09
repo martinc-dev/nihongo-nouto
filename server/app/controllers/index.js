@@ -30,13 +30,18 @@ class NounController extends BaseController {
     try {
       let result = await this.service.insertNoun({ ...req.body })
 
-      if (!result?.dataValues?.id) throw new InternalServiceError({ message: 'Cannot create record' })
+      if (!result?.dataValues?.id)
+        throw new InternalServiceError({ message: 'Cannot create record' })
 
       const { id } = result.dataValues
 
-      result = await this.service.queryAsync({ conditionKV: { id }, options: this.queryOption })
+      result = await this.service.queryAsync({
+        conditionKV: { id },
+        options: this.queryOption
+      })
 
-      if (!result?.count) throw new InternalServiceError({ message: 'Cannot find new record' })
+      if (!result?.count)
+        throw new InternalServiceError({ message: 'Cannot find new record' })
 
       return res.json(result.rows[0].dataValues)
     } catch (error) {

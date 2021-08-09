@@ -4,7 +4,11 @@ import { logError } from 'src/utils/log'
 import { sendGet } from 'src/utils/requests'
 import endpoints from 'src/constants/endpoints'
 import resourceTypes from 'src/constants/resourceTypes'
-import { fetchWordDetailAction, fetchWordDetailActionOK, fetchWordDetailActionError } from 'src/actions/wordDetail'
+import {
+  fetchWordDetailAction,
+  fetchWordDetailActionOK,
+  fetchWordDetailActionError
+} from 'src/actions/wordDetail'
 import { getCurrentContentType } from 'src/selectors/nav'
 
 export function* fetchWordDetail({ payload }) {
@@ -15,7 +19,8 @@ export function* fetchWordDetail({ payload }) {
 
     const typeKey = yield select(getCurrentContentType)
 
-    if (!typeKey || (resourceTypes[typeKey]?.isMain ?? false)) throw new Error('Target resource is not searchable')
+    if (!typeKey || (resourceTypes[typeKey]?.isMain ?? false))
+      throw new Error('Target resource is not searchable')
 
     const response = yield call(sendGet, {
       url: endpoints.getWordUrl({ typeKey, id })

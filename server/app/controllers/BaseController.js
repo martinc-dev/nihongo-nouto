@@ -23,7 +23,8 @@ class BaseController {
   }
 
   getMultipleByWord = async (req, res) => {
-    if (!this.isSearchable) throw new NotFoundError({ message: 'Not a searchable resource' })
+    if (!this.isSearchable)
+      throw new NotFoundError({ message: 'Not a searchable resource' })
 
     try {
       const { word } = req.query
@@ -32,7 +33,13 @@ class BaseController {
       const isAsc = (req.query?.asc ?? 'false').toLowerCase() === 'true'
       const option = this.queryOption ? { options: this.queryOption } : null
 
-      const result = await this.service.queryAsync({ conditionKV: { word }, limit, page, isAsc, ...option })
+      const result = await this.service.queryAsync({
+        conditionKV: { word },
+        limit,
+        page,
+        isAsc,
+        ...option
+      })
 
       return res.json(result.rows.map(t => t.dataValues))
     } catch (error) {
@@ -60,9 +67,13 @@ class BaseController {
 
   createOne = async (req, res) => {
     try {
-      const result = await this.service.createAsync({ fieldKV: { ...req.body }, editableFields: this.editableFields })
+      const result = await this.service.createAsync({
+        fieldKV: { ...req.body },
+        editableFields: this.editableFields
+      })
 
-      if (!result?.dataValues?.id) throw new InternalServiceError({ message: 'Cannot create record' })
+      if (!result?.dataValues?.id)
+        throw new InternalServiceError({ message: 'Cannot create record' })
 
       return res.json(result.dataValues)
     } catch (error) {

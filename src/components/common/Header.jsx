@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 
 import { theme } from 'src/themes/theme'
 import { sizes } from 'src/themes/sizes'
+import NavMenu from 'src/components/common/NavMenu'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,6 +27,7 @@ const Header = () => {
     <div className={classes.root}>
       <AppBar position='fixed'>
         <Toolbar className={classes.toolbar}>
+          <NavMenu />
           <Typography className={classes.title} variant='h6'>
             日本語ノート
           </Typography>

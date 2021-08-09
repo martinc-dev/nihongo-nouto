@@ -5,6 +5,8 @@ const resourceTypes = {
     sname: 'Verb',
     pname: 'Verbs',
     path: 'verb',
+    contentType: 'verbs',
+    pathName: 'verbs',
     isMain: true
   },
   ADJ: {
@@ -13,6 +15,8 @@ const resourceTypes = {
     sname: 'Adjective',
     pname: 'Adjectives',
     path: 'adj',
+    contentType: 'adjectives',
+    pathName: 'adjectives',
     isMain: true
   },
   OTHER: {
@@ -21,6 +25,8 @@ const resourceTypes = {
     sname: 'Other',
     pname: 'Others',
     path: 'other',
+    contentType: 'others',
+    pathName: 'others',
     isMain: true
   },
   NOUN: {
@@ -29,6 +35,8 @@ const resourceTypes = {
     sname: 'Noun',
     pname: 'Nouns',
     path: 'noun',
+    contentType: 'nouns',
+    pathName: 'nouns',
     isMain: true
   },
   NOUN_TAG_REL: {
