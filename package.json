@@ -11,6 +11,7 @@
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "camelcase-keys": "^6.2.2",
+    "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",

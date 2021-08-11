@@ -19,7 +19,7 @@ export function* fetchWordDetail({ payload }) {
 
     const typeKey = yield select(getCurrentContentType)
 
-    if (!typeKey || (resourceTypes[typeKey]?.isMain ?? false))
+    if (!typeKey || !(resourceTypes[typeKey]?.isMain ?? false))
       throw new Error('Target resource is not searchable')
 
     const response = yield call(sendGet, {

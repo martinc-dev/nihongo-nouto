@@ -23,7 +23,7 @@ class NounTagRelController extends BaseController {
 
 class NounController extends BaseController {
   service = new NounService()
-  editableFields = ['word', 'romaji', 'sense']
+  editableFields = ['word', 'hiragana', 'sense']
   queryOption = { include: [{ model: NounTagRel, as: 'nounTagRel' }] }
 
   createOne = async (req, res) => {
@@ -53,19 +53,19 @@ class NounController extends BaseController {
 
 class OtherController extends BaseController {
   service = new OtherService()
-  editableFields = ['word', 'romaji', 'sense']
+  editableFields = ['word', 'hiragana', 'sense']
 }
 
 class AdjController extends BaseController {
   service = new AdjService()
-  editableFields = ['word', 'romaji', 'sense', 'isIConjugation']
+  editableFields = ['word', 'hiragana', 'sense', 'isIConjugation']
 }
 
 class VerbController extends BaseController {
   service = new VerbService()
   editableFields = [
     'word',
-    'romaji',
+    'hiragana',
     'group',
     'sense',
     'stem',

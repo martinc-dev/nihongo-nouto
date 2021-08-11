@@ -7,6 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 
 import { theme as customTheme } from 'src/themes/theme'
 import { sizes } from 'src/themes/sizes'
+import resourceTypes from 'src/constants/resourceTypes'
 import queryClient from 'src/singletons/queryClient'
 import Header from 'src/components/common/Header'
 import Footer from 'src/components/common/Footer'
@@ -42,10 +43,30 @@ const App = () => {
           <main className={classes.content}>
             <Switch>
               <Route component={WordDashboard} exact key='dashboard' path='/' />
-              <Route component={WordDashboard} exact key='dashboard' path='/verbs' />
-              <Route component={WordDashboard} exact key='dashboard' path='/adjectives' />
-              <Route component={WordDashboard} exact key='dashboard' path='/nouns' />
-              <Route component={WordDashboard} exact key='dashboard' path='/others' />
+              <Route
+                component={WordDashboard}
+                exact
+                key={`${resourceTypes.VERB.key}`}
+                path={`/${resourceTypes.VERB.pathName}`}
+              />
+              <Route
+                component={WordDashboard}
+                exact
+                key={`${resourceTypes.ADJ.key}`}
+                path={`/${resourceTypes.ADJ.pathName}`}
+              />
+              <Route
+                component={WordDashboard}
+                exact
+                key={`${resourceTypes.NOUN.key}`}
+                path={`/${resourceTypes.NOUN.pathName}`}
+              />
+              <Route
+                component={WordDashboard}
+                exact
+                key={`${resourceTypes.OTHER.key}`}
+                path={`/${resourceTypes.OTHER.pathName}`}
+              />
               <Redirect from='*' to='/' />
             </Switch>
           </main>

@@ -39,7 +39,7 @@ const Noun = connection.define(
       allowNull: false,
       defaultValue: ''
     },
-    romaji: {
+    hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: ''
@@ -100,7 +100,7 @@ const Other = connection.define(
       allowNull: false,
       defaultValue: ''
     },
-    romaji: {
+    hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: ''
@@ -130,7 +130,7 @@ const Adj = connection.define(
       allowNull: false,
       defaultValue: ''
     },
-    romaji: {
+    hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: ''
@@ -165,7 +165,7 @@ const Verb = connection.define(
       allowNull: false,
       defaultValue: ''
     },
-    romaji: {
+    hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: ''

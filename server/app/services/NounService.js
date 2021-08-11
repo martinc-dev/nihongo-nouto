@@ -7,11 +7,11 @@ const { NounTagService } = require('../services/NounTagService')
 class NounService extends BaseService {
   model = Noun
 
-  insertNoun = async ({ word, romaji, sense, tagIds }) => {
+  insertNoun = async ({ word, hiragana, sense, tagIds }) => {
     const newWord = await this.createAsync({
       fieldKV: {
         word,
-        romaji,
+        hiragana,
         sense
       }
     })

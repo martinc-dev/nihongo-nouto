@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 
 import { theme } from 'src/themes/theme'
+import resourceTypes from 'src/constants/resourceTypes'
 
 const useStyles = makeStyles(() => ({
   menuButton: {
@@ -52,10 +53,18 @@ const NavMenu = () => {
         onClose={handleClose}
         open={Boolean(anchorEl)}
       >
-        <MenuItem onClick={() => handleClickItem('verbs')}>Verbs</MenuItem>
-        <MenuItem onClick={() => handleClickItem('adjectives')}>Adjectives</MenuItem>
-        <MenuItem onClick={() => handleClickItem('nouns')}>Nouns</MenuItem>
-        <MenuItem onClick={() => handleClickItem('others')}>Others</MenuItem>
+        <MenuItem onClick={() => handleClickItem(resourceTypes.VERB.pathName)}>
+          {resourceTypes.VERB.pname}
+        </MenuItem>
+        <MenuItem onClick={() => handleClickItem(resourceTypes.ADJ.pathName)}>
+          {resourceTypes.ADJ.pname}
+        </MenuItem>
+        <MenuItem onClick={() => handleClickItem(resourceTypes.NOUN.pathName)}>
+          {resourceTypes.NOUN.pname}
+        </MenuItem>
+        <MenuItem onClick={() => handleClickItem(resourceTypes.OTHER.pathName)}>
+          {resourceTypes.OTHER.pname}
+        </MenuItem>
       </Menu>
     </>
   )
