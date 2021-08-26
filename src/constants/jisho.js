@@ -43,3 +43,47 @@ export const adjPOSTypeMarkers = {
   'i-adjective (keiyoushi)': 'IADJ',
   'na-adjective (keiyodoshi)': 'NAADJ'
 }
+
+export const adjTypes = {
+  IADJ: 'IADJ',
+  NAADJ: 'NAADJ'
+}
+
+export const getWordGroupIconMatch = type => {
+  switch (type) {
+    case 'V5U':
+    case 'V5K':
+    case 'V5G':
+    case 'V5S':
+    case 'V5T':
+    case 'V5M':
+    case 'V5B':
+    case 'V5N':
+    case 'V5R':
+      return {
+        text: 'G',
+        colorName: 'sakuraPink'
+      }
+
+    case 'V1':
+      return {
+        text: 'I',
+        colorName: 'kooriBlue'
+      }
+
+    case 'IRS':
+      return {
+        text: 'S',
+        colorName: 'kujakuishiGreen'
+      }
+
+    case 'IRK':
+      return {
+        text: 'S',
+        colorName: 'kujakuishiGreen'
+      }
+
+    default:
+      return null
+  }
+}

@@ -28,11 +28,13 @@ const WordListTable = ({ wordToRow, words, columns }) => {
               <TableRow key={row.id}>
                 {columns.map((column, idx) =>
                   !idx ? (
-                    <TableCell component='th' scope='row'>
+                    <TableCell component='th' key={column} scope='row'>
                       {row[column]}
                     </TableCell>
                   ) : (
-                    <TableCell align='right'>{row[column]}</TableCell>
+                    <TableCell align='right' key={column}>
+                      {row[column]}
+                    </TableCell>
                   )
                 )}
               </TableRow>

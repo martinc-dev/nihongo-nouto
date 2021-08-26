@@ -14,7 +14,7 @@ import FilterListIcon from '@material-ui/icons/FilterList'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import AddIcon from '@material-ui/icons/Add'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   wordListTableHead: {},
   filterMenu: {},
   displayMenu: {},
@@ -57,7 +57,7 @@ const WordListTableHeadDropdown = ({
         onClick={handleMenuOpen}
       >
         {title}
-        {icon && <icon />}
+        {icon && icon}
       </Button>
       <Menu
         anchorEl={anchorEl}
