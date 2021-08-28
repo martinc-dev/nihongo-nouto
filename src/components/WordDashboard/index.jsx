@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { find as findInObj } from 'lodash'
 
@@ -13,21 +13,22 @@ import WordList from 'src/components/WordList'
 import WordDetail from 'src/components/WordDashboard/WordDetail'
 import SplashScreen from 'src/components/WordDashboard/SplashScreen'
 
-const WordDashboard = () => {
-  const location = useLocation()
+const WordDashboard = ({ match }) => {
   const dispatch = useDispatch()
   const currentContentType = useSelector(getCurrentContentType)
 
-  const { pathname } = location
+  const { path } = match
   const contentType =
-    findInObj(resourceTypes, t => t.pathName === pathname.replace('/', '').toLowerCase())
-      ?.key ?? null
+    findInObj(
+      resourceTypes,
+      t => t.pathName === path.replace('/', '').replace('/:wordId', '').toLowerCase()
+    )?.key ?? null
 
   useEffect(() => {
     if (currentContentType !== contentType) {
       dispatch(setCurrentContentType(contentType))
     }
-  }, [pathname])
+  }, [path])
 
   useEffect(() => {
     if (currentContentType && currentContentType === contentType) {
@@ -40,13 +41,22 @@ const WordDashboard = () => {
       {currentContentType ? (
         <>
           <WordList />
-          <WordDetail />
+          <WordDetail wordId={match.params?.wordId ?? null} />
         </>
       ) : (
         <SplashScreen />
       )}
     </Container>
   )
+}
+
+WordDashboard.propTypes = {
+  match: PropTypes.shape({
+    path: PropTypes.string.isRequired,
+    params: PropTypes.shape({
+      wordId: PropTypes.string
+    })
+  }).isRequired
 }
 
 export default WordDashboard

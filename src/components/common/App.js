@@ -45,26 +45,25 @@ const App = () => {
               <Route component={WordDashboard} exact key='dashboard' path='/' />
               <Route
                 component={WordDashboard}
-                exact
-                key={`${resourceTypes.VERB.key}`}
-                path={`/${resourceTypes.VERB.pathName}`}
+                path={`/${resourceTypes.VERB.pathName}/:wordId`}
+              />
+              <Route component={WordDashboard} path={`/${resourceTypes.VERB.pathName}`} />
+              <Route
+                component={WordDashboard}
+                path={`/${resourceTypes.ADJ.pathName}/:wordId`}
+              />
+              <Route component={WordDashboard} path={`/${resourceTypes.ADJ.pathName}`} />
+              <Route
+                component={WordDashboard}
+                path={`/${resourceTypes.NOUN.pathName}/:wordId`}
+              />
+              <Route component={WordDashboard} path={`/${resourceTypes.NOUN.pathName}`} />
+              <Route
+                component={WordDashboard}
+                path={`/${resourceTypes.OTHER.pathName}/:wordId`}
               />
               <Route
                 component={WordDashboard}
-                exact
-                key={`${resourceTypes.ADJ.key}`}
-                path={`/${resourceTypes.ADJ.pathName}`}
-              />
-              <Route
-                component={WordDashboard}
-                exact
-                key={`${resourceTypes.NOUN.key}`}
-                path={`/${resourceTypes.NOUN.pathName}`}
-              />
-              <Route
-                component={WordDashboard}
-                exact
-                key={`${resourceTypes.OTHER.key}`}
                 path={`/${resourceTypes.OTHER.pathName}`}
               />
               <Redirect from='*' to='/' />
