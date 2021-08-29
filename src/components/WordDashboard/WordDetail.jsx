@@ -6,6 +6,10 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 
 import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
 import { getWordDetailData } from 'src/selectors/wordDetail'
+import WordTitle from 'src/components/WordDashboard/WordTitle'
+import WordActions from 'src/components/WordDashboard/WordActions'
+import VerbMainFormRow from 'src/components/WordDashboard/VerbMainFormRow'
+import VerbConjFormRow from 'src/components/WordDashboard/VerbConjFormRow'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -32,7 +36,16 @@ const WordDetail = ({ wordId }) => {
     }
   }, [wordId])
 
-  return <div className={classes.wordDetail}>{word && JSON.stringify(word)}</div>
+  if (!word) return null
+
+  return (
+    <div className={classes.wordDetail}>
+      <WordTitle {...word} />
+      <WordActions />
+      <VerbMainFormRow {...word} />
+      <VerbConjFormRow {...word} />
+    </div>
+  )
 }
 
 WordDetail.propTypes = {

@@ -10,6 +10,7 @@ import {
   fetchWordDetailActionError
 } from 'src/actions/wordDetail'
 import { getCurrentContentType } from 'src/selectors/nav'
+import verbConjugation from 'src/utils/conjugation'
 
 export function* fetchWordDetail({ payload }) {
   try {
@@ -22,15 +23,19 @@ export function* fetchWordDetail({ payload }) {
     if (!typeKey || !(resourceTypes[typeKey]?.isMain ?? false))
       throw new Error('Target resource is not searchable')
 
-    const response = yield call(sendGet, {
+    let result = yield call(sendGet, {
       url: endpoints.getWordUrl({ typeKey, id })
     })
 
-    if (response.error) {
-      throw response
+    if (result.error) {
+      throw result
     }
 
-    yield put(fetchWordDetailActionOK(response))
+    if (typeKey === resourceTypes.VERB.key && result.word && result.group) {
+      result = { ...result, conjugation: verbConjugation(result.word, result.group) }
+    }
+
+    yield put(fetchWordDetailActionOK(result))
   } catch (error) {
     yield put(fetchWordDetailActionError(error))
     logError(error)

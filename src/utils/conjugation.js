@@ -799,40 +799,40 @@ const verbEndings = [
   'る'
 ]
 
-module.exports = {
-  conjugate: function (verb, type) {
-    if (!verb || !type) throw new Error('Missing param')
-    const ret = []
-    let index, verbstem
+const conjugation = (verb, type) => {
+  if (!verb || !type) throw new Error('Missing param')
+  const result = {}
+  let index, verbstem
 
-    if (type.toLowerCase().indexOf('V1') > -1) {
-      index = verbTypes.indexOf('V1')
-      verbstem = verb.substring(0, verb.length - 1)
-    } else if (type.toLowerCase().indexOf('IRS') > -1) {
-      index = verbTypes.indexOf('IRS')
-      verbstem = verb.substring(0, verb.length - 2)
-    } else if (type.toLowerCase().indexOf('IRK') > -1) {
-      index = verbTypes.indexOf('IRK')
-      verbstem = verb.substring(0, verb.length - 2)
-    } else {
-      const lastchar = verb.substring(verb.length - 1, verb.length)
+  if (type.toLowerCase().indexOf('V1') > -1) {
+    index = verbTypes.indexOf('V1')
+    verbstem = verb.substring(0, verb.length - 1)
+  } else if (type.toLowerCase().indexOf('IRS') > -1) {
+    index = verbTypes.indexOf('IRS')
+    verbstem = verb.substring(0, verb.length - 2)
+  } else if (type.toLowerCase().indexOf('IRK') > -1) {
+    index = verbTypes.indexOf('IRK')
+    verbstem = verb.substring(0, verb.length - 2)
+  } else {
+    const lastchar = verb.substring(verb.length - 1, verb.length)
 
-      index = verbEndings.indexOf(lastchar)
-      verbstem = verb.substring(0, verb.length - 1)
-    }
-
-    const e = conjugationForms.length
-
-    let i, form, specific
-
-    for (i = 0; i < e; i++) {
-      form = conjugationForms[i]
-      specific = form.forms[index]
-      if (specific !== false) {
-        ret.push({ name: form.name, form: verbstem + specific })
-      }
-    }
-
-    return ret
+    index = verbEndings.indexOf(lastchar)
+    verbstem = verb.substring(0, verb.length - 1)
   }
+
+  const e = conjugationForms.length
+
+  let i, form, specific
+
+  for (i = 0; i < e; i++) {
+    form = conjugationForms[i]
+    specific = form.forms[index]
+    if (specific !== false) {
+      result[form.name] = verbstem + specific
+    }
+  }
+
+  return result
 }
+
+export default conjugation

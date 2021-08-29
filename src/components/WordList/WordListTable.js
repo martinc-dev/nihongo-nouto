@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Table from '@material-ui/core/Table'
@@ -8,17 +10,31 @@ import TableContainer from '@material-ui/core/TableContainer'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 
+import resourceTypes from 'src/constants/resourceTypes'
+import { getCurrentContentType } from 'src/selectors/nav'
+
 const useStyles = makeStyles({
+  root: {
+    boxShadow: 'none'
+  },
   table: {
     width: '100%'
+  },
+  tableCell: {
+    border: 0
+  },
+  tableCellHead: {
+    border: 0
   }
 })
 
 const WordListTable = ({ wordToRow, words, columns }) => {
   const classes = useStyles()
+  const currentContentType = useSelector(getCurrentContentType)
+  const resourcePath = resourceTypes[currentContentType]?.path ?? null
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer className={classes.root} component={Paper}>
       <Table aria-label='word list table' className={classes.table} size='small'>
         <TableBody>
           {words.map(word => {
@@ -28,12 +44,17 @@ const WordListTable = ({ wordToRow, words, columns }) => {
               <TableRow key={row.id}>
                 {columns.map((column, idx) =>
                   !idx ? (
-                    <TableCell component='th' key={column} scope='row'>
-                      {row[column]}
+                    <TableCell
+                      className={classes.tableCellHead}
+                      component='th'
+                      key={column}
+                      scope='row'
+                    >
+                      <Link to={`/${resourcePath}/${row.id}`}>{row[column]}</Link>
                     </TableCell>
                   ) : (
-                    <TableCell align='right' key={column}>
-                      {row[column]}
+                    <TableCell align='left' className={classes.tableCell} key={column}>
+                      <Link to={`/${resourcePath}/${row.id}`}>{row[column]}</Link>
                     </TableCell>
                   )
                 )}
