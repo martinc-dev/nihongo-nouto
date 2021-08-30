@@ -24,7 +24,10 @@ const WordGroupIcon = ({ type }) => {
   return (
     <div
       className={classes.root}
-      styles={{ backgroundColor: colors[iconDetail.colorName] }}
+      style={{
+        backgroundColor: colors[iconDetail.colorName],
+        color: colors.prussianBlue
+      }}
     >
       {iconDetail.text}
     </div>

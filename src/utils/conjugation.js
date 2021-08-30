@@ -110,7 +110,7 @@ const conjugationForms = [
     ]
   },
   {
-    name: 'polite affirmative',
+    name: 'polite affirmative past tense',
     forms: [
       'いました',
       'きました',
@@ -127,7 +127,7 @@ const conjugationForms = [
     ]
   },
   {
-    name: 'plain negative',
+    name: 'plain negative past tense',
     forms: [
       'わなかった',
       'かなかった',
@@ -144,7 +144,7 @@ const conjugationForms = [
     ]
   },
   {
-    name: 'polite negative',
+    name: 'polite negative past tense',
     forms: [
       'いませんでした',
       'きませんでした',
@@ -766,10 +766,6 @@ const conjugationForms = [
   }
 ]
 
-conjugationForms.sort((a, b) => {
-  return b.forms[0].length - a.forms[0].length
-})
-
 const verbTypes = [
   'V5U',
   'V5K',
@@ -804,13 +800,13 @@ const conjugation = (verb, type) => {
   const result = {}
   let index, verbstem
 
-  if (type.toLowerCase().indexOf('V1') > -1) {
+  if (type.toUpperCase().indexOf('V1') > -1) {
     index = verbTypes.indexOf('V1')
     verbstem = verb.substring(0, verb.length - 1)
-  } else if (type.toLowerCase().indexOf('IRS') > -1) {
+  } else if (type.toUpperCase().indexOf('IRS') > -1) {
     index = verbTypes.indexOf('IRS')
     verbstem = verb.substring(0, verb.length - 2)
-  } else if (type.toLowerCase().indexOf('IRK') > -1) {
+  } else if (type.toUpperCase().indexOf('IRK') > -1) {
     index = verbTypes.indexOf('IRK')
     verbstem = verb.substring(0, verb.length - 2)
   } else {
@@ -820,17 +816,9 @@ const conjugation = (verb, type) => {
     verbstem = verb.substring(0, verb.length - 1)
   }
 
-  const e = conjugationForms.length
-
-  let i, form, specific
-
-  for (i = 0; i < e; i++) {
-    form = conjugationForms[i]
-    specific = form.forms[index]
-    if (specific !== false) {
-      result[form.name] = verbstem + specific
-    }
-  }
+  conjugationForms.map(t => {
+    result[t.name] = `${verbstem}${t.forms[index] || ''}`
+  })
 
   return result
 }

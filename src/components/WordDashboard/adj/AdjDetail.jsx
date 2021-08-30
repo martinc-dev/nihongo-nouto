@@ -8,8 +8,7 @@ import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/w
 import { getWordDetailData } from 'src/selectors/wordDetail'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
-import VerbMainFormRow from 'src/components/WordDashboard/VerbMainFormRow'
-import VerbConjFormRow from 'src/components/WordDashboard/VerbConjFormRow'
+import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -23,7 +22,7 @@ const useStyles = makeStyles(() =>
   })
 )
 
-const WordDetail = ({ wordId }) => {
+const AdjDetail = ({ wordId }) => {
   const dispatch = useDispatch()
   const classes = useStyles()
   const word = useSelector(getWordDetailData)
@@ -38,18 +37,25 @@ const WordDetail = ({ wordId }) => {
 
   if (!word) return null
 
+  const types = [
+    word.group,
+    word.isTransitive === true && 'TRANSITIVE',
+    word.isIntransitive === true && 'INTRANSITIVE',
+    word.isIConjugation === true && 'IADJ',
+    word.isIConjugation === false && 'NAADJ'
+  ].filter(t => t)
+
   return (
     <div className={classes.wordDetail}>
       <WordTitle {...word} />
       <WordActions />
-      <VerbMainFormRow {...word} />
-      <VerbConjFormRow {...word} />
+      <WordTypeDisplay types={types} />
     </div>
   )
 }
 
-WordDetail.propTypes = {
+AdjDetail.propTypes = {
   wordId: PropTypes.string
 }
 
-export default WordDetail
+export default AdjDetail

@@ -10,7 +10,7 @@ import { deserializeBoolList } from 'src/utils/boolean'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { getWordListData } from 'src/selectors/wordList'
 import WordGroupIcon from 'src/components/common/WordGroupIcon'
-import WordListTableHead from 'src/components/WordList/WordListTableActions'
+import WordListTableHead from 'src/components/WordList/WordListTableHead'
 import WordListTable from 'src/components/WordList/WordListTable'
 
 const useStyles = makeStyles(() =>
@@ -62,7 +62,7 @@ const WordList = () => {
     )
   }, [currentContentType])
 
-  return filterOptionsMap && displayOptionsMap ? (
+  return displayOptionsMap ? (
     <div className={classes.wordList}>
       <WordListTableHead
         displayOptionsMap={displayOptionsMap}
@@ -76,7 +76,7 @@ const WordList = () => {
         wordToRow={t => ({
           ...t,
           ...(t.group && { group: <WordGroupIcon type={t.group} /> }),
-          ...(t.isIConjugation && {
+          ...(t.isIConjugation !== undefined && {
             isIConjugation: (
               <WordGroupIcon type={t.isIConjugation ? adjTypes.IADJ : adjTypes.NAADJ} />
             )

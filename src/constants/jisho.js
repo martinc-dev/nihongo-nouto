@@ -62,25 +62,57 @@ export const getWordGroupIconMatch = type => {
     case 'V5R':
       return {
         text: 'G',
-        colorName: 'sakuraPink'
+        colorName: 'sakuraPink',
+        value: 'GoDan'
       }
 
     case 'V1':
       return {
         text: 'I',
-        colorName: 'kooriBlue'
+        colorName: 'kooriBlue',
+        value: 'Ichidan'
       }
 
     case 'IRS':
       return {
         text: 'S',
-        colorName: 'kujakuishiGreen'
+        colorName: 'kujakuishiGreen',
+        value: 'Irregular Suru'
       }
 
     case 'IRK':
       return {
-        text: 'S',
-        colorName: 'kujakuishiGreen'
+        text: 'K',
+        colorName: 'kujakuishiGreen',
+        value: 'Irregular Kuru'
+      }
+
+    case 'TRANSITIVE':
+      return {
+        text: 'T',
+        colorName: 'mikanOrange',
+        value: 'Transitive'
+      }
+
+    case 'INTRANSITIVE':
+      return {
+        text: 'It',
+        colorName: 'yuzuYellow',
+        value: 'Intransitive'
+      }
+
+    case 'IADJ':
+      return {
+        text: 'I',
+        colorName: 'sakuraPink',
+        value: 'I-adjective'
+      }
+
+    case 'NAADJ':
+      return {
+        text: 'Na',
+        colorName: 'kooriBlue',
+        value: 'Na-adjective'
       }
 
     default:

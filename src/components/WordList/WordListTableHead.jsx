@@ -116,13 +116,15 @@ const WordListTableHead = ({
 
   return (
     <div className={classes.wordListTableHead}>
-      <WordListTableHeadDropdown
-        className={classes.filterMenu}
-        icon={<FilterListIcon />}
-        onOptionToggle={onFilterChange}
-        optionsMap={filterOptionsMap}
-        title={'Filter'}
-      />
+      {filterOptionsMap && (
+        <WordListTableHeadDropdown
+          className={classes.filterMenu}
+          icon={<FilterListIcon />}
+          onOptionToggle={onFilterChange}
+          optionsMap={filterOptionsMap}
+          title={'Filter'}
+        />
+      )}
       <WordListTableHeadDropdown
         className={classes.displayMenu}
         icon={<VisibilityIcon />}
@@ -140,7 +142,7 @@ const WordListTableHead = ({
 
 WordListTableHead.propTypes = {
   displayOptionsMap: PropTypes.objectOf(PropTypes.bool).isRequired,
-  filterOptionsMap: PropTypes.objectOf(PropTypes.bool).isRequired,
+  filterOptionsMap: PropTypes.objectOf(PropTypes.bool),
   onCreateClick: PropTypes.func.isRequired,
   onDisplayChange: PropTypes.func.isRequired,
   onFilterChange: PropTypes.func.isRequired
