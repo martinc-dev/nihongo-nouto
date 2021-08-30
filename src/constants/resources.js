@@ -61,31 +61,37 @@ export const nounTags = {
     id: 1,
     color: 'kujakuishiGreen',
     name: 'THINGS',
+    value: 'Things',
   },
   ABSTRACT: {
     id: 2,
     color: 'sakuraPink',
     name: 'ABSTRACT',
+    value: 'Abstract',
   },
   LOCATION: {
     id: 3,
     color: 'mikanOrange',
     name: 'LOCATION',
+    value: 'Location',
   },
   TIME: {
     id: 4,
     color: 'kumoriBlue',
     name: 'TIME',
+    value: 'Time',
   },
   PEOPLE: {
     id: 5,
     color: 'yuzuYellow',
     name: 'PEOPLE',
+    value: 'People',
   },
   OTHER: {
     id: 6,
     color: 'kooriBlue',
     name: 'OTHER',
+    value: 'Other',
   },
 }
 
@@ -155,37 +161,37 @@ export const getWordGroupIconMatch = type => {
       return {
         text: 'T',
         colorName: nounTags.THINGS.color,
-        value: nounTags.THINGS.name,
+        value: nounTags.THINGS.value,
       }
     case nounTags.ABSTRACT.name:
       return {
         text: 'A',
         colorName: nounTags.ABSTRACT.color,
-        value: nounTags.ABSTRACT.name,
+        value: nounTags.ABSTRACT.value,
       }
     case nounTags.LOCATION.name:
       return {
         text: 'L',
         colorName: nounTags.LOCATION.color,
-        value: nounTags.LOCATION.name,
+        value: nounTags.LOCATION.value,
       }
     case nounTags.TIME.name:
       return {
         text: 'T',
         colorName: nounTags.TIME.color,
-        value: nounTags.TIME.name,
+        value: nounTags.TIME.value,
       }
     case nounTags.PEOPLE.name:
       return {
         text: 'P',
         colorName: nounTags.PEOPLE.color,
-        value: nounTags.PEOPLE.name,
+        value: nounTags.PEOPLE.value,
       }
     case nounTags.OTHER.name:
       return {
         text: 'O',
         colorName: nounTags.OTHER.color,
-        value: nounTags.OTHER.name,
+        value: nounTags.OTHER.value,
       }
 
     default:
