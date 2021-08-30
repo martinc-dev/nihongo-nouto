@@ -19,8 +19,8 @@ const conjugationForms = [
       'ります',
       'ます',
       'します',
-      'きます'
-    ]
+      'きます',
+    ],
   },
   {
     name: 'plain negative',
@@ -36,8 +36,8 @@ const conjugationForms = [
       'らない',
       'ない',
       'しない',
-      'こない'
-    ]
+      'こない',
+    ],
   },
   {
     name: 'polite negative',
@@ -53,8 +53,8 @@ const conjugationForms = [
       'りません',
       'ません',
       'しません',
-      'きません'
-    ]
+      'きません',
+    ],
   },
   {
     name: 'curt negative (archaic)',
@@ -70,8 +70,8 @@ const conjugationForms = [
       'らん',
       'ん',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'polite negative (archaic)',
@@ -87,8 +87,8 @@ const conjugationForms = [
       'りませぬ',
       'ませぬ',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
 
   // Past tense: 6-9
@@ -106,8 +106,8 @@ const conjugationForms = [
       'った',
       'た',
       'した',
-      'きた'
-    ]
+      'きた',
+    ],
   },
   {
     name: 'polite affirmative past tense',
@@ -123,8 +123,8 @@ const conjugationForms = [
       'りました',
       'ました',
       'しました',
-      'きました'
-    ]
+      'きました',
+    ],
   },
   {
     name: 'plain negative past tense',
@@ -140,8 +140,8 @@ const conjugationForms = [
       'らなかった',
       'なかった',
       'しなかった',
-      'こなかった'
-    ]
+      'こなかった',
+    ],
   },
   {
     name: 'polite negative past tense',
@@ -157,8 +157,8 @@ const conjugationForms = [
       'りませんでした',
       'ませんでした',
       'しませんでした',
-      'きませんでした'
-    ]
+      'きませんでした',
+    ],
   },
 
   // Perfect: 10
@@ -176,8 +176,8 @@ const conjugationForms = [
       'らず(に)',
       'ず(に)',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
 
   // Ta form: 11
@@ -195,8 +195,8 @@ const conjugationForms = [
       'ったり',
       'たり',
       'したり',
-      'きたり'
-    ]
+      'きたり',
+    ],
   },
 
   // Renyoukei: 12-13
@@ -214,8 +214,8 @@ const conjugationForms = [
       'り-',
       '-',
       'し-',
-      'き-'
-    ]
+      'き-',
+    ],
   },
   {
     name: 'way of doing',
@@ -231,8 +231,8 @@ const conjugationForms = [
       'りかた',
       'かた',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
 
   // Te forms: 14-22
@@ -250,8 +250,8 @@ const conjugationForms = [
       'って',
       'て',
       'して',
-      'きて'
-    ]
+      'きて',
+    ],
   },
   {
     name: 'te iru',
@@ -267,8 +267,8 @@ const conjugationForms = [
       'っている',
       'ている',
       'している',
-      'きている'
-    ]
+      'きている',
+    ],
   },
   {
     name: 'simplified te iru',
@@ -284,8 +284,8 @@ const conjugationForms = [
       'ってる',
       'てる',
       'してる',
-      'きてる'
-    ]
+      'きてる',
+    ],
   },
   {
     name: 'te aru',
@@ -301,8 +301,8 @@ const conjugationForms = [
       'ってある',
       'てある',
       'してある',
-      'きてある'
-    ]
+      'きてある',
+    ],
   },
   {
     name: 'simplified te ageru',
@@ -318,8 +318,8 @@ const conjugationForms = [
       'ったげる',
       'たげる',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'te oru',
@@ -335,8 +335,8 @@ const conjugationForms = [
       'っておる',
       'ておる',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'simplified te oru',
@@ -352,8 +352,8 @@ const conjugationForms = [
       'っとる',
       'とる',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'te oku',
@@ -369,8 +369,8 @@ const conjugationForms = [
       'っておく',
       'ておく',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'simplified te oku',
@@ -386,8 +386,8 @@ const conjugationForms = [
       'っとく',
       'とく',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
 
   // Tai/tageru: 23-24
@@ -405,8 +405,8 @@ const conjugationForms = [
       'りたい',
       'たい',
       'したい',
-      'きたい'
-    ]
+      'きたい',
+    ],
   },
   {
     name: "other's desire",
@@ -422,8 +422,8 @@ const conjugationForms = [
       'りたがる',
       'たがる',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
 
   // Pseudo-futurum forms: 25-30
@@ -441,8 +441,8 @@ const conjugationForms = [
       'ろう',
       'よう',
       'しよう',
-      'こよう'
-    ]
+      'こよう',
+    ],
   },
   {
     name: 'polite presumptive',
@@ -458,8 +458,8 @@ const conjugationForms = [
       'るでしょう',
       'るでしょう',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'plain presumptive',
@@ -475,8 +475,8 @@ const conjugationForms = [
       'るだろう',
       'るだろう',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'polite negative presumptive',
@@ -492,8 +492,8 @@ const conjugationForms = [
       'らないだろう',
       'ないだろう',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'plain negative presumptive',
@@ -509,8 +509,8 @@ const conjugationForms = [
       'るまい',
       'まい',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'past presumptive',
@@ -526,8 +526,8 @@ const conjugationForms = [
       'った',
       'たろう',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
 
   // Izenkei / kateikei: 31-32
@@ -545,8 +545,8 @@ const conjugationForms = [
       'れば',
       'れば',
       'すれば',
-      'くれば'
-    ]
+      'くれば',
+    ],
   },
   {
     name: 'past hypothetical',
@@ -562,8 +562,8 @@ const conjugationForms = [
       'ったら',
       'たら',
       'したら',
-      'きたら'
-    ]
+      'きたら',
+    ],
   },
   {
     name: 'short potential',
@@ -577,10 +577,10 @@ const conjugationForms = [
       'べる',
       'ねる',
       'れる',
-      '',
+      'られる',
       'できる',
-      'こられる'
-    ]
+      'こられる',
+    ],
   },
 
   // Saserareru: 33-35
@@ -598,8 +598,8 @@ const conjugationForms = [
       'られる',
       'られる',
       'される',
-      'こられる'
-    ]
+      'こられる',
+    ],
   },
   {
     name: 'causative',
@@ -615,8 +615,8 @@ const conjugationForms = [
       'らせる',
       'させる',
       'させる',
-      'こさせる'
-    ]
+      'こさせる',
+    ],
   },
   {
     name: 'causative passive',
@@ -632,8 +632,8 @@ const conjugationForms = [
       'らせられる',
       'させられる',
       'させられる',
-      'こさせられる'
-    ]
+      'こさせられる',
+    ],
   },
 
   // Commands: 36-41
@@ -651,13 +651,13 @@ const conjugationForms = [
       'ってください',
       'てください',
       'してください',
-      'きてください'
-    ]
+      'きてください',
+    ],
   },
 
   {
     name: 'commanding',
-    forms: ['え', 'け', 'げ', 'せ', 'て', 'め', 'べ', 'ね', 'れ', 'ろ', 'しろ', 'こい']
+    forms: ['え', 'け', 'げ', 'せ', 'て', 'め', 'べ', 'ね', 'れ', 'ろ', 'しろ', 'こい'],
   },
   {
     name: 'authoritative',
@@ -673,8 +673,8 @@ const conjugationForms = [
       'りなさい',
       'なさい',
       'しなさい',
-      'きなさい'
-    ]
+      'きなさい',
+    ],
   },
   { name: 'advisory', forms: ['', '', '', '', '', '', '', '', '', 'よ', '?', '?'] },
   {
@@ -691,8 +691,8 @@ const conjugationForms = [
       'らないでください',
       'ないでください',
       'しないでください',
-      'こないでください'
-    ]
+      'こないでください',
+    ],
   },
   {
     name: 'negative imperative',
@@ -708,8 +708,8 @@ const conjugationForms = [
       'るな',
       'るな',
       'するな',
-      'くるな'
-    ]
+      'くるな',
+    ],
   },
 
   // Belief about [...]ness: 42-44
@@ -727,8 +727,8 @@ const conjugationForms = [
       'りそう',
       'そう',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'claimed to be the case',
@@ -744,8 +744,8 @@ const conjugationForms = [
       'るそう',
       'るそう',
       '?',
-      '?'
-    ]
+      '?',
+    ],
   },
   {
     name: 'apparently the case',
@@ -761,9 +761,13 @@ const conjugationForms = [
       'るらしい',
       'るらしい',
       '?',
-      '?'
-    ]
-  }
+      '?',
+    ],
+  },
+  {
+    name: 'verbstem',
+    forms: ['', '', '', '', '', '', '', '', '', '', '', ''],
+  },
 ]
 
 const verbTypes = [
@@ -778,7 +782,7 @@ const verbTypes = [
   'V5R',
   'V1',
   'IRS',
-  'IRK'
+  'IRK',
 ]
 const verbEndings = [
   'う',
@@ -792,7 +796,7 @@ const verbEndings = [
   'る',
   'る',
   'る',
-  'る'
+  'る',
 ]
 
 const conjugation = (verb, type) => {

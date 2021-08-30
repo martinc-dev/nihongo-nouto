@@ -7,7 +7,7 @@ const resourceTypes = {
     path: 'verb',
     contentType: 'verbs',
     pathName: 'verb',
-    isMain: true
+    isMain: true,
   },
   ADJ: {
     id: 2,
@@ -16,7 +16,7 @@ const resourceTypes = {
     pname: 'Adjectives',
     path: 'adj',
     pathName: 'adj',
-    isMain: true
+    isMain: true,
   },
   OTHER: {
     id: 3,
@@ -25,7 +25,7 @@ const resourceTypes = {
     pname: 'Others',
     path: 'other',
     pathName: 'other',
-    isMain: true
+    isMain: true,
   },
   NOUN: {
     id: 4,
@@ -34,7 +34,7 @@ const resourceTypes = {
     pname: 'Nouns',
     path: 'noun',
     pathName: 'noun',
-    isMain: true
+    isMain: true,
   },
   NOUN_TAG_REL: {
     id: 5,
@@ -42,7 +42,7 @@ const resourceTypes = {
     sname: '',
     pname: '',
     path: 'noun_tag_rel',
-    isMain: false
+    isMain: false,
   },
   NOUN_TAG: {
     id: 6,
@@ -50,8 +50,8 @@ const resourceTypes = {
     sname: '',
     pname: '',
     path: 'noun_tag',
-    isMain: false
-  }
+    isMain: false,
+  },
 }
 
 export default resourceTypes

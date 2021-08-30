@@ -1,16 +1,28 @@
 import PropTypes from 'prop-types'
 
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, createStyles } from '@material-ui/core/styles'
 
-import { getWordGroupIconMatch } from 'src/constants/jisho'
+import { getWordGroupIconMatch } from 'src/constants/resources'
 import WordGroupIcon from 'src/components/common/WordGroupIcon'
 
-const useStyles = makeStyles({
-  root: {},
-  row: {},
-  iconCell: {},
-  valueCell: {}
-})
+const useStyles = makeStyles(theme =>
+  createStyles({
+    root: {
+      width: '100%',
+      borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
+    },
+    row: {
+      margin: '10px 0',
+    },
+    iconCell: {
+      display: 'inline-block',
+      marginRight: 10,
+    },
+    valueCell: {
+      display: 'inline-block',
+    },
+  })
+)
 
 const WordTypeDisplay = ({ types }) => {
   const classes = useStyles()
@@ -33,7 +45,7 @@ const WordTypeDisplay = ({ types }) => {
 }
 
 WordTypeDisplay.propTypes = {
-  types: PropTypes.arrayOf(PropTypes.string)
+  types: PropTypes.arrayOf(PropTypes.string),
 }
 
 export default WordTypeDisplay

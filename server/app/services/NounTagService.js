@@ -6,5 +6,5 @@ class NounTagService extends BaseService {
 }
 
 module.exports = {
-  NounTagService
+  NounTagService,
 }

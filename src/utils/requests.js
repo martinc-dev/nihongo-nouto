@@ -10,7 +10,7 @@ export const sendGet = async ({ url, data = {} }) => {
     const urlWithParam = query ? `${url}?${query}` : url
 
     const resp = await fetch(urlWithParam, {
-      method: 'GET'
+      method: 'GET',
     })
 
     const { ok } = resp
@@ -33,7 +33,7 @@ export const sendPost = async ({ url, data, isRespJson = true }) => {
     const resp = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
 
     const { ok } = resp
@@ -56,7 +56,7 @@ export const sendPatch = async ({ url, data, isRespJson = true }) => {
     const resp = await fetch(url, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
 
     const { ok } = resp
@@ -83,7 +83,7 @@ export const sendDelete = async ({ url, data = {} }) => {
     const urlWithParam = query ? `${url}?${query}` : url
 
     const resp = await fetch(urlWithParam, {
-      method: 'DELETE'
+      method: 'DELETE',
     })
 
     const { ok } = resp

@@ -14,13 +14,48 @@ import FilterListIcon from '@material-ui/icons/FilterList'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import AddIcon from '@material-ui/icons/Add'
 
-const useStyles = makeStyles(() => ({
-  wordListTableHead: {},
-  filterMenu: {},
-  displayMenu: {},
+const useStyles = makeStyles(theme => ({
+  wordListTableHead: {
+    '& svg': {
+      width: 15,
+      marginRight: 10,
+      fill: theme.palette.kujakuishiGreen.main,
+    },
+  },
+  filterMenu: {
+    display: 'inline-block',
+    '& button': {
+      textTransform: 'capitalize',
+      color: theme.palette.kujakuishiGreen.main,
+    },
+  },
+  displayMenu: {
+    display: 'inline-block',
+    '& button': {
+      textTransform: 'capitalize',
+      color: theme.palette.kujakuishiGreen.main,
+    },
+  },
+  createButton: {
+    display: 'inline-block',
+    color: theme.palette.kujakuishiGreen.main,
+    '& span': {
+      textTransform: 'capitalize',
+    },
+    '& svg': {
+      verticalAlign: 'top',
+    },
+  },
   dropdownMenu: {
-    maxWidth: 200
-  }
+    maxWidth: 200,
+  },
+  dropdownItemIcon: {
+    minWidth: 30,
+  },
+  dropdownItemText: {
+    textTransform: 'capitalize',
+    color: theme.palette.kujakuishiGreen.main,
+  },
 }))
 
 const WordListTableHeadDropdown = ({
@@ -28,7 +63,7 @@ const WordListTableHeadDropdown = ({
   title,
   icon,
   onOptionToggle,
-  optionsMap
+  optionsMap,
 }) => {
   const classes = useStyles()
 
@@ -56,8 +91,8 @@ const WordListTableHeadDropdown = ({
         aria-haspopup='true'
         onClick={handleMenuOpen}
       >
-        {title}
         {icon && icon}
+        {title}
       </Button>
       <Menu
         anchorEl={anchorEl}
@@ -78,16 +113,21 @@ const WordListTableHeadDropdown = ({
                 onClick={() => handleToggle(key)}
                 role={undefined}
               >
-                <ListItemIcon>
+                <ListItemIcon className={classes.dropdownItemIcon}>
                   <Checkbox
                     checked={optionsMap[key]}
+                    color='default'
                     disableRipple
                     edge='start'
                     inputProps={{ 'aria-labelledby': labelId }}
                     tabIndex={-1}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={key} />
+                <ListItemText
+                  className={classes.dropdownItemText}
+                  id={labelId}
+                  primary={key}
+                />
               </ListItem>
             )
           })}
@@ -102,7 +142,7 @@ WordListTableHeadDropdown.propTypes = {
   icon: PropTypes.node,
   onOptionToggle: PropTypes.func.isRequired,
   optionsMap: PropTypes.objectOf(PropTypes.bool).isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 }
 
 const WordListTableHead = ({
@@ -110,7 +150,7 @@ const WordListTableHead = ({
   displayOptionsMap,
   onFilterChange,
   onDisplayChange,
-  onCreateClick
+  onCreateClick,
 }) => {
   const classes = useStyles()
 
@@ -132,7 +172,11 @@ const WordListTableHead = ({
         optionsMap={displayOptionsMap}
         title={'Show'}
       />
-      <Button aria-controls='create word' onClick={onCreateClick}>
+      <Button
+        aria-controls='create word'
+        className={classes.createButton}
+        onClick={onCreateClick}
+      >
         <AddIcon />
         Create
       </Button>
@@ -145,7 +189,7 @@ WordListTableHead.propTypes = {
   filterOptionsMap: PropTypes.objectOf(PropTypes.bool),
   onCreateClick: PropTypes.func.isRequired,
   onDisplayChange: PropTypes.func.isRequired,
-  onFilterChange: PropTypes.func.isRequired
+  onFilterChange: PropTypes.func.isRequired,
 }
 
 export default WordListTableHead

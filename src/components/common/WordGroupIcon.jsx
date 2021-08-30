@@ -2,17 +2,19 @@ import PropTypes from 'prop-types'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import { theme } from 'src/themes/theme'
 import { colors } from 'src/themes/colors'
-import { getWordGroupIconMatch } from 'src/constants/jisho'
+import { getWordGroupIconMatch } from 'src/constants/resources'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   groupIcon: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
     borderRadius: 5,
-    color: theme.palette.prussianBlue.main
-  }
+    verticalAlign: 'top',
+    textAlign: 'center',
+    fontWeight: 700,
+    color: theme.palette.prussianBlue.main,
+  },
 }))
 
 const WordGroupIcon = ({ type }) => {
@@ -23,10 +25,9 @@ const WordGroupIcon = ({ type }) => {
 
   return (
     <div
-      className={classes.root}
+      className={classes.groupIcon}
       style={{
         backgroundColor: colors[iconDetail.colorName],
-        color: colors.prussianBlue
       }}
     >
       {iconDetail.text}
@@ -35,7 +36,7 @@ const WordGroupIcon = ({ type }) => {
 }
 
 WordGroupIcon.propTypes = {
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 }
 
 export default WordGroupIcon

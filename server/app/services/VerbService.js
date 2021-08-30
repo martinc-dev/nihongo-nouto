@@ -6,5 +6,5 @@ class VerbService extends BaseService {
 }
 
 module.exports = {
-  VerbService
+  VerbService,
 }

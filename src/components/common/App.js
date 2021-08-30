@@ -19,14 +19,14 @@ const useStyles = makeStyles(() =>
       display: 'flex',
       flexDirection: 'column',
       backgroundColor: customTheme.palette.sameGray.main,
-      color: customTheme.palette.white.main
+      color: customTheme.palette.white.main,
     },
     content: {
       flexGrow: 1,
       minHeight: `calc(100vh - ${sizes.footerHeight}px)`,
       padding: customTheme.spacing(3),
-      paddingTop: sizes.headerHeight + customTheme.spacing(3)
-    }
+      paddingTop: sizes.headerHeight + customTheme.spacing(3),
+    },
   })
 )
 

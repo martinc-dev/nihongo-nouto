@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors') // TODO: Add auth
 const {
-  server: { port }
+  server: { port },
 } = require('../env')
 const { router } = require('./routes')
 

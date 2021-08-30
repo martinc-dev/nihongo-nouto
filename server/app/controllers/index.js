@@ -37,7 +37,7 @@ class NounController extends BaseController {
 
       result = await this.service.queryAsync({
         conditionKV: { id },
-        options: this.queryOption
+        options: this.queryOption,
       })
 
       if (!result?.count)
@@ -74,7 +74,7 @@ class VerbController extends BaseController {
     'eDan',
     'oDan',
     'isTransitive',
-    'isIntransitive'
+    'isIntransitive',
   ]
 }
 
@@ -84,5 +84,5 @@ module.exports = {
   NounController,
   OtherController,
   AdjController,
-  VerbController
+  VerbController,
 }

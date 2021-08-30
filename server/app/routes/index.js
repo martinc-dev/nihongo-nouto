@@ -5,7 +5,7 @@ const {
   NounController,
   OtherController,
   AdjController,
-  VerbController
+  VerbController,
 } = require('../controllers')
 
 const registerCRUDEndpoints = ({
@@ -15,7 +15,7 @@ const registerCRUDEndpoints = ({
   createOne,
   updateOne,
   deleteOne,
-  getMultipleByWord
+  getMultipleByWord,
 }) => {
   const router = Router()
 
@@ -40,5 +40,5 @@ router.use('/adj', registerCRUDEndpoints(new AdjController()))
 router.use('/verb', registerCRUDEndpoints(new VerbController()))
 
 module.exports = {
-  router
+  router,
 }

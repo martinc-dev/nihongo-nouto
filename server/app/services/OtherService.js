@@ -6,5 +6,5 @@ class OtherService extends BaseService {
 }
 
 module.exports = {
-  OtherService
+  OtherService,
 }

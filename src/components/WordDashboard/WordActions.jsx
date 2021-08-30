@@ -4,10 +4,10 @@ import Button from '@material-ui/core/Button'
 const useStyles = makeStyles(() =>
   createStyles({
     wordActions: {
-      display: 'inline-block'
+      display: 'inline-block',
     },
     editButton: {},
-    deleteButton: {}
+    deleteButton: {},
   })
 )
 

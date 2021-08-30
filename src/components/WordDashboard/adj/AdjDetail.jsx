@@ -9,6 +9,7 @@ import { getWordDetailData } from 'src/selectors/wordDetail'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
+import WordSense from 'src/components/WordDashboard/WordSense'
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -17,8 +18,8 @@ const useStyles = makeStyles(() =>
       position: 'relative',
       width: '70%',
       borderRadius: 3,
-      verticalAlign: 'top'
-    }
+      verticalAlign: 'top',
+    },
   })
 )
 
@@ -38,11 +39,8 @@ const AdjDetail = ({ wordId }) => {
   if (!word) return null
 
   const types = [
-    word.group,
-    word.isTransitive === true && 'TRANSITIVE',
-    word.isIntransitive === true && 'INTRANSITIVE',
     word.isIConjugation === true && 'IADJ',
-    word.isIConjugation === false && 'NAADJ'
+    word.isIConjugation === false && 'NAADJ',
   ].filter(t => t)
 
   return (
@@ -50,12 +48,13 @@ const AdjDetail = ({ wordId }) => {
       <WordTitle {...word} />
       <WordActions />
       <WordTypeDisplay types={types} />
+      <WordSense {...word} />
     </div>
   )
 }
 
 AdjDetail.propTypes = {
-  wordId: PropTypes.string
+  wordId: PropTypes.string,
 }
 
 export default AdjDetail

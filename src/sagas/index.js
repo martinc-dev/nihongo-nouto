@@ -6,7 +6,7 @@ const sagas = [
   watchFetchWordList,
   watchFetchWordDetail,
   watchFetchWordDupe,
-  watchFetchWordSearch
+  watchFetchWordSearch,
 ]
 
 export default sagas

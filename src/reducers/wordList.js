@@ -8,7 +8,7 @@ import {
   fetchWordListActionReset,
   addWordToWordListAction,
   updateWordInWordListAction,
-  removeWordInWordListAction
+  removeWordInWordListAction,
 } from 'src/actions/wordList'
 
 const wordListData = (state = [], action) => {

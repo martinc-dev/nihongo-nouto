@@ -1,16 +1,16 @@
 export const fetchWordDetailAction = payload => ({
   type: 'WORD_DETAIL:FETCH',
-  payload
+  payload,
 })
 export const fetchWordDetailActionOK = payload => ({
   type: 'WORD_DETAIL:FETCH:OK',
-  payload
+  payload,
 })
 export const fetchWordDetailActionError = payload => ({
   type: 'WORD_DETAIL:FETCH:ERROR',
-  payload
+  payload,
 })
 export const fetchWordDetailActionReset = payload => ({
   type: 'WORD_DETAIL:FETCH:RESET',
-  payload
+  payload,
 })

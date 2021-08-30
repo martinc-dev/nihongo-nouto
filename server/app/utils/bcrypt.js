@@ -6,5 +6,5 @@ const checkHashed = (clearText, hashed) => bcrypt.compareSync(clearText, hashed)
 
 module.exports = {
   getHashed,
-  checkHashed
+  checkHashed,
 }

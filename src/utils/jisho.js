@@ -3,7 +3,7 @@ import {
   verbClassificationNaiveGuess,
   verbPOSTypeRegexMarkers,
   verbPOSTrMarkers,
-  adjPOSTypeMarkers
+  adjPOSTypeMarkers,
 } from 'src/constants/jisho'
 
 export const parseVerbProp = ({ partsOfSpeechArray, word }) => {
@@ -11,7 +11,7 @@ export const parseVerbProp = ({ partsOfSpeechArray, word }) => {
     verbType: null,
     verbClassification: null,
     verbIsTransitive: false,
-    verbIsInTransitive: false
+    verbIsInTransitive: false,
   }
 
   partsOfSpeechArray.map(t => {

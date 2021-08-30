@@ -9,23 +9,41 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 
 import resourceTypes from 'src/constants/resourceTypes'
 import { getCurrentContentType } from 'src/selectors/nav'
 
 const useStyles = makeStyles({
   root: {
-    boxShadow: 'none'
+    boxShadow: 'none',
   },
   table: {
-    width: '100%'
+    width: '100%',
+  },
+  tableRow: {
+    maxWidth: '270px',
   },
   tableCell: {
-    border: 0
+    padding: 0,
+    border: 0,
+    maxWidth: '60px',
   },
   tableCellHead: {
-    border: 0
-  }
+    padding: 0,
+    border: 0,
+    maxWidth: '60px',
+  },
+  tableCellHeadContent: {
+    display: 'inline-block',
+    maxWidth: 60,
+    verticalAlign: 'middle',
+  },
+  tableCellContent: {
+    display: 'inline-block',
+    maxWidth: 60,
+    verticalAlign: 'middle',
+  },
 })
 
 const WordListTable = ({ wordToRow, words, columns }) => {
@@ -41,20 +59,35 @@ const WordListTable = ({ wordToRow, words, columns }) => {
             const row = wordToRow(word)
 
             return (
-              <TableRow key={row.id}>
+              <TableRow className={classes.tableRow} key={row.id}>
                 {columns.map((column, idx) =>
                   !idx ? (
                     <TableCell
+                      align='center'
                       className={classes.tableCellHead}
                       component='th'
                       key={column}
                       scope='row'
                     >
-                      <Link to={`/${resourcePath}/${row.id}`}>{row[column]}</Link>
+                      <Typography
+                        className={classes.tableCellHeadContent}
+                        component='div'
+                        noWrap
+                        variant='caption'
+                      >
+                        <Link to={`/${resourcePath}/${row.id}`}>{row[column]}</Link>
+                      </Typography>
                     </TableCell>
                   ) : (
-                    <TableCell align='left' className={classes.tableCell} key={column}>
-                      <Link to={`/${resourcePath}/${row.id}`}>{row[column]}</Link>
+                    <TableCell align='center' className={classes.tableCell} key={column}>
+                      <Typography
+                        className={classes.tableCellContent}
+                        component='div'
+                        noWrap
+                        variant='caption'
+                      >
+                        <Link to={`/${resourcePath}/${row.id}`}>{row[column]}</Link>
+                      </Typography>
                     </TableCell>
                   )
                 )}
@@ -70,7 +103,7 @@ const WordListTable = ({ wordToRow, words, columns }) => {
 WordListTable.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
   wordToRow: PropTypes.func.isRequired,
-  words: PropTypes.array.isRequired
+  words: PropTypes.array.isRequired,
 }
 
 export default WordListTable

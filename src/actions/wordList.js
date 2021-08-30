@@ -1,31 +1,31 @@
 export const fetchWordListAction = payload => ({
   type: 'WORD_LIST:FETCH',
-  payload
+  payload,
 })
 export const fetchWordListActionOK = payload => ({
   type: 'WORD_LIST:FETCH:OK',
-  payload
+  payload,
 })
 export const fetchWordListActionError = payload => ({
   type: 'WORD_LIST:FETCH:ERROR',
-  payload
+  payload,
 })
 export const fetchWordListActionReset = payload => ({
   type: 'WORD_LIST:FETCH:RESET',
-  payload
+  payload,
 })
 
 export const addWordToWordListAction = payload => ({
   type: 'WORD_LIST:ADD',
-  payload
+  payload,
 })
 
 export const updateWordInWordListAction = payload => ({
   type: 'WORD_LIST:UPDATE',
-  payload
+  payload,
 })
 
 export const removeWordInWordListAction = payload => ({
   type: 'WORD_LIST:REMOVE',
-  payload
+  payload,
 })

@@ -17,5 +17,5 @@ export const colors = {
   metalBlue: '#2e455b',
   prussianBlue: '#102b43',
   sameGray: '#1d2125',
-  transparent: 'transparent'
+  transparent: 'transparent',
 }

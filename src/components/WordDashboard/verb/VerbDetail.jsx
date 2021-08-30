@@ -21,8 +21,8 @@ const useStyles = makeStyles(() =>
       position: 'relative',
       width: '70%',
       borderRadius: 3,
-      verticalAlign: 'top'
-    }
+      verticalAlign: 'top',
+    },
   })
 )
 
@@ -44,7 +44,7 @@ const VerbDetail = ({ wordId }) => {
   const types = [
     word.group,
     word.isTransitive === true && 'TRANSITIVE',
-    word.isIntransitive === true && 'INTRANSITIVE'
+    word.isIntransitive === true && 'INTRANSITIVE',
   ].filter(t => t)
 
   return (
@@ -61,7 +61,7 @@ const VerbDetail = ({ wordId }) => {
 }
 
 VerbDetail.propTypes = {
-  wordId: PropTypes.string
+  wordId: PropTypes.string,
 }
 
 export default VerbDetail

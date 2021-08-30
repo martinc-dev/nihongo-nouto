@@ -4,8 +4,12 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles({
-  root: {},
-  sense: {}
+  root: {
+    display: 'inline-block',
+    width: '50%',
+    verticalAlign: 'top',
+  },
+  sense: {},
 })
 
 const WordSense = ({ sense }) => {
@@ -23,7 +27,7 @@ const WordSense = ({ sense }) => {
 }
 
 WordSense.propTypes = {
-  sense: PropTypes.string.isRequired
+  sense: PropTypes.string.isRequired,
 }
 
 export default WordSense

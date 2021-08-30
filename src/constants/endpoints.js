@@ -6,7 +6,7 @@ const endpoints = {
   getWordUrl: ({ typeKey, id }) =>
     `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}/${id}`,
   getWordDupeSearchUrl: ({ typeKey }) =>
-    `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}/search`
+    `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}/search`,
 }
 
 export default endpoints

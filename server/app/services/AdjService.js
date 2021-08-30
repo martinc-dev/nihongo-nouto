@@ -6,5 +6,5 @@ class AdjService extends BaseService {
 }
 
 module.exports = {
-  AdjService
+  AdjService,
 }

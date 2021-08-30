@@ -18,8 +18,9 @@ const useStyles = makeStyles(() =>
     wordList: {
       display: 'inline-block',
       width: '30%',
-      verticalAlign: 'top'
-    }
+      maxWidth: 270,
+      verticalAlign: 'top',
+    },
   })
 )
 
@@ -28,7 +29,7 @@ const DISPLAYABLE_FIELDS_MAP = Object.keys(mainResourceFields).reduce(
     ...acc,
     [t]: Object.keys(mainResourceFields[t]).filter(
       k => deserializeBoolList(mainResourceFields[t][k])[0]
-    )
+    ),
   }),
   {}
 )
@@ -79,8 +80,8 @@ const WordList = () => {
           ...(t.isIConjugation !== undefined && {
             isIConjugation: (
               <WordGroupIcon type={t.isIConjugation ? adjTypes.IADJ : adjTypes.NAADJ} />
-            )
-          })
+            ),
+          }),
         })}
         words={words}
       />

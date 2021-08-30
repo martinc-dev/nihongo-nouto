@@ -11,17 +11,17 @@ const NounTag = connection.define(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
-    }
+      unique: true,
+    },
   },
   {
     timestamps: false,
-    underscored: true
+    underscored: true,
   }
 )
 
@@ -32,27 +32,27 @@ const Noun = connection.define(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     word: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     sense: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
-    }
+      defaultValue: '',
+    },
   },
   {
     timestamps: true,
-    underscored: true
+    underscored: true,
   }
 )
 const NounTagRel = connection.define(
@@ -62,28 +62,28 @@ const NounTagRel = connection.define(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     nounId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: Noun,
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     tagId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: NounTag,
-        key: 'id'
-      }
-    }
+        key: 'id',
+      },
+    },
   },
   {
     timestamps: false,
-    underscored: true
+    underscored: true,
   }
 )
 const Other = connection.define(
@@ -93,27 +93,27 @@ const Other = connection.define(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     word: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     sense: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
-    }
+      defaultValue: '',
+    },
   },
   {
     timestamps: true,
-    underscored: true
+    underscored: true,
   }
 )
 const Adj = connection.define(
@@ -123,32 +123,32 @@ const Adj = connection.define(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     word: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     sense: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     isIConjugation: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
-    }
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,
-    underscored: true
+    underscored: true,
   }
 )
 const Verb = connection.define(
@@ -158,17 +158,17 @@ const Verb = connection.define(
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
     },
     word: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     hiragana: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     group: {
       type: DataTypes.ENUM([
@@ -183,55 +183,55 @@ const Verb = connection.define(
         'V5R',
         'V1',
         'IRS',
-        'IRK'
+        'IRK',
       ]),
       allowNull: true,
-      defaultValue: null
+      defaultValue: null,
     },
     sense: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     stem: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     teForm: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     aDan: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     eDan: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     oDan: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: ''
+      defaultValue: '',
     },
     isTransitive: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
     isIntransitive: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
-    }
+      defaultValue: false,
+    },
   },
   {
     timestamps: true,
-    underscored: true
+    underscored: true,
   }
 )
 
@@ -244,5 +244,5 @@ module.exports = {
   NounTagRel,
   Other,
   Adj,
-  Verb
+  Verb,
 }

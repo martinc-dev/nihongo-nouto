@@ -68,9 +68,9 @@ WordDashboard.propTypes = {
   match: PropTypes.shape({
     path: PropTypes.string.isRequired,
     params: PropTypes.shape({
-      wordId: PropTypes.string
-    })
-  }).isRequired
+      wordId: PropTypes.string,
+    }),
+  }).isRequired,
 }
 
 export default WordDashboard

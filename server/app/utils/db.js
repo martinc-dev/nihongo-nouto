@@ -6,7 +6,7 @@ const getDBConnection = () =>
   new Sequelize(env.database.name, env.database.username, env.database.password, {
     host: env.database.host,
     port: env.database.port,
-    dialect: 'mysql'
+    dialect: 'mysql',
   })
 const testConnectionAsync = async () => {
   try {
@@ -24,5 +24,5 @@ const testConnectionAsync = async () => {
 
 module.exports = {
   getDBConnection,
-  testConnectionAsync
+  testConnectionAsync,
 }

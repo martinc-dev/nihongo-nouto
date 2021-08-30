@@ -38,7 +38,7 @@ class BaseController {
         limit,
         page,
         isAsc,
-        ...option
+        ...option,
       })
 
       return res.json(result.rows.map(t => t.dataValues))
@@ -69,7 +69,7 @@ class BaseController {
     try {
       const result = await this.service.createAsync({
         fieldKV: { ...req.body },
-        editableFields: this.editableFields
+        editableFields: this.editableFields,
       })
 
       if (!result?.dataValues?.id)
@@ -89,7 +89,7 @@ class BaseController {
       await this.service.updateAsync({
         conditionKV: { id },
         fieldKV: { ...req.body },
-        editableFields: this.editableFields
+        editableFields: this.editableFields,
       })
 
       const option = this.queryOption ? { options: this.queryOption } : null
@@ -119,5 +119,5 @@ class BaseController {
 }
 
 module.exports = {
-  BaseController
+  BaseController,
 }

@@ -1,33 +1,33 @@
 export const fetchWordDupeAction = payload => ({
   type: 'WORD_DUPE:FETCH',
-  payload
+  payload,
 })
 export const fetchWordDupeActionOK = payload => ({
   type: 'WORD_DUPE:FETCH:OK',
-  payload
+  payload,
 })
 export const fetchWordDupeActionError = payload => ({
   type: 'WORD_DUPE:FETCH:ERROR',
-  payload
+  payload,
 })
 export const fetchWordDupeActionReset = payload => ({
   type: 'WORD_DUPE:FETCH:RESET',
-  payload
+  payload,
 })
 
 export const fetchWordSearchAction = payload => ({
   type: 'WORD_SEARCH:FETCH',
-  payload
+  payload,
 })
 export const fetchWordSearchActionOK = payload => ({
   type: 'WORD_SEARCH:FETCH:OK',
-  payload
+  payload,
 })
 export const fetchWordSearchActionError = payload => ({
   type: 'WORD_SEARCH:FETCH:ERROR',
-  payload
+  payload,
 })
 export const fetchWordSearchActionReset = payload => ({
   type: 'WORD_SEARCH:FETCH:RESET',
-  payload
+  payload,
 })

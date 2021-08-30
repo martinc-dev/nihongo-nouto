@@ -12,8 +12,8 @@ export const theme = createMuiTheme({
       'sans-serif',
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(',')
+      '"Segoe UI Symbol"',
+    ].join(','),
   },
   palette: {
     type: 'light',
@@ -26,7 +26,7 @@ export const theme = createMuiTheme({
     background: { default: colors.sameGray, paper: colors.sameGray },
     text: {
       primary: colors.white,
-      secondary: colors.kujakuishiGreen
+      secondary: colors.kujakuishiGreen,
     },
     sakuraPink: { main: colors.sakuraPink },
     toukaPurple: { main: colors.toukaPurple },
@@ -46,6 +46,6 @@ export const theme = createMuiTheme({
     sameGray: { main: colors.sameGray },
     black: { main: colors.black },
     white: { main: colors.white },
-    transparent: { main: colors.transparent }
-  }
+    transparent: { main: colors.transparent },
+  },
 })

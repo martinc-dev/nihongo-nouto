@@ -10,7 +10,7 @@ const saga = createSagaMiddleware()
 
 const getEnhancerConfig = history => ({
   enhancers: composeEnhancers(applyMiddleware(routerMiddleware(history), saga)),
-  afterMount: () => saga.run(sagas)
+  afterMount: () => saga.run(sagas),
 })
 
 export default getEnhancerConfig

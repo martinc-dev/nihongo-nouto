@@ -8,14 +8,14 @@ class BaseService {
     isAsc = false,
     limit = 0,
     page = 0,
-    options = {}
+    options = {},
   } = {}) {
     try {
       const pagination =
         limit >= 1 && page >= 1
           ? {
               limit,
-              offset: (page - 1) * limit
+              offset: (page - 1) * limit,
             }
           : {}
       let result = null
@@ -25,7 +25,7 @@ class BaseService {
             where: conditionKV,
             order: [[orderBy, isAsc ? 'ASC' : 'DESC']],
             ...options,
-            ...pagination
+            ...pagination,
           })
         : await this.model.findAndCountAll({ ...options })
 
@@ -55,7 +55,7 @@ class BaseService {
       if (editableFields?.length) {
         return this.model.update(fieldKV, {
           where: conditionKV,
-          fields: editableFields.filter(t => Object.keys(fieldKV).includes(t))
+          fields: editableFields.filter(t => Object.keys(fieldKV).includes(t)),
         })
       }
 
@@ -79,5 +79,5 @@ class BaseService {
 }
 
 module.exports = {
-  BaseService
+  BaseService,
 }

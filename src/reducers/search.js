@@ -9,7 +9,7 @@ import {
   fetchWordSearchAction,
   fetchWordSearchActionOK,
   fetchWordSearchActionError,
-  fetchWordSearchActionReset
+  fetchWordSearchActionReset,
 } from 'src/actions/search'
 
 const wordDupeData = (state = [], action) => {
@@ -83,10 +83,10 @@ const wordSearchStatus = (state = requestStatus.INITIAL, action) => {
 export default combineReducers({
   dupe: combineReducers({
     data: wordDupeData,
-    status: wordDupeStatus
+    status: wordDupeStatus,
   }),
   search: combineReducers({
     data: wordSearchData,
-    status: wordSearchStatus
-  })
+    status: wordSearchStatus,
+  }),
 })

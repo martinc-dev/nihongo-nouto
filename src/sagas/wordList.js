@@ -7,7 +7,7 @@ import resourceTypes from 'src/constants/resourceTypes'
 import {
   fetchWordListAction,
   fetchWordListActionOK,
-  fetchWordListActionError
+  fetchWordListActionError,
 } from 'src/actions/wordList'
 import { getCurrentContentType } from 'src/selectors/nav'
 
@@ -19,7 +19,7 @@ export function* fetchWordList() {
       throw new Error('Target resource is not searchable')
 
     const response = yield call(sendGet, {
-      url: endpoints.getWordsUrl({ typeKey })
+      url: endpoints.getWordsUrl({ typeKey }),
     })
 
     if (response.error) {

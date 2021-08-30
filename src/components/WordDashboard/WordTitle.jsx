@@ -3,17 +3,23 @@ import PropTypes from 'prop-types'
 import { makeStyles, createStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles(theme =>
   createStyles({
     wordTitle: {
-      display: 'inline-block'
+      display: 'inline-block',
+      height: 80,
+      width: 'calc(100% - 150px)',
+      color: theme.palette.shibafuGreen.main,
     },
     wordTitleWord: {
-      display: 'inline-block'
+      display: 'inline-block',
+      marginRight: 50,
+      fontWeight: 700,
     },
     wordTitleHiragana: {
-      display: 'inline-block'
-    }
+      display: 'inline-block',
+      fontWeight: 700,
+    },
   })
 )
 
@@ -26,7 +32,7 @@ const WordTitle = ({ word, hiragana }) => {
         {word}
       </Typography>
       {hiragana && (
-        <Typography className={classes.wordTitleHiragana} variant='h3'>
+        <Typography className={classes.wordTitleHiragana} variant='h4'>
           {hiragana}
         </Typography>
       )}
@@ -36,7 +42,7 @@ const WordTitle = ({ word, hiragana }) => {
 
 WordTitle.propTypes = {
   hiragana: PropTypes.string,
-  word: PropTypes.string.isRequired
+  word: PropTypes.string.isRequired,
 }
 
 export default WordTitle

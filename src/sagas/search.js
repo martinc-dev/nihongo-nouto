@@ -12,7 +12,7 @@ import {
   fetchWordDupeActionError,
   fetchWordSearchAction,
   fetchWordSearchActionOK,
-  fetchWordSearchActionError
+  fetchWordSearchActionError,
 } from 'src/actions/search'
 import { getCurrentContentType } from 'src/selectors/nav'
 import jisho from 'src/singletons/jisho'
@@ -30,7 +30,7 @@ export function* fetchWordDupe({ payload }) {
 
     const response = yield call(sendGet, {
       url: endpoints.getWordDupeSearchUrl({ typeKey }),
-      data: { word }
+      data: { word },
     })
 
     if (response.error) {
@@ -48,7 +48,7 @@ export function* aggregateJisho({ raw, typeKey, word }) {
   try {
     const result = {
       wordOptions: [],
-      definitionOptions: []
+      definitionOptions: [],
     }
 
     if ((raw?.meta?.status ?? null) !== 200) yield result
@@ -62,7 +62,7 @@ export function* aggregateJisho({ raw, typeKey, word }) {
       case resourceTypes.VERB.key: {
         result.definitionOptions = senses.map(t => ({
           definitions: t.englishDefinitions,
-          ...parseVerbProp({ partsOfSpeechArray: t.partsOfSpeech, word })
+          ...parseVerbProp({ partsOfSpeechArray: t.partsOfSpeech, word }),
         }))
         break
       }
@@ -70,7 +70,7 @@ export function* aggregateJisho({ raw, typeKey, word }) {
       case resourceTypes.ADJ.key: {
         result.definitionOptions = senses.map(t => ({
           definitions: t.englishDefinitions,
-          ...parseAdjProp({ partsOfSpeechArray: t.partsOfSpeech })
+          ...parseAdjProp({ partsOfSpeechArray: t.partsOfSpeech }),
         }))
         break
       }
@@ -78,14 +78,14 @@ export function* aggregateJisho({ raw, typeKey, word }) {
       case resourceTypes.NOUN.key: {
         // TODO: Add tag management if/when available
         result.definitionOptions = senses.map(t => ({
-          definitions: t.englishDefinitions
+          definitions: t.englishDefinitions,
         }))
         break
       }
 
       default: {
         result.definitionOptions = senses.map(t => ({
-          definitions: t.englishDefinitions
+          definitions: t.englishDefinitions,
         }))
       }
     }

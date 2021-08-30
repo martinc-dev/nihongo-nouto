@@ -7,13 +7,12 @@ import MenuItem from '@material-ui/core/MenuItem'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 
-import { theme } from 'src/themes/theme'
 import resourceTypes from 'src/constants/resourceTypes'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   menuButton: {
-    marginRight: theme.spacing(2)
-  }
+    marginRight: theme.spacing(2),
+  },
 }))
 
 const NavMenu = () => {

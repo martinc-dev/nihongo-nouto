@@ -12,8 +12,8 @@ class NounService extends BaseService {
       fieldKV: {
         word,
         hiragana,
-        sense
-      }
+        sense,
+      },
     })
     const id = newWord?.dataValues?.id ?? 0
 
@@ -32,8 +32,8 @@ class NounService extends BaseService {
         nounTagRelService.createAsync({
           fieldKV: {
             nounId: id,
-            tagId: t
-          }
+            tagId: t,
+          },
         })
       )
     )
@@ -43,5 +43,5 @@ class NounService extends BaseService {
 }
 
 module.exports = {
-  NounService
+  NounService,
 }

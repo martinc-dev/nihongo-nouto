@@ -12,7 +12,7 @@ const createRootReducer = history =>
     wordList,
     wordDetail,
     search,
-    router: connectRouter(history)
+    router: connectRouter(history),
   })
 
 export default createRootReducer

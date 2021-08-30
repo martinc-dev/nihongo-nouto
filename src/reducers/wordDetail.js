@@ -5,7 +5,7 @@ import {
   fetchWordDetailAction,
   fetchWordDetailActionOK,
   fetchWordDetailActionError,
-  fetchWordDetailActionReset
+  fetchWordDetailActionReset,
 } from 'src/actions/wordDetail'
 
 const wordDetailData = (state = null, action) => {
