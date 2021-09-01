@@ -107,26 +107,31 @@ export const getWordGroupIconMatch = type => {
     case 'V5N':
     case 'V5R':
       return {
-        text: 'G',
+        text: '5',
         colorName: 'sakuraPink',
         value: 'GoDan',
       }
-
+    case 'V5KS':
+      return {
+        text: '5k',
+        colorName: 'sakuraPink',
+        value: 'GoDan Kuru Special',
+      }
     case 'V1':
       return {
-        text: 'I',
+        text: '1',
         colorName: 'kooriBlue',
         value: 'Ichidan',
       }
     case 'IRS':
       return {
-        text: 'S',
+        text: 'Su',
         colorName: 'kujakuishiGreen',
         value: 'Irregular Suru',
       }
     case 'IRK':
       return {
-        text: 'K',
+        text: 'Ku',
         colorName: 'kujakuishiGreen',
         value: 'Irregular Kuru',
       }

@@ -174,6 +174,7 @@ const Verb = connection.define(
       type: DataTypes.ENUM([
         'V5U',
         'V5K',
+        'V5KS',
         'V5G',
         'V5S',
         'V5T',

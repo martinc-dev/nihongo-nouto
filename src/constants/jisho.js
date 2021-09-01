@@ -2,7 +2,7 @@ export const verbPOSTypeMarkers = {
   'ichidan verb': 'V1',
   "godan verb with 'u' ending": 'V5U',
   "godan verb with 'ku' ending": 'V5K',
-  'godan verb - iku/yuku special class': 'V5K',
+  'godan verb - iku/yuku special class': 'V5KS',
   "godan verb with 'gu' ending": 'V5G',
   "godan verb with 'su' ending": 'V5S',
   "godan verb with 'tsu' ending": 'V5T',

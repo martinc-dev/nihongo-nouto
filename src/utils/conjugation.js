@@ -10,6 +10,7 @@ const conjugationForms = [
     forms: [
       'います',
       'きます',
+      'きます',
       'ぎます',
       'します',
       'ちます',
@@ -26,6 +27,7 @@ const conjugationForms = [
     name: 'plain negative',
     forms: [
       'わない',
+      'かない',
       'かない',
       'がない',
       'さない',
@@ -44,6 +46,7 @@ const conjugationForms = [
     forms: [
       'いません',
       'きません',
+      'きません',
       'ぎません',
       'しません',
       'ちません',
@@ -61,6 +64,7 @@ const conjugationForms = [
     forms: [
       'わん',
       'かん',
+      'かん',
       'がん',
       'さん',
       'たん',
@@ -77,6 +81,7 @@ const conjugationForms = [
     name: 'polite negative (archaic)',
     forms: [
       'いませぬ',
+      'きませぬ',
       'きませぬ',
       'ぎませぬ',
       'しませぬ',
@@ -97,6 +102,7 @@ const conjugationForms = [
     forms: [
       'った',
       'いた',
+      'った',
       'いだ',
       'した',
       'った',
@@ -113,6 +119,7 @@ const conjugationForms = [
     name: 'polite affirmative past tense',
     forms: [
       'いました',
+      'きました',
       'きました',
       'ぎました',
       'しました',
@@ -131,6 +138,7 @@ const conjugationForms = [
     forms: [
       'わなかった',
       'かなかった',
+      'かなかった',
       'がなかった',
       'さなかった',
       'たなかった',
@@ -147,6 +155,7 @@ const conjugationForms = [
     name: 'polite negative past tense',
     forms: [
       'いませんでした',
+      'きませんでした',
       'きませんでした',
       'ぎませんでした',
       'しませんでした',
@@ -167,6 +176,7 @@ const conjugationForms = [
     forms: [
       'わず(に)',
       'かず(に)',
+      'かず(に)',
       'がず(に)',
       'さず(に)',
       'たず(に)',
@@ -186,6 +196,7 @@ const conjugationForms = [
     forms: [
       'ったり',
       'いたり',
+      'ったり',
       'いだり',
       'したり',
       'ったり',
@@ -205,6 +216,7 @@ const conjugationForms = [
     forms: [
       'い-',
       'き-',
+      'き-',
       'ぎ-',
       'し-',
       'ち-',
@@ -221,6 +233,7 @@ const conjugationForms = [
     name: 'way of doing',
     forms: [
       'いかた',
+      'きかた',
       'きかた',
       'ぎかた',
       'しかた',
@@ -241,6 +254,7 @@ const conjugationForms = [
     forms: [
       'って',
       'いて',
+      'って',
       'いで',
       'して',
       'って',
@@ -258,6 +272,7 @@ const conjugationForms = [
     forms: [
       'っている',
       'いている',
+      'っている',
       'いでいる',
       'している',
       'っている',
@@ -275,6 +290,7 @@ const conjugationForms = [
     forms: [
       'ってる',
       'いてる',
+      'ってる',
       'いでる',
       'してる',
       'ってる',
@@ -292,6 +308,7 @@ const conjugationForms = [
     forms: [
       'ってある',
       'いてある',
+      'ってある',
       'いである',
       'してある',
       'ってある',
@@ -309,6 +326,7 @@ const conjugationForms = [
     forms: [
       'ったげる',
       'いたげる',
+      'ったげる',
       'いだげる',
       'したげる',
       'ったげる',
@@ -326,6 +344,7 @@ const conjugationForms = [
     forms: [
       'っておる',
       'いておる',
+      'っておる',
       'いでおる',
       'しておる',
       'っておる',
@@ -343,6 +362,7 @@ const conjugationForms = [
     forms: [
       'っとる',
       'いとる',
+      'っとる',
       'いどる',
       'しとる',
       'っとる',
@@ -360,6 +380,7 @@ const conjugationForms = [
     forms: [
       'っておく',
       'いておく',
+      'っておく',
       'いでおく',
       'しておく',
       'っておく',
@@ -377,6 +398,7 @@ const conjugationForms = [
     forms: [
       'っとく',
       'いとく',
+      'っとく',
       'いどく',
       'しとく',
       'っとく',
@@ -396,6 +418,7 @@ const conjugationForms = [
     forms: [
       'いたい',
       'きたい',
+      'きたい',
       'ぎたい',
       'したい',
       'ちたい',
@@ -412,6 +435,7 @@ const conjugationForms = [
     name: "other's desire",
     forms: [
       'いたがる',
+      'きたがる',
       'きたがる',
       'ぎたがる',
       'したがる',
@@ -432,6 +456,7 @@ const conjugationForms = [
     forms: [
       'おう',
       'こう',
+      'こう',
       'ごう',
       'そう',
       'とう',
@@ -448,6 +473,7 @@ const conjugationForms = [
     name: 'polite presumptive',
     forms: [
       'うでしょう',
+      'くでしょう',
       'くでしょう',
       'ぐでしょう',
       'すでしょう',
@@ -466,6 +492,7 @@ const conjugationForms = [
     forms: [
       'うだろう',
       'くだろう',
+      'くだろう',
       'ぐだろう',
       'すだろう',
       'つだろう',
@@ -482,6 +509,7 @@ const conjugationForms = [
     name: 'polite negative presumptive',
     forms: [
       'わないだろう',
+      'かないだろう',
       'かないだろう',
       'がないだろう',
       'さないだろう',
@@ -500,6 +528,7 @@ const conjugationForms = [
     forms: [
       'うまい',
       'くまい',
+      'くまい',
       'ぐまい',
       'すまい',
       'つまい',
@@ -517,6 +546,7 @@ const conjugationForms = [
     forms: [
       'ったろう',
       'いたろう',
+      'ったろう',
       'いだろう',
       'したろう',
       'ったろう',
@@ -536,6 +566,7 @@ const conjugationForms = [
     forms: [
       'えば',
       'けば',
+      'けば',
       'げば',
       'せば',
       'てば',
@@ -553,6 +584,7 @@ const conjugationForms = [
     forms: [
       'ったら',
       'いたら',
+      'ったら',
       'いだら',
       'したら',
       'ったら',
@@ -569,6 +601,7 @@ const conjugationForms = [
     name: 'short potential',
     forms: [
       'える',
+      'ける',
       'ける',
       'げる',
       'せる',
@@ -589,6 +622,7 @@ const conjugationForms = [
     forms: [
       'われる',
       'かれる',
+      'かれる',
       'がれる',
       'される',
       'たれる',
@@ -606,6 +640,7 @@ const conjugationForms = [
     forms: [
       'わせる',
       'かせる',
+      'かせる',
       'がせる',
       'させる',
       'たせる',
@@ -622,6 +657,7 @@ const conjugationForms = [
     name: 'causative passive',
     forms: [
       'わせられる',
+      'かせられる',
       'かせられる',
       'がせられる',
       'させられる',
@@ -642,6 +678,7 @@ const conjugationForms = [
     forms: [
       'ってください',
       'いてください',
+      'ってください',
       'いでください',
       'してください',
       'ってください',
@@ -657,12 +694,27 @@ const conjugationForms = [
 
   {
     name: 'commanding',
-    forms: ['え', 'け', 'げ', 'せ', 'て', 'め', 'べ', 'ね', 'れ', 'ろ', 'しろ', 'こい'],
+    forms: [
+      'え',
+      'け',
+      'け',
+      'げ',
+      'せ',
+      'て',
+      'め',
+      'べ',
+      'ね',
+      'れ',
+      'ろ',
+      'しろ',
+      'こい',
+    ],
   },
   {
     name: 'authoritative',
     forms: [
       'いなさい',
+      'きなさい',
       'きなさい',
       'ぎなさい',
       'しなさい',
@@ -676,11 +728,12 @@ const conjugationForms = [
       'きなさい',
     ],
   },
-  { name: 'advisory', forms: ['', '', '', '', '', '', '', '', '', 'よ', '?', '?'] },
+  { name: 'advisory', forms: ['', '', '', '', '', '', '', '', '', '', 'よ', '?', '?'] },
   {
     name: 'negative request',
     forms: [
       'わないでください',
+      'かないでください',
       'かないでください',
       'がないでください',
       'さないでください',
@@ -698,6 +751,7 @@ const conjugationForms = [
     name: 'negative imperative',
     forms: [
       'うな',
+      'くな',
       'くな',
       'ぐな',
       'すな',
@@ -718,6 +772,7 @@ const conjugationForms = [
     forms: [
       'いそう',
       'きそう',
+      'きそう',
       'ぎそう',
       'しそう',
       'ちそう',
@@ -734,6 +789,7 @@ const conjugationForms = [
     name: 'claimed to be the case',
     forms: [
       'うそう',
+      'くそう',
       'くそう',
       'ぐそう',
       'すそう',
@@ -752,6 +808,7 @@ const conjugationForms = [
     forms: [
       'うらしい',
       'くらしい',
+      'くらしい',
       'ぐらしい',
       'すらしい',
       'つらしい',
@@ -766,13 +823,14 @@ const conjugationForms = [
   },
   {
     name: 'verbstem',
-    forms: ['', '', '', '', '', '', '', '', '', '', '', ''],
+    forms: ['', '', '', '', '', '', '', '', '', '', '', '', ''],
   },
 ]
 
 const verbTypes = [
   'V5U',
   'V5K',
+  'V5KS',
   'V5G',
   'V5S',
   'V5T',
@@ -786,6 +844,7 @@ const verbTypes = [
 ]
 const verbEndings = [
   'う',
+  'く',
   'く',
   'ぐ',
   'す',
@@ -813,6 +872,9 @@ const conjugation = (verb, type) => {
   } else if (type.toUpperCase().indexOf('IRK') > -1) {
     index = verbTypes.indexOf('IRK')
     verbstem = verb.substring(0, verb.length - 2)
+  } else if (type.toUpperCase().indexOf('V5KS') > -1) {
+    index = verbTypes.indexOf('V5KS')
+    verbstem = verb.substring(0, verb.length - 1)
   } else {
     const lastchar = verb.substring(verb.length - 1, verb.length)
 
