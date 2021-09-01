@@ -47,8 +47,9 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-const VerbConjFormRow = ({ aDan, stem, word, eDan, oDan, conjugation }) => {
+const VerbConjFormRow = ({ group, word, conjugation }) => {
   const classes = useStyles()
+  const isGoDan = group.includes('V5')
 
   return (
     <TableContainer className={classes.root} component={Paper}>
@@ -57,45 +58,46 @@ const VerbConjFormRow = ({ aDan, stem, word, eDan, oDan, conjugation }) => {
           <TableRow>
             <TableCell align='left' className={classes.tableCell}>
               <span className={classes.name}>A</span>
-              <span className={classes.value}>{aDan}</span>
+              <span className={classes.value}>
+                {(conjugation['plain negative'] || '').replace('ない', '')}
+              </span>
               <span className={classes.suffix}>ない</span>
             </TableCell>
             <TableCell align='left' className={classes.tableCell}>
               <span className={classes.name}>I</span>
-              <span className={classes.value}>{stem}</span>
+              <span className={classes.value}>
+                {(conjugation['polite affirmative'] || '').replace('ます', '')}
+              </span>
               <span className={classes.suffix}>ます</span>
             </TableCell>
             <TableCell align='left' className={classes.tableCell}>
               <span className={classes.name}>U</span>
-              <span className={classes.value}>
-                {conjugation['verbstem'] ? conjugation['verbstem'] : word}
-              </span>
-              <span className={classes.suffix}>
-                {conjugation['verbstem']
-                  ? word.replace(conjugation['verbstem'], '')
-                  : word}
-              </span>
+              <span className={classes.value}>{word}</span>
             </TableCell>
             <TableCell align='left' className={classes.tableCell}>
               <span className={classes.name}>E</span>
               <span className={classes.value}>
-                {conjugation['short potential'] ? conjugation['verbstem'] : eDan}
+                {isGoDan
+                  ? (conjugation['short potential'] || '').slice(0, -1)
+                  : conjugation['verbstem']}
               </span>
               <span className={classes.suffix}>
-                {conjugation['short potential']
-                  ? conjugation['short potential'].replace(conjugation['verbstem'], '')
-                  : '〜'}
+                {isGoDan
+                  ? 'る'
+                  : conjugation['short potential'].replace(conjugation['verbstem'], '')}
               </span>
             </TableCell>
             <TableCell align='left' className={classes.tableCell}>
               <span className={classes.name}>O</span>
               <span className={classes.value}>
-                {conjugation['pseudo futurum'] ? conjugation['verbstem'] : oDan}
+                {isGoDan
+                  ? (conjugation['pseudo futurum'] || '').slice(0, -1)
+                  : conjugation['verbstem']}
               </span>
               <span className={classes.suffix}>
-                {conjugation['pseudo futurum']
-                  ? conjugation['pseudo futurum'].replace(conjugation['verbstem'], '')
-                  : '〜'}
+                {isGoDan
+                  ? 'う'
+                  : conjugation['pseudo futurum'].replace(conjugation['verbstem'], '')}
               </span>
             </TableCell>
           </TableRow>
@@ -106,11 +108,8 @@ const VerbConjFormRow = ({ aDan, stem, word, eDan, oDan, conjugation }) => {
 }
 
 VerbConjFormRow.propTypes = {
-  aDan: PropTypes.string.isRequired,
   conjugation: PropTypes.object.isRequired,
-  eDan: PropTypes.string.isRequired,
-  oDan: PropTypes.string.isRequired,
-  stem: PropTypes.string.isRequired,
+  group: PropTypes.string.isRequired,
   word: PropTypes.string.isRequired,
 }
 

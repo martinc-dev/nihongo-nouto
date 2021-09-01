@@ -18,9 +18,12 @@ const useStyles = makeStyles(theme =>
       display: 'inline-block',
     },
     name: {
-      textTransform: 'uppercase',
       marginRight: 50,
-      color: theme.palette.soraBlue.main,
+      padding: '0 5px',
+      textTransform: 'uppercase',
+      borderRadius: 4,
+      backgroundColor: theme.palette.soraBlue.main,
+      color: theme.palette.prussianBlue.main,
     },
     value: {
       marginRight: 5,
@@ -29,27 +32,28 @@ const useStyles = makeStyles(theme =>
   })
 )
 
-const VerbMainFormRow = ({ stem, teForm }) => {
+const VerbMainFormRow = ({ conjugation }) => {
   const classes = useStyles()
 
   return (
     <div className={classes.root}>
       <div className={classes.stem}>
         <span className={classes.name}>Stem</span>
-        <span className={classes.value}>{stem}</span>
+        <span className={classes.value}>
+          {conjugation.verbstem || conjugation['te form'].replace('て', '')}
+        </span>
         <span className={classes.suffix}>〜</span>
       </div>
       <div className={classes.teForm}>
         <span className={classes.name}>Te</span>
-        <span className={classes.value}>{teForm}</span>
+        <span className={classes.value}>{conjugation['te form'] || '?'}</span>
       </div>
     </div>
   )
 }
 
 VerbMainFormRow.propTypes = {
-  stem: PropTypes.string,
-  teForm: PropTypes.string,
+  conjugation: PropTypes.object.isRequired,
 }
 
 export default VerbMainFormRow

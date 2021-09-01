@@ -70,6 +70,14 @@ const VerbConjFormAdditional = ({ conjugation }) => {
           </TableRow>
           <TableRow>
             <TableCell align='left' className={`${classes.tableCell} ${classes.name}`}>
+              Short Potential
+            </TableCell>
+            <TableCell align='left' className={`${classes.tableCell} ${classes.value}`}>
+              {conjugation['short potential']}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align='left' className={`${classes.tableCell} ${classes.name}`}>
               Passive
             </TableCell>
             <TableCell align='left' className={`${classes.tableCell} ${classes.value}`}>
@@ -82,6 +90,14 @@ const VerbConjFormAdditional = ({ conjugation }) => {
             </TableCell>
             <TableCell align='left' className={`${classes.tableCell} ${classes.value}`}>
               {conjugation['hypothetical']}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align='left' className={`${classes.tableCell} ${classes.name}`}>
+              Pseudo Futurum
+            </TableCell>
+            <TableCell align='left' className={`${classes.tableCell} ${classes.value}`}>
+              {conjugation['pseudo futurum']}
             </TableCell>
           </TableRow>
           <TableRow>
@@ -106,14 +122,6 @@ const VerbConjFormAdditional = ({ conjugation }) => {
             </TableCell>
             <TableCell align='left' className={`${classes.tableCell} ${classes.value}`}>
               {conjugation['past hypothetical']}
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell align='left' className={`${classes.tableCell} ${classes.name}`}>
-              Pseudo Futurum
-            </TableCell>
-            <TableCell align='left' className={`${classes.tableCell} ${classes.value}`}>
-              {conjugation['pseudo futurum']}
             </TableCell>
           </TableRow>
           <TableRow>
