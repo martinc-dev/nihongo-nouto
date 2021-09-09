@@ -19,13 +19,13 @@ const registerCRUDEndpoints = ({
 }) => {
   const router = Router()
 
+  if (isSearchable) router.get('/search', (req, res) => getMultipleByWord(req, res))
+
   router.get('/', (req, res) => getMultiple(req, res))
   router.get('/:id', (req, res) => getOne(req, res))
   router.post('/', (req, res) => createOne(req, res))
   router.patch('/:id', (req, res) => updateOne(req, res))
   router.delete('/:id', (req, res) => deleteOne(req, res))
-
-  if (isSearchable) router.get('/search', (req, res) => getMultipleByWord(req, res))
 
   return router
 }

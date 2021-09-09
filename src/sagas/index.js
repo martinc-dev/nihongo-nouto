@@ -1,5 +1,9 @@
 import { watchFetchWordList } from 'src/sagas/wordList'
-import { watchFetchWordDetail } from 'src/sagas/wordDetail'
+import {
+  watchFetchWordDetail,
+  watchSaveWordDetailAction,
+  watchDeleteWordDetailAction,
+} from 'src/sagas/wordDetail'
 import { watchFetchWordDupe, watchFetchWordSearch } from 'src/sagas/search'
 
 const sagas = [
@@ -7,6 +11,8 @@ const sagas = [
   watchFetchWordDetail,
   watchFetchWordDupe,
   watchFetchWordSearch,
+  watchSaveWordDetailAction,
+  watchDeleteWordDetailAction,
 ]
 
 export default sagas

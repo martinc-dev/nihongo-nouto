@@ -7,7 +7,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles'
 
 import { nounTags } from 'src/constants/resources'
 import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
-import { getWordDetailData } from 'src/selectors/wordDetail'
+import { getFetchWordDetailData } from 'src/selectors/wordDetail'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() =>
 const NounDetail = ({ wordId }) => {
   const dispatch = useDispatch()
   const classes = useStyles()
-  const word = useSelector(getWordDetailData)
+  const word = useSelector(getFetchWordDetailData)
 
   useEffect(() => {
     if (wordId) {
