@@ -7,6 +7,20 @@ class BaseController {
   queryOption = null
   isSearchable = true // Must have a "word" field
 
+  handleError = (error, res) => {
+    if (
+      [error instanceof NotFoundError, error instanceof InternalServiceError].filter(
+        t => t
+      ).length
+    )
+      res.status(error.status || 500).json(error)
+    else {
+      res
+        .status(error.status || 500)
+        .json({ message: 'Something went wrong while processing your request.' })
+    }
+  }
+
   getOne = async (req, res) => {
     try {
       const { id } = req.params
@@ -18,7 +32,7 @@ class BaseController {
       return res.json(result.rows[0].dataValues)
     } catch (error) {
       logError(error)
-      res.status(error.status || 500).json(error)
+      this.handleError(error, res)
     }
   }
 
@@ -44,7 +58,7 @@ class BaseController {
       return res.json(result.rows.map(t => t.dataValues))
     } catch (error) {
       logError(error)
-      res.status(error.status || 500).json(error)
+      this.handleError(error, res)
     }
   }
 
@@ -61,7 +75,7 @@ class BaseController {
       return res.json(result.rows.map(t => t.dataValues))
     } catch (error) {
       logError(error)
-      res.status(error.status || 500).json(error)
+      this.handleError(error, res)
     }
   }
 
@@ -78,7 +92,7 @@ class BaseController {
       return res.json(result.dataValues)
     } catch (error) {
       logError(error)
-      res.status(error.status || 500).json(error)
+      this.handleError(error, res)
     }
   }
 
@@ -100,7 +114,7 @@ class BaseController {
       return res.json(result.rows[0].dataValues)
     } catch (error) {
       logError(error)
-      res.status(error.status || 500).json(error)
+      this.handleError(error, res)
     }
   }
 
@@ -113,7 +127,7 @@ class BaseController {
       return res.json('OK')
     } catch (error) {
       logError(error)
-      res.status(error.status || 500).json(error)
+      this.handleError(error, res)
     }
   }
 }

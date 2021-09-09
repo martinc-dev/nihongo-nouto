@@ -1,6 +1,7 @@
 /* eslint-disable no-console, require-await */
 class BaseService {
   model = null
+  queryOption = null
 
   async queryAsync({
     conditionKV = null,

@@ -46,7 +46,22 @@ class NounController extends BaseController {
       return res.json(result.rows[0].dataValues)
     } catch (error) {
       logError(error)
-      res.status(error.status || 500).json(error)
+      this.handleError(error, res)
+    }
+  }
+
+  updateOne = async (req, res) => {
+    try {
+      const { id } = req.params
+      const result = await this.service.updateNoun({ ...req.body, id })
+
+      if (!result?.count)
+        throw new InternalServiceError({ message: 'Cannot find new record' })
+
+      return res.json(result.rows[0].dataValues)
+    } catch (error) {
+      logError(error)
+      this.handleError(error, res)
     }
   }
 }
