@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
 
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
+import Typography from '@mui/material/Typography'
 
 const useStyles = makeStyles(theme =>
   createStyles({

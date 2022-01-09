@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { find as findInObj } from 'lodash'
 
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
 
 import { nounTags } from 'src/constants/resources'
 import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'

@@ -1,5 +1,6 @@
-import { makeStyles, createStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
+import Button from '@mui/material/Button'
 
 const useStyles = makeStyles(() =>
   createStyles({

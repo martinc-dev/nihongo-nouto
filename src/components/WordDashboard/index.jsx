@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { find as findInObj } from 'lodash'
 
-import Container from '@material-ui/core/Container'
+import Container from '@mui/material/Container'
 
 import resourceTypes from 'src/constants/resourceTypes'
 import { getCurrentContentType } from 'src/selectors/nav'

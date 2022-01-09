@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { pickBy, keys as getKeysInObj } from 'lodash'
 
-import { makeStyles, createStyles } from '@material-ui/core/styles'
+import makeStyles from '@mui/styles/makeStyles'
+import createStyles from '@mui/styles/createStyles'
 
 import { mainResourceFields, mainResourceFilterables } from 'src/constants/resources'
 import { adjTypes } from 'src/constants/jisho'

@@ -1,7 +1,7 @@
-import { makeStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
+import makeStyles from '@mui/styles/makeStyles'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 
 import { sizes } from 'src/themes/sizes'
 import NavMenu from 'src/components/common/NavMenu'
