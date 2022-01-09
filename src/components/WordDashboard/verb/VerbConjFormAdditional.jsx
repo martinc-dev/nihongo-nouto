@@ -1,7 +1,7 @@
 /* eslint-disable dot-notation */
 import PropTypes from 'prop-types'
 
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'

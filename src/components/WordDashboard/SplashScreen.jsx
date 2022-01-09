@@ -1,4 +1,4 @@
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 const PREFIX = 'SplashScreen'
 
 const classes = {

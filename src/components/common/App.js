@@ -1,5 +1,5 @@
 import { QueryClientProvider } from 'react-query'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 import {
   responsiveFontSizes,

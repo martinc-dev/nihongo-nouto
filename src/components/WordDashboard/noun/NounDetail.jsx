@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { find as findInObj } from 'lodash'

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import PropTypes from 'prop-types'
 import clxn from 'classnames'
 

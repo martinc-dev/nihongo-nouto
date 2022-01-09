@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { useSelector } from 'react-redux'
 import { pickBy, keys as getKeysInObj } from 'lodash'
 

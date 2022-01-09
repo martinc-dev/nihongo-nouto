@@ -1,6 +1,6 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import Paper from '@mui/material/Paper'
 
 import { theme as customTheme } from 'src/themes/theme'

@@ -1,4 +1,4 @@
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 
 const PREFIX = 'WordActions'

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 
 import { colors } from 'src/themes/colors'
 import { getWordGroupIconMatch } from 'src/constants/resources'

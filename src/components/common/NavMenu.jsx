@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { styled } from '@mui/styles'
+import { styled } from '@mui/material/styles'
 import { useHistory } from 'react-router-dom'
 
 import Menu from '@mui/material/Menu'
