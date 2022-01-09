@@ -1,28 +1,33 @@
 import PropTypes from 'prop-types'
 
-import makeStyles from '@mui/styles/makeStyles'
+import { styled } from '@mui/styles'
 import Typography from '@mui/material/Typography'
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'WordSense'
+
+const classes = {
+  root: `${PREFIX}-root`,
+  sense: `${PREFIX}-sense`,
+}
+
+const Root = styled('div')({
+  [`&.${classes.root}`]: {
     display: 'inline-block',
     width: '50%',
     verticalAlign: 'top',
   },
-  sense: {},
+  [`& .${classes.sense}`]: {},
 })
 
 const WordSense = ({ sense }) => {
-  const classes = useStyles()
-
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <div className={classes.sense}>
         <Typography component='div' variant='body1'>
           {sense}
         </Typography>
       </div>
-    </div>
+    </Root>
   )
 }
 

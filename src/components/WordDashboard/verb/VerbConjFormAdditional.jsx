@@ -1,8 +1,7 @@
 /* eslint-disable dot-notation */
 import PropTypes from 'prop-types'
 
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
+import { styled } from '@mui/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -10,39 +9,51 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    root: {
-      display: 'inline-block',
-      width: '50%',
-      paddingLeft: 10,
-      borderLeft: `1px solid ${theme.palette.kumoriBlue.main}`,
-      boxShadow: 'none',
-    },
-    table: {
-      width: '100%',
-    },
-    tableCell: {
-      border: 0,
-    },
-    tableCellHead: {
-      border: 0,
-    },
-    name: {
-      marginRight: 20,
-      padding: '0 5px',
-      textTransform: 'Capitalize',
-      color: theme.palette.kooriBlue.main,
-    },
-    value: {},
-  })
-)
+const PREFIX = 'VerbConjFormAdditional'
+
+const classes = {
+  root: `${PREFIX}-root`,
+  table: `${PREFIX}-table`,
+  tableCell: `${PREFIX}-tableCell`,
+  tableCellHead: `${PREFIX}-tableCellHead`,
+  name: `${PREFIX}-name`,
+  value: `${PREFIX}-value`,
+}
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    display: 'inline-block',
+    width: '50%',
+    paddingLeft: 10,
+    borderLeft: `1px solid ${theme.palette.kumoriBlue.main}`,
+    boxShadow: 'none',
+  },
+
+  [`& .${classes.table}`]: {
+    width: '100%',
+  },
+
+  [`& .${classes.tableCell}`]: {
+    border: 0,
+  },
+
+  [`& .${classes.tableCellHead}`]: {
+    border: 0,
+  },
+
+  [`& .${classes.name}`]: {
+    marginRight: 20,
+    padding: '0 5px',
+    textTransform: 'Capitalize',
+    color: theme.palette.kooriBlue.main,
+  },
+
+  [`& .${classes.value}`]: {},
+}))
 
 const VerbConjFormAdditional = ({ conjugation }) => {
-  const classes = useStyles()
-
   return (
-    <TableContainer className={classes.root} component={Paper}>
+    <StyledTableContainer className={classes.root} component={Paper}>
       <Table className={classes.table} size='small'>
         <TableBody>
           <TableRow>
@@ -271,7 +282,7 @@ const VerbConjFormAdditional = ({ conjugation }) => {
           </TableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   )
 }
 

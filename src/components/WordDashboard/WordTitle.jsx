@@ -1,34 +1,39 @@
 import PropTypes from 'prop-types'
 
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
+import { styled } from '@mui/styles'
 import Typography from '@mui/material/Typography'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    wordTitle: {
-      display: 'inline-block',
-      height: 80,
-      width: 'calc(100% - 150px)',
-      color: theme.palette.shibafuGreen.main,
-    },
-    wordTitleWord: {
-      display: 'inline-block',
-      marginRight: 50,
-      fontWeight: 700,
-    },
-    wordTitleHiragana: {
-      display: 'inline-block',
-      fontWeight: 700,
-    },
-  })
-)
+const PREFIX = 'WordTitle'
+
+const classes = {
+  wordTitle: `${PREFIX}-wordTitle`,
+  wordTitleWord: `${PREFIX}-wordTitleWord`,
+  wordTitleHiragana: `${PREFIX}-wordTitleHiragana`,
+}
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.wordTitle}`]: {
+    display: 'inline-block',
+    height: 80,
+    width: 'calc(100% - 150px)',
+    color: theme.palette.shibafuGreen.main,
+  },
+
+  [`& .${classes.wordTitleWord}`]: {
+    display: 'inline-block',
+    marginRight: 50,
+    fontWeight: 700,
+  },
+
+  [`& .${classes.wordTitleHiragana}`]: {
+    display: 'inline-block',
+    fontWeight: 700,
+  },
+}))
 
 const WordTitle = ({ word, hiragana }) => {
-  const classes = useStyles()
-
   return (
-    <div className={classes.wordTitle}>
+    <Root className={classes.wordTitle}>
       <Typography className={classes.wordTitleWord} variant='h2'>
         {word}
       </Typography>
@@ -37,7 +42,7 @@ const WordTitle = ({ word, hiragana }) => {
           {hiragana}
         </Typography>
       )}
-    </div>
+    </Root>
   )
 }
 

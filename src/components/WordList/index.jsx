@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
+import { styled } from '@mui/styles'
 import { useSelector } from 'react-redux'
 import { pickBy, keys as getKeysInObj } from 'lodash'
 
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
-
-import { mainResourceFields, mainResourceFilterables } from 'src/constants/resources'
+import {
+  mainResourceFields,
+  mainResourceFilterables,
+  getWordGroupIconMatch,
+} from 'src/constants/resources'
 import { adjTypes } from 'src/constants/jisho'
 import { deserializeBoolList } from 'src/utils/boolean'
 import { getCurrentContentType } from 'src/selectors/nav'
@@ -14,16 +16,20 @@ import WordGroupIcon from 'src/components/common/WordGroupIcon'
 import WordListTableHead from 'src/components/WordList/WordListTableHead'
 import WordListTable from 'src/components/WordList/WordListTable'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    wordList: {
-      display: 'inline-block',
-      width: '30%',
-      maxWidth: 270,
-      verticalAlign: 'top',
-    },
-  })
-)
+const PREFIX = 'WordList'
+
+const classes = {
+  wordList: `${PREFIX}-wordList`,
+}
+
+const Root = styled('div')(() => ({
+  [`&.${classes.wordList}`]: {
+    display: 'inline-block',
+    width: '30%',
+    maxWidth: 270,
+    verticalAlign: 'top',
+  },
+}))
 
 const DISPLAYABLE_FIELDS_MAP = Object.keys(mainResourceFields).reduce(
   (acc, t) => ({
@@ -38,7 +44,6 @@ const DISPLAYABLE_FIELDS_MAP = Object.keys(mainResourceFields).reduce(
 const FILTERABLE_FIELDS_MAP = { ...mainResourceFilterables }
 
 const WordList = () => {
-  const classes = useStyles()
   const currentContentType = useSelector(getCurrentContentType)
   const words = useSelector(getWordListData)
 
@@ -65,7 +70,7 @@ const WordList = () => {
   }, [currentContentType])
 
   return displayOptionsMap ? (
-    <div className={classes.wordList}>
+    <Root className={classes.wordList}>
       <WordListTableHead
         displayOptionsMap={displayOptionsMap}
         filterOptionsMap={filterOptionsMap}
@@ -84,9 +89,18 @@ const WordList = () => {
             ),
           }),
         })}
-        words={words}
+        words={words.filter(t => {
+          if (t.group)
+            return filterOptionsMap[getWordGroupIconMatch(t.group)?.filterKey ?? '']
+          if (t.isIConjugation !== undefined)
+            return filterOptionsMap[
+              getWordGroupIconMatch(t.isIConjugation ? 'IADJ' : 'NAADJ')?.filterKey ?? ''
+            ]
+
+          return true
+        })}
       />
-    </div>
+    </Root>
   ) : null
 }
 

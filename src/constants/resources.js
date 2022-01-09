@@ -51,7 +51,7 @@ export const mainResourceFields = {
 }
 
 export const mainResourceFilterables = {
-  VERB: ['GoDan', 'IchiDan', 'SuRu', 'KuRu', 'Transitive', 'Intransitive'],
+  VERB: ['GoDan', 'IchiDan', 'SuRu', 'KuRu'],
   ADJ: ['I-Adj', 'Na-Adj'],
 }
 
@@ -110,30 +110,35 @@ export const getWordGroupIconMatch = type => {
         text: '5',
         colorName: 'sakuraPink',
         value: 'GoDan',
+        filterKey: 'GoDan',
       }
     case 'V5KS':
       return {
         text: '5k',
         colorName: 'sakuraPink',
         value: 'GoDan Kuru Special',
+        filterKey: 'GoDan',
       }
     case 'V1':
       return {
         text: '1',
         colorName: 'kooriBlue',
         value: 'Ichidan',
+        filterKey: 'IchiDan',
       }
     case 'IRS':
       return {
         text: 'Su',
         colorName: 'kujakuishiGreen',
         value: 'Irregular Suru',
+        filterKey: 'SuRu',
       }
     case 'IRK':
       return {
         text: 'Ku',
         colorName: 'kujakuishiGreen',
         value: 'Irregular Kuru',
+        filterKey: 'KuRu',
       }
 
     case 'TRANSITIVE':
@@ -154,12 +159,14 @@ export const getWordGroupIconMatch = type => {
         text: 'I',
         colorName: 'sakuraPink',
         value: 'I-adjective',
+        filterKey: 'I-Adj',
       }
     case 'NAADJ':
       return {
         text: 'Na',
         colorName: 'kooriBlue',
         value: 'Na-adjective',
+        filterKey: 'Na-Adj',
       }
 
     case nounTags.THINGS.name:

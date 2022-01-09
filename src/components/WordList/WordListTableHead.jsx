@@ -1,8 +1,8 @@
 import { useState } from 'react'
+import { styled } from '@mui/styles'
 import PropTypes from 'prop-types'
 import clxn from 'classnames'
 
-import makeStyles from '@mui/styles/makeStyles'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import List from '@mui/material/List'
@@ -14,29 +14,44 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import AddIcon from '@mui/icons-material/Add'
 
-const useStyles = makeStyles(theme => ({
-  wordListTableHead: {
+const PREFIX = 'WordListTableHead'
+
+const classes = {
+  wordListTableHead: `${PREFIX}-wordListTableHead`,
+  filterMenu: `${PREFIX}-filterMenu`,
+  displayMenu: `${PREFIX}-displayMenu`,
+  createButton: `${PREFIX}-createButton`,
+  dropdownMenu: `${PREFIX}-dropdownMenu`,
+  dropdownItemIcon: `${PREFIX}-dropdownItemIcon`,
+  dropdownItemText: `${PREFIX}-dropdownItemText`,
+}
+
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.wordListTableHead}`]: {
     '& svg': {
       width: 15,
       marginRight: 10,
       fill: theme.palette.kujakuishiGreen.main,
     },
   },
-  filterMenu: {
+
+  [`& .${classes.filterMenu}`]: {
     display: 'inline-block',
     '& button': {
       textTransform: 'capitalize',
       color: theme.palette.kujakuishiGreen.main,
     },
   },
-  displayMenu: {
+
+  [`& .${classes.displayMenu}`]: {
     display: 'inline-block',
     '& button': {
       textTransform: 'capitalize',
       color: theme.palette.kujakuishiGreen.main,
     },
   },
-  createButton: {
+
+  [`& .${classes.createButton}`]: {
     display: 'inline-block',
     color: theme.palette.kujakuishiGreen.main,
     '& span': {
@@ -46,13 +61,16 @@ const useStyles = makeStyles(theme => ({
       verticalAlign: 'top',
     },
   },
-  dropdownMenu: {
+
+  [`& .${classes.dropdownMenu}`]: {
     maxWidth: 200,
   },
-  dropdownItemIcon: {
+
+  [`& .${classes.dropdownItemIcon}`]: {
     minWidth: 30,
   },
-  dropdownItemText: {
+
+  [`& .${classes.dropdownItemText}`]: {
     textTransform: 'capitalize',
     color: theme.palette.kujakuishiGreen.main,
   },
@@ -65,8 +83,6 @@ const WordListTableHeadDropdown = ({
   onOptionToggle,
   optionsMap,
 }) => {
-  const classes = useStyles()
-
   const [anchorEl, setAnchorEl] = useState(null)
 
   const handleToggle = key => {
@@ -152,10 +168,8 @@ const WordListTableHead = ({
   onDisplayChange,
   onCreateClick,
 }) => {
-  const classes = useStyles()
-
   return (
-    <div className={classes.wordListTableHead}>
+    <Root className={classes.wordListTableHead}>
       {filterOptionsMap && (
         <WordListTableHeadDropdown
           className={classes.filterMenu}
@@ -180,7 +194,7 @@ const WordListTableHead = ({
         <AddIcon />
         Create
       </Button>
-    </div>
+    </Root>
   )
 }
 

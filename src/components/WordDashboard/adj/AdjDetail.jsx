@@ -1,9 +1,7 @@
 import { useEffect } from 'react'
+import { styled } from '@mui/styles'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
-
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
 
 import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
 import { getFetchWordDetailData } from 'src/selectors/wordDetail'
@@ -12,21 +10,25 @@ import WordActions from 'src/components/WordDashboard/WordActions'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    wordDetail: {
-      display: 'inline-block',
-      position: 'relative',
-      width: '70%',
-      borderRadius: 3,
-      verticalAlign: 'top',
-    },
-  })
-)
+const PREFIX = 'AdjDetail'
+
+const classes = {
+  wordDetail: `${PREFIX}-wordDetail`,
+}
+
+const Root = styled('div')(() => ({
+  [`&.${classes.wordDetail}`]: {
+    display: 'inline-block',
+    position: 'relative',
+    width: '70%',
+    borderRadius: 3,
+    verticalAlign: 'top',
+  },
+}))
 
 const AdjDetail = ({ wordId }) => {
   const dispatch = useDispatch()
-  const classes = useStyles()
+
   const word = useSelector(getFetchWordDetailData)
 
   useEffect(() => {
@@ -45,12 +47,12 @@ const AdjDetail = ({ wordId }) => {
   ].filter(t => t)
 
   return (
-    <div className={classes.wordDetail}>
+    <Root className={classes.wordDetail}>
       <WordTitle {...word} />
       <WordActions />
       <WordTypeDisplay types={types} />
       <WordSense {...word} />
-    </div>
+    </Root>
   )
 }
 

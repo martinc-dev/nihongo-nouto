@@ -1,38 +1,46 @@
 import PropTypes from 'prop-types'
 
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
+import { styled } from '@mui/styles'
 
 import { getWordGroupIconMatch } from 'src/constants/resources'
 import WordGroupIcon from 'src/components/common/WordGroupIcon'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    root: {
-      width: '100%',
-      borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
-    },
-    row: {
-      margin: '10px 0',
-    },
-    iconCell: {
-      display: 'inline-block',
-      marginRight: 10,
-    },
-    valueCell: {
-      display: 'inline-block',
-    },
-  })
-)
+const PREFIX = 'WordTypeDisplay'
+
+const classes = {
+  root: `${PREFIX}-root`,
+  row: `${PREFIX}-row`,
+  iconCell: `${PREFIX}-iconCell`,
+  valueCell: `${PREFIX}-valueCell`,
+}
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    width: '100%',
+    borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
+  },
+
+  [`& .${classes.row}`]: {
+    margin: '10px 0',
+  },
+
+  [`& .${classes.iconCell}`]: {
+    display: 'inline-block',
+    marginRight: 10,
+  },
+
+  [`& .${classes.valueCell}`]: {
+    display: 'inline-block',
+  },
+}))
 
 const WordTypeDisplay = ({ types }) => {
-  const classes = useStyles()
   const items = (types || [])
     .map(t => ({ type: t, match: getWordGroupIconMatch(t) }))
     .filter(t => t.match)
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       {items.map(t => (
         <div className={classes.row} key={t.type}>
           <span className={classes.iconCell}>
@@ -41,7 +49,7 @@ const WordTypeDisplay = ({ types }) => {
           <span className={classes.valueCell}>{t.match.value}</span>
         </div>
       ))}
-    </div>
+    </Root>
   )
 }
 

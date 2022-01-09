@@ -1,29 +1,33 @@
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
+import { styled } from '@mui/styles'
 import Button from '@mui/material/Button'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    wordActions: {
-      display: 'inline-block',
-    },
-    editButton: {},
-    deleteButton: {},
-  })
-)
+const PREFIX = 'WordActions'
+
+const classes = {
+  wordActions: `${PREFIX}-wordActions`,
+  editButton: `${PREFIX}-editButton`,
+  deleteButton: `${PREFIX}-deleteButton`,
+}
+
+const Root = styled('div')(() => ({
+  [`&.${classes.wordActions}`]: {
+    display: 'inline-block',
+  },
+
+  [`& .${classes.editButton}`]: {},
+  [`& .${classes.deleteButton}`]: {},
+}))
 
 const WordActions = () => {
-  const classes = useStyles()
-
   return (
-    <div className={classes.wordActions}>
+    <Root className={classes.wordActions}>
       <Button className={classes.editButton} onClick={() => true} type='button'>
         Edit
       </Button>
       <Button className={classes.deleteButton} onClick={() => true} type='button'>
         Delete
       </Button>
-    </div>
+    </Root>
   )
 }
 

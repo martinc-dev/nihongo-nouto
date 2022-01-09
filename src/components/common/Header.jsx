@@ -1,4 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles'
+import { styled } from '@mui/styles'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -6,25 +6,33 @@ import Typography from '@mui/material/Typography'
 import { sizes } from 'src/themes/sizes'
 import NavMenu from 'src/components/common/NavMenu'
 
-const useStyles = makeStyles(theme => ({
-  root: {
+const PREFIX = 'Header'
+
+const classes = {
+  root: `${PREFIX}-root`,
+  toolbar: `${PREFIX}-toolbar`,
+  title: `${PREFIX}-title`,
+}
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     flexGrow: 1,
   },
-  toolbar: {
+
+  [`& .${classes.toolbar}`]: {
     minHeight: sizes.headerHeight,
   },
-  title: {
+
+  [`& .${classes.title}`]: {
     flexGrow: 1,
     color: theme.palette.white.main,
   },
 }))
 
 const Header = () => {
-  const classes = useStyles()
-
   return (
-    <div className={classes.root}>
-      <AppBar position='fixed'>
+    <Root className={classes.root}>
+      <AppBar enableColorOnDark position='fixed'>
         <Toolbar className={classes.toolbar}>
           <NavMenu />
           <Typography className={classes.title} variant='h6'>
@@ -32,7 +40,7 @@ const Header = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-    </div>
+    </Root>
   )
 }
 

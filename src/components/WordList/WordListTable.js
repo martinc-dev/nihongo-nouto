@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
+import { styled } from '@mui/styles'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-import makeStyles from '@mui/styles/makeStyles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -14,32 +14,44 @@ import Typography from '@mui/material/Typography'
 import resourceTypes from 'src/constants/resourceTypes'
 import { getCurrentContentType } from 'src/selectors/nav'
 
-const useStyles = makeStyles({
-  root: {
+const PREFIX = 'WordListTable'
+
+const classes = {
+  root: `${PREFIX}-root`,
+  table: `${PREFIX}-table`,
+  tableRow: `${PREFIX}-tableRow`,
+  tableCell: `${PREFIX}-tableCell`,
+  tableCellHead: `${PREFIX}-tableCellHead`,
+  tableCellHeadContent: `${PREFIX}-tableCellHeadContent`,
+  tableCellContent: `${PREFIX}-tableCellContent`,
+}
+
+const StyledTableContainer = styled(TableContainer)({
+  [`&.${classes.root}`]: {
     boxShadow: 'none',
   },
-  table: {
+  [`& .${classes.table}`]: {
     width: '100%',
   },
-  tableRow: {
+  [`& .${classes.tableRow}`]: {
     maxWidth: '270px',
   },
-  tableCell: {
+  [`& .${classes.tableCell}`]: {
     padding: 0,
     border: 0,
     maxWidth: '60px',
   },
-  tableCellHead: {
+  [`& .${classes.tableCellHead}`]: {
     padding: 0,
     border: 0,
     maxWidth: '60px',
   },
-  tableCellHeadContent: {
+  [`& .${classes.tableCellHeadContent}`]: {
     display: 'inline-block',
     maxWidth: 60,
     verticalAlign: 'middle',
   },
-  tableCellContent: {
+  [`& .${classes.tableCellContent}`]: {
     display: 'inline-block',
     maxWidth: 60,
     verticalAlign: 'middle',
@@ -47,12 +59,11 @@ const useStyles = makeStyles({
 })
 
 const WordListTable = ({ wordToRow, words, columns }) => {
-  const classes = useStyles()
   const currentContentType = useSelector(getCurrentContentType)
   const resourcePath = resourceTypes[currentContentType]?.path ?? null
 
   return (
-    <TableContainer className={classes.root} component={Paper}>
+    <StyledTableContainer className={classes.root} component={Paper}>
       <Table aria-label='word list table' className={classes.table} size='small'>
         <TableBody>
           {words.map(word => {
@@ -96,7 +107,7 @@ const WordListTable = ({ wordToRow, words, columns }) => {
           })}
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   )
 }
 

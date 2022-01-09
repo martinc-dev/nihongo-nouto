@@ -1,16 +1,16 @@
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
+import { styled } from '@mui/styles'
+const PREFIX = 'SplashScreen'
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    splashScreen: {},
-  })
-)
+const classes = {
+  splashScreen: `${PREFIX}-splashScreen`,
+}
+
+const Root = styled('div')(() => ({
+  [`&.${classes.splashScreen}`]: {},
+}))
 
 const SplashScreen = () => {
-  const classes = useStyles()
-
-  return <div className={classes.splashScreen}>SplashScreen</div>
+  return <Root className={classes.splashScreen}>SplashScreen</Root>
 }
 
 export default SplashScreen

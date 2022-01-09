@@ -1,8 +1,7 @@
 /* eslint-disable dot-notation */
 import PropTypes from 'prop-types'
 
-import makeStyles from '@mui/styles/makeStyles'
-import createStyles from '@mui/styles/createStyles'
+import { styled } from '@mui/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -10,50 +9,65 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 
-const useStyles = makeStyles(theme =>
-  createStyles({
-    root: {
-      boxShadow: 'none',
-      marginBottom: 10,
-      borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
-      borderRadius: 0,
-    },
-    table: {
-      width: '100%',
-    },
-    tableCell: {
-      border: 0,
-      padding: '10px 0',
-    },
-    tableCellHead: {
-      border: 0,
-      padding: '10px 0',
-    },
-    name: {
-      marginRight: 20,
-      padding: '0 5px',
-      textTransform: 'uppercase',
-      borderRadius: 4,
-      backgroundColor: theme.palette.soraBlue.main,
-      color: theme.palette.prussianBlue.main,
-    },
-    value: {
-      marginRight: 5,
-    },
-    suffix: {
-      padding: '0 5px',
-      borderRadius: 4,
-      border: `1px solid ${theme.palette.kujakuishiGreen.main}`,
-    },
-  })
-)
+const PREFIX = 'VerbConjFormRow'
+
+const classes = {
+  root: `${PREFIX}-root`,
+  table: `${PREFIX}-table`,
+  tableCell: `${PREFIX}-tableCell`,
+  tableCellHead: `${PREFIX}-tableCellHead`,
+  name: `${PREFIX}-name`,
+  value: `${PREFIX}-value`,
+  suffix: `${PREFIX}-suffix`,
+}
+
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  [`&.${classes.root}`]: {
+    boxShadow: 'none',
+    marginBottom: 10,
+    borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
+    borderRadius: 0,
+  },
+
+  [`& .${classes.table}`]: {
+    width: '100%',
+  },
+
+  [`& .${classes.tableCell}`]: {
+    border: 0,
+    padding: '10px 0',
+  },
+
+  [`& .${classes.tableCellHead}`]: {
+    border: 0,
+    padding: '10px 0',
+  },
+
+  [`& .${classes.name}`]: {
+    marginRight: 20,
+    padding: '0 5px',
+    textTransform: 'uppercase',
+    borderRadius: 4,
+    backgroundColor: theme.palette.soraBlue.main,
+    color: theme.palette.prussianBlue.main,
+  },
+
+  [`& .${classes.value}`]: {
+    marginRight: 5,
+  },
+
+  [`& .${classes.suffix}`]: {
+    padding: '0 5px',
+    borderRadius: 4,
+    border: `1px solid ${theme.palette.kujakuishiGreen.main}`,
+  },
+}))
 
 const VerbConjFormRow = ({ group, word, conjugation }) => {
-  const classes = useStyles()
   const isGoDan = group.includes('V5')
 
   return (
-    <TableContainer className={classes.root} component={Paper}>
+    <StyledTableContainer className={classes.root} component={Paper}>
       <Table className={classes.table} size='small'>
         <TableBody>
           <TableRow>
@@ -104,7 +118,7 @@ const VerbConjFormRow = ({ group, word, conjugation }) => {
           </TableRow>
         </TableBody>
       </Table>
-    </TableContainer>
+    </StyledTableContainer>
   )
 }
 

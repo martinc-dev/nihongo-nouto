@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { styled } from '@mui/styles'
 import { useHistory } from 'react-router-dom'
 
-import makeStyles from '@mui/styles/makeStyles'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
@@ -9,14 +9,20 @@ import MenuIcon from '@mui/icons-material/Menu'
 
 import resourceTypes from 'src/constants/resourceTypes'
 
-const useStyles = makeStyles(theme => ({
-  menuButton: {
+const PREFIX = 'NavMenu'
+
+const classes = {
+  menuButton: `${PREFIX}-menuButton`,
+}
+
+// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
+const Root = styled('div')(({ theme }) => ({
+  [`& .${classes.menuButton}`]: {
     marginRight: theme.spacing(2),
   },
 }))
 
 const NavMenu = () => {
-  const classes = useStyles()
   const history = useHistory()
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -34,7 +40,7 @@ const NavMenu = () => {
   }
 
   return (
-    <>
+    <Root>
       <IconButton
         aria-haspopup='true'
         aria-label='menu'
@@ -66,7 +72,7 @@ const NavMenu = () => {
           {resourceTypes.OTHER.pname}
         </MenuItem>
       </Menu>
-    </>
+    </Root>
   )
 }
 

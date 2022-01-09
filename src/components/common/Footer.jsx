@@ -1,10 +1,17 @@
-import makeStyles from '@mui/styles/makeStyles'
+import { styled } from '@mui/styles'
 import Typography from '@mui/material/Typography'
 
 import { sizes } from 'src/themes/sizes'
 
-const useStyles = makeStyles(theme => ({
-  root: {
+const PREFIX = 'Footer'
+
+const classes = {
+  root: `${PREFIX}-root`,
+  footNote: `${PREFIX}-footNote`,
+}
+
+const Root = styled('div')(({ theme }) => ({
+  [`&.${classes.root}`]: {
     flex: 1,
     display: 'flex',
     justifyContent: 'flex-end',
@@ -12,19 +19,18 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.metalBlue.main,
     color: theme.palette.white.main,
   },
-  footNote: {
+
+  [`& .${classes.footNote}`]: {
     padding: '40px 40px 0 0',
     fontSize: 12,
   },
 }))
 
 const Footer = () => {
-  const classes = useStyles()
-
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <Typography className={classes.footNote}>Nihongo Nouto</Typography>
-    </div>
+    </Root>
   )
 }
 
