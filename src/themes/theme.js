@@ -17,8 +17,8 @@ export const theme = createTheme({
   },
   palette: {
     mode: 'dark',
-    primary: { main: colors.prussianBlue },
-    secondary: { main: colors.metalBlue },
+    primary: { main: colors.shibafuGreen },
+    secondary: { main: colors.kujakuishiGreen },
     error: { main: colors.ichigoRed },
     warning: { main: colors.yuzuYellow },
     info: { main: colors.prussianBlue },

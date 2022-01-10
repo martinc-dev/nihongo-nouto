@@ -11,6 +11,7 @@ import { fetchWordListAction } from 'src/actions/wordList'
 import { setCurrentContentType } from 'src/actions/nav'
 import WordList from 'src/components/WordList'
 import VerbDetail from 'src/components/WordDashboard/verb/VerbDetail'
+import VerbEditor from 'src/components/WordDashboard/verb/VerbEditor'
 import AdjDetail from 'src/components/WordDashboard/adj/AdjDetail'
 import NounDetail from 'src/components/WordDashboard/noun/NounDetail'
 import OtherDetail from 'src/components/WordDashboard/other/OtherDetail'
@@ -24,7 +25,14 @@ const WordDashboard = ({ match }) => {
   const contentType =
     findInObj(
       resourceTypes,
-      t => t.pathName === path.replace('/', '').replace('/:wordId', '').toLowerCase()
+      t =>
+        t.pathName ===
+        path
+          .replace('/', '')
+          .replace('/:wordId', '')
+          .replace('/create', '')
+          .replace('/edit', '')
+          .toLowerCase()
     )?.key ?? null
 
   useEffect(() => {
@@ -40,15 +48,15 @@ const WordDashboard = ({ match }) => {
   }, [currentContentType])
 
   const wordId = match?.params?.wordId ?? null
+  const isEditing = path.includes('/create') || path.includes('/:wordId/edit')
 
   return (
     <Container maxWidth='xl'>
       {currentContentType ? (
         <>
           <WordList />
-          {currentContentType === resourceTypes.VERB.key && (
-            <VerbDetail wordId={wordId} />
-          )}
+          {currentContentType === resourceTypes.VERB.key &&
+            (isEditing ? <VerbEditor wordId={wordId} /> : <VerbDetail wordId={wordId} />)}
           {currentContentType === resourceTypes.ADJ.key && <AdjDetail wordId={wordId} />}
           {currentContentType === resourceTypes.NOUN.key && (
             <NounDetail wordId={wordId} />

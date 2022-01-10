@@ -90,17 +90,15 @@ export function* aggregateJisho({ raw, typeKey, word }) {
       }
     }
 
-    yield result
+    return result
   } catch (error) {
     logError(error)
     throw error
   }
 }
 
-export function* fetchWordSearch({ payload }) {
+export function* fetchWordSearch({ payload: word }) {
   try {
-    const { word } = payload
-
     if (!word) throw new Error('No word defined within search')
 
     const typeKey = yield select(getCurrentContentType)
@@ -111,6 +109,7 @@ export function* fetchWordSearch({ payload }) {
     const raw = yield jisho.searchForPhrase(word)
     const result = yield call(aggregateJisho, { raw, typeKey, word })
 
+    if (!result) throw new Error('Jisho response cannot be parsed')
     yield put(fetchWordSearchActionOK(result))
   } catch (error) {
     yield put(fetchWordSearchActionError(error))

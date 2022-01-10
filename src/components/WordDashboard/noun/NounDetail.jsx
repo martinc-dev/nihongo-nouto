@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { styled } from '@mui/material/styles'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { find as findInObj } from 'lodash'
+
+import { styled } from '@mui/material/styles'
 
 import { nounTags } from 'src/constants/resources'
 import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'

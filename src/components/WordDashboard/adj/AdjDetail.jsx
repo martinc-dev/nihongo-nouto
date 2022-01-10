@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { styled } from '@mui/material/styles'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
+
+import { styled } from '@mui/material/styles'
 
 import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
 import { getFetchWordDetailData } from 'src/selectors/wordDetail'

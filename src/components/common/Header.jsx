@@ -32,7 +32,7 @@ const Root = styled('div')(({ theme }) => ({
 const Header = () => {
   return (
     <Root className={classes.root}>
-      <AppBar enableColorOnDark position='fixed'>
+      <AppBar color='prussianBlue' enableColorOnDark position='fixed'>
         <Toolbar className={classes.toolbar}>
           <NavMenu />
           <Typography className={classes.title} variant='h6'>

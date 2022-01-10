@@ -44,6 +44,14 @@ const MainContent = () => {
             <Route component={WordDashboard} exact key='dashboard' path='/' />
             <Route
               component={WordDashboard}
+              path={`/${resourceTypes.VERB.pathName}/create`}
+            />
+            <Route
+              component={WordDashboard}
+              path={`/${resourceTypes.VERB.pathName}/:wordId/edit`}
+            />
+            <Route
+              component={WordDashboard}
               path={`/${resourceTypes.VERB.pathName}/:wordId`}
             />
             <Route component={WordDashboard} path={`/${resourceTypes.VERB.pathName}`} />
