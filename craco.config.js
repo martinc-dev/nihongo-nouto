@@ -1,6 +1,9 @@
 const CracoAlias = require('craco-alias')
 
 module.exports = {
+  babel: {
+    plugins: [],
+  },
   plugins: [
     {
       plugin: CracoAlias,

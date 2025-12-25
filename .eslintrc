@@ -2,28 +2,56 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "prettier"
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
   ],
   "env": {
     "browser": true,
     "node": true,
     "es6": true,
-    "jest/globals": true
+    "jest/globals": true,
   },
-  "plugins": ["jest"],
-  "parser": "babel-eslint",
+  "plugins": ["jest", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+    },
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "parser": "@babel/eslint-parser",
+      "parserOptions": {
+        "requireConfigFile": false,
+        "babelOptions": {
+          "presets": ["@babel/preset-react"],
+        },
+      },
+    },
+    {
+      "files": ["server/**/*.js", "server/**/*.jsx", "server/**/*.ts", "server/**/*.tsx"],
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off",
+        "@typescript-eslint/no-var-requires": "off",
+      },
+    },
+  ],
   "settings": {
     "react": {
       "version": "detect",
     },
   },
   "rules": {
+    "@typescript-eslint/no-unused-vars": "warn",
     "array-bracket-newline": [
       "error",
       {
         "minItems": 22,
-        "multiline": true
-      }
+        "multiline": true,
+      },
     ],
     "array-callback-return": 0,
     "arrow-spacing": 1,
@@ -39,73 +67,70 @@
     "dot-notation": [
       "error",
       {
-        "allowPattern": "^[a-z]+(_[a-z]+)+$"
-      }
+        "allowPattern": "^[a-z]+(_[a-z]+)+$",
+      },
     ],
     "eqeqeq": 1,
     "func-call-spacing": 1,
     "generator-star-spacing": 0,
-    "jsx-quotes": [
-      "warn",
-      "prefer-single"
-    ],
+    "jsx-quotes": ["warn", "prefer-single"],
     "key-spacing": [
       "warn",
       {
         "afterColon": true,
-        "beforeColon": false
-      }
+        "beforeColon": false,
+      },
     ],
     "keyword-spacing": [
       "warn",
       {
         "after": true,
-        "before": true
-      }
+        "before": true,
+      },
     ],
     "lines-around-comment": 0,
     "max-depth": [
       "warn",
       {
-        "max": 3
-      }
+        "max": 3,
+      },
     ],
     "max-lines": [
       "warn",
       {
-        "max": 360
-      }
+        "max": 360,
+      },
     ],
     "max-nested-callbacks": [
       "warn",
       {
-        "max": 3
-      }
+        "max": 3,
+      },
     ],
     "max-params": [
       "warn",
       {
-        "max": 4
-      }
+        "max": 4,
+      },
     ],
     "max-statements-per-line": [
       "warn",
       {
-        "max": 2
-      }
+        "max": 2,
+      },
     ],
     "max-statements": [
       "warn",
       {
-        "max": 30
-      }
+        "max": 30,
+      },
     ],
     "new-cap": 0,
     "newline-per-chained-call": [
       "warn",
       {
-        "ignoreChainWithDepth": 5
-      }
+        "ignoreChainWithDepth": 5,
+      },
     ],
     "no-alert": 2,
     "no-array-constructor": 1,
@@ -128,27 +153,8 @@
     "no-magic-numbers": [
       "warn",
       {
-        "ignore": [
-          -1,
-          0,
-          1,
-          2,
-          3,
-          4,
-          5,
-          6,
-          7,
-          8,
-          9,
-          200,
-          401,
-          403,
-          400,
-          404,
-          422,
-          500
-        ]
-      }
+        "ignore": [-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 200, 401, 403, 400, 404, 422, 500],
+      },
     ],
     "no-mixed-operators": 2,
     "no-multi-spaces": 1,
@@ -161,8 +167,8 @@
     "no-plusplus": [
       "error",
       {
-        "allowForLoopAfterthoughts": true
-      }
+        "allowForLoopAfterthoughts": true,
+      },
     ],
     "no-proto": 2,
     "no-redeclare": 2,
@@ -178,8 +184,8 @@
     "no-trailing-spaces": [
       "error",
       {
-        "ignoreComments": false
-      }
+        "ignoreComments": false,
+      },
     ],
     "no-underscore-dangle": 1,
     "no-unneeded-ternary": 1,
@@ -195,53 +201,35 @@
     "no-warning-comments": 0,
     "no-whitespace-before-property": 2,
     "no-with": 2,
-    "object-curly-spacing": [
-      "warn",
-      "always"
-    ],
+    "object-curly-spacing": ["warn", "always"],
     "padding-line-between-statements": [
       "warn",
       {
         "blankLine": "always",
         "prev": "*",
-        "next": "return"
+        "next": "return",
       },
       {
         "blankLine": "always",
-        "prev": [
-          "const",
-          "let",
-          "var"
-        ],
-        "next": "*"
+        "prev": ["const", "let", "var"],
+        "next": "*",
       },
       {
         "blankLine": "any",
-        "prev": [
-          "const",
-          "let",
-          "var"
-        ],
-        "next": [
-          "const",
-          "let",
-          "var"
-        ]
+        "prev": ["const", "let", "var"],
+        "next": ["const", "let", "var"],
       },
       {
         "blankLine": "any",
         "prev": "directive",
-        "next": "directive"
-      }
+        "next": "directive",
+      },
     ],
     "prefer-arrow-callback": 1,
     "prefer-const": 1,
     "prefer-destructuring": 1,
     "prefer-promise-reject-errors": 1,
-    "quote-props": [
-      "warn",
-      "as-needed"
-    ],
+    "quote-props": ["warn", "as-needed"],
     "quotes": 0,
     "react/no-danger-with-children": 0,
     "react/boolean-prop-naming": 1,
@@ -274,18 +262,12 @@
     "react/jsx-curly-spacing": [
       2,
       {
-        "when": "never"
-      }
+        "when": "never",
+      },
     ],
-    "react/jsx-first-prop-new-line": [
-      2,
-      "multiline"
-    ],
+    "react/jsx-first-prop-new-line": [2, "multiline"],
     "react/jsx-equals-spacing": 1,
-    "react/jsx-indent-props": [
-      2,
-      2
-    ],
+    "react/jsx-indent-props": [2, 2],
     "react/jsx-key": 2,
     "react/jsx-no-comment-textnodes": 2,
     "react/jsx-no-duplicate-props": 2,
@@ -295,11 +277,8 @@
     "react/jsx-sort-props": 1,
     "react/jsx-wrap-multilines": 1,
     "require-await": 2,
-    "semi": [
-      "warn",
-      "never"
-    ],
+    "semi": ["warn", "never"],
     "space-in-parens": 1,
-    "yoda": 2
-  }
+    "yoda": 2,
+  },
 }
