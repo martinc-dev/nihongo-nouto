@@ -1,11 +1,6 @@
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-
 import { styled } from '@mui/material/styles'
 
-import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
-import { getFetchWordDetailData } from 'src/selectors/wordDetail'
-import { RootState } from 'src/types/redux'
+import { useWordDetail } from 'src/hooks/useWordDetail'
 import { OtherWord } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
@@ -33,34 +28,32 @@ interface OtherDetailProps {
 }
 
 const OtherDetail = ({ wordId }: OtherDetailProps) => {
-  const dispatch = useDispatch()
+  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
 
-  const word = useSelector((state: RootState) => getFetchWordDetailData(state)) as OtherWord | null
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
-  useEffect(() => {
-    if (wordId) {
-      dispatch(fetchWordDetailAction({ id: parseInt(wordId, 10) }))
-    } else {
-      dispatch(fetchWordDetailActionReset())
-    }
-  }, [wordId, dispatch])
+  if (error || !word) {
+    return null
+  }
 
-  if (!word) return null
+  const otherWord = word as OtherWord
 
   const types: string[] = [
-    'group' in word ? word.group : null,
-    'isTransitive' in word && word.isTransitive === true ? 'TRANSITIVE' : null,
-    'isIntransitive' in word && word.isIntransitive === true ? 'INTRANSITIVE' : null,
-    'isIConjugation' in word && word.isIConjugation === true ? 'IADJ' : null,
-    'isIConjugation' in word && word.isIConjugation === false ? 'NAADJ' : null,
+    'group' in otherWord ? otherWord.group : null,
+    'isTransitive' in otherWord && otherWord.isTransitive === true ? 'TRANSITIVE' : null,
+    'isIntransitive' in otherWord && otherWord.isIntransitive === true ? 'INTRANSITIVE' : null,
+    'isIConjugation' in otherWord && otherWord.isIConjugation === true ? 'IADJ' : null,
+    'isIConjugation' in otherWord && otherWord.isIConjugation === false ? 'NAADJ' : null,
   ].filter((t): t is string => t !== null)
 
   return (
     <Root className={classes.wordDetail}>
-      <WordTitle {...word} />
+      <WordTitle {...otherWord} />
       <WordActions />
       <WordTypeDisplay types={types} />
-      <WordSense {...word} />
+      <WordSense {...otherWord} />
     </Root>
   )
 }

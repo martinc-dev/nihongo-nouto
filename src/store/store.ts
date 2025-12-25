@@ -8,14 +8,12 @@ import sagas from 'src/store/sagas'
 import { RootState } from 'src/types/redux'
 
 const history: History = createBrowserHistory()
-const {
-  createReduxHistory,
-  routerMiddleware,
-  routerReducer,
-} = createReduxHistoryContext({
-  history,
-  reduxTravelling: true,
-})
+const { createReduxHistory, routerMiddleware, routerReducer } = createReduxHistoryContext(
+  {
+    history,
+    reduxTravelling: true,
+  },
+)
 
 const rootReducer = createRootReducer(routerReducer)
 
@@ -26,11 +24,13 @@ interface WindowWithDevTools extends Window {
 }
 
 const composeEnhancers: typeof compose =
-  (window as unknown as WindowWithDevTools).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  // eslint-disable-next-line no-underscore-dangle
+  (window as unknown as WindowWithDevTools).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ||
+  compose
 
 const store: Store<RootState, AnyAction> = createStore(
   rootReducer,
-  composeEnhancers(applyMiddleware(routerMiddleware, saga))
+  composeEnhancers(applyMiddleware(routerMiddleware, saga)),
 )
 
 // Create redux history after store is created - it needs the store object, not the reducer

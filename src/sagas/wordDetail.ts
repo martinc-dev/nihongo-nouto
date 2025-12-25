@@ -66,6 +66,7 @@ export function* fetchWordDetail({
 
     let result = response as WordDetail
     const wordDetail = result
+
     if (
       typeKey === resourceTypes.VERB.key &&
       wordDetail &&
@@ -75,6 +76,7 @@ export function* fetchWordDetail({
       wordDetail.group
     ) {
       const verbWord = wordDetail as VerbWord
+
       if (verbWord.group) {
         result = {
           ...verbWord,
@@ -86,6 +88,7 @@ export function* fetchWordDetail({
     yield put(fetchWordDetailActionOK(result as WordDetail))
   } catch (error) {
     const apiError: ApiError = error as ApiError
+
     yield put(fetchWordDetailActionError(apiError))
     logError(error)
   }
@@ -110,6 +113,7 @@ export function* saveWordDetail({
         url: endpoints.getWordUrl({ typeKey, id: String(id) }),
         data: restPayload as Record<string, string | number | boolean>,
       })
+
       if (response.error) {
         throw response
       }
@@ -119,6 +123,7 @@ export function* saveWordDetail({
         url: endpoints.getWordsUrl({ typeKey }),
         data: restPayload as Record<string, string | number | boolean>,
       })
+
       if (response.error) {
         throw response
       }
@@ -126,6 +131,7 @@ export function* saveWordDetail({
     }
 
     const wordDetail = result as WordDetail
+
     if (
       typeKey === resourceTypes.VERB.key &&
       wordDetail &&
@@ -135,6 +141,7 @@ export function* saveWordDetail({
       wordDetail.group
     ) {
       const verbWord = wordDetail as VerbWord
+
       if (verbWord.group) {
         result = {
           ...verbWord,
@@ -157,6 +164,7 @@ export function* saveWordDetail({
         isTransitive: 'isTransitive' in result ? result.isTransitive : undefined,
         isIntransitive: 'isIntransitive' in result ? result.isIntransitive : undefined,
       }
+
       yield put(updateWordInWordListAction(wordListItem))
       yield put(fetchWordDetailActionOK(result))
     } else if (result && 'id' in result) {
@@ -171,11 +179,13 @@ export function* saveWordDetail({
         isTransitive: 'isTransitive' in result ? result.isTransitive : undefined,
         isIntransitive: 'isIntransitive' in result ? result.isIntransitive : undefined,
       }
+
       yield put(addWordToWordListAction(wordListItem))
       yield put(push(`/${resourceTypes[typeKey].pathName}/${result.id}`))
     }
   } catch (error) {
     const apiError: ApiError = error as ApiError
+
     yield put(saveWordDetailActionError(apiError))
     logError(error)
   }
@@ -209,6 +219,7 @@ export function* deleteWordDetail({
     yield put(push(`/${resourceTypes[typeKey].pathName}`))
   } catch (error) {
     const apiError: ApiError = error as ApiError
+
     yield put(deleteWordDetailActionError(apiError))
     logError(error)
   }

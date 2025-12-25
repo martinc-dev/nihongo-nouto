@@ -1,13 +1,6 @@
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { find as findInObj } from 'lodash'
-
 import { styled } from '@mui/material/styles'
 
-import { nounTags } from 'src/constants/resources'
-import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
-import { getFetchWordDetailData } from 'src/selectors/wordDetail'
-import { RootState } from 'src/types/redux'
+import { useWordDetail } from 'src/hooks/useWordDetail'
 import { NounWord } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
@@ -36,6 +29,10 @@ interface NounDetailProps {
 
 interface NounTagRel {
   tagId: number
+  nounTag?: {
+    id: number
+    name: string
+  }
   [key: string]: unknown
 }
 
@@ -44,31 +41,30 @@ interface NounWordWithTags extends NounWord {
 }
 
 const NounDetail = ({ wordId }: NounDetailProps) => {
-  const dispatch = useDispatch()
+  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
 
-  const word = useSelector((state: RootState) => getFetchWordDetailData(state)) as NounWordWithTags | null
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
-  useEffect(() => {
-    if (wordId) {
-      dispatch(fetchWordDetailAction({ id: parseInt(wordId, 10) }))
-    } else {
-      dispatch(fetchWordDetailActionReset())
-    }
-  }, [wordId, dispatch])
+  if (error || !word) {
+    return null
+  }
 
-  if (!word) return null
+  const nounWord = word as NounWordWithTags
 
+  // Extract tag names from nounTagRel for display as icons
   const types: string[] =
-    word.nounTagRel
-      ?.map(t => findInObj(nounTags, tag => tag.id === t.tagId)?.name ?? null)
-      ?.filter((t): t is string => t !== null) ?? []
+    nounWord.nounTagRel
+      ?.map(rel => rel.nounTag?.name)
+      ?.filter((name): name is string => name !== undefined && name !== null) ?? []
 
   return (
     <Root className={classes.wordDetail}>
-      <WordTitle {...word} />
+      <WordTitle {...nounWord} />
       <WordActions />
       <WordTypeDisplay types={types} />
-      <WordSense {...word} />
+      <WordSense {...nounWord} />
     </Root>
   )
 }

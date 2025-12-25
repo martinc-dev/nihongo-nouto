@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
@@ -7,9 +6,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import Typography from '@mui/material/Typography'
 
 import { colors } from 'src/themes/colors'
-import { fetchWordSearchAction, fetchWordSearchActionReset } from 'src/actions/search'
-import { getSearchStoreSearchData } from 'src/selectors/search'
-import { RootState } from 'src/types/redux'
+import { useWordSearch } from 'src/hooks/useWordSearch'
 import { JishoWordOption } from 'src/types/words'
 
 interface WordSearchInputProps {
@@ -26,14 +23,13 @@ const WordSearchInput = ({
   initWord = '',
 }: WordSearchInputProps) => {
   const [word, setWord] = useState('')
-
-  const dispatch = useDispatch()
-  const searchResult = useSelector((state: RootState) => getSearchStoreSearchData(state))
+  const [searchResult, setSearchResult] = useState<{ wordOptions?: JishoWordOption[] } | null>(null)
+  const wordSearchMutation = useWordSearch()
 
   useEffect(() => {
     if (initWord) setWord(initWord)
-    dispatch(fetchWordSearchActionReset())
-  }, [initWord, dispatch])
+    setSearchResult(null)
+  }, [initWord])
 
   return (
     <Autocomplete
@@ -61,8 +57,14 @@ const WordSearchInput = ({
           onKeyDown={e => {
             const enterKeyCode = 13
 
-            if (searchResult) dispatch(fetchWordSearchActionReset())
-            if (e.keyCode === enterKeyCode && word) dispatch(fetchWordSearchAction(word))
+            if (e.keyCode === enterKeyCode && word) {
+              setSearchResult(null)
+              wordSearchMutation.mutate(word, {
+                onSuccess: (data) => {
+                  setSearchResult(data)
+                },
+              })
+            }
           }}
           sx={{ '& .MuiOutlinedInput-input': { color: colors.shibafuGreen } }}
         />

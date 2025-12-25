@@ -5,7 +5,6 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
 
 import { VerbWord } from 'src/types/words'
 import { ConjugationResult } from 'src/utils/conjugation'
@@ -106,7 +105,10 @@ const VerbConjFormRow = ({ group, word, conjugation }: VerbConjFormRowProps) => 
               <span className={classes.suffix}>
                 {isGoDan
                   ? 'る'
-                  : (conjugation['short potential'] || '').replace(conjugation['verbstem'] || '', '')}
+                  : (conjugation['short potential'] || '').replace(
+                      conjugation['verbstem'] || '',
+                      '',
+                    )}
               </span>
             </TableCell>
             <TableCell align='left' className={classes.tableCell}>
@@ -119,7 +121,10 @@ const VerbConjFormRow = ({ group, word, conjugation }: VerbConjFormRowProps) => 
               <span className={classes.suffix}>
                 {isGoDan
                   ? 'う'
-                  : (conjugation['pseudo futurum'] || '').replace(conjugation['verbstem'] || '', '')}
+                  : (conjugation['pseudo futurum'] || '').replace(
+                      conjugation['verbstem'] || '',
+                      '',
+                    )}
               </span>
             </TableCell>
           </TableRow>
@@ -130,4 +135,3 @@ const VerbConjFormRow = ({ group, word, conjugation }: VerbConjFormRowProps) => 
 }
 
 export default VerbConjFormRow
-

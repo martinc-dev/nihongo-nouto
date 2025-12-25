@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
 
 import { styled } from '@mui/material/styles'
 
-import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
-import { getFetchWordDetailData } from 'src/selectors/wordDetail'
-import { RootState } from 'src/types/redux'
+import { useWordDetail } from 'src/hooks/useWordDetail'
 import { WordDetail } from 'src/types/words'
 import WordSearchInput from 'src/components/WordDashboard/editor/WordSearchInput'
 
@@ -32,16 +29,7 @@ interface VerbEditorProps {
 const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
   const [currentWordObject, setCurrentWordObject] = useState<Partial<WordDetail>>({})
 
-  const dispatch = useDispatch()
-  const word = useSelector((state: RootState) => getFetchWordDetailData(state))
-
-  useEffect(() => {
-    if (wordId) {
-      dispatch(fetchWordDetailAction({ id: parseInt(wordId, 10) }))
-    } else {
-      dispatch(fetchWordDetailActionReset())
-    }
-  }, [wordId, dispatch])
+  const { data: word } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
 
   useEffect(() => {
     if (word) {

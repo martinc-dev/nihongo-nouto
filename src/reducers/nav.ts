@@ -17,5 +17,6 @@ const currentContentType: Reducer<ResourceTypeKey | null, AnyAction> = (
 }
 
 const navReducer = combineReducers({ currentContentType })
+
 export default navReducer as Reducer<NavState, AnyAction>
 

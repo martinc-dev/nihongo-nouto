@@ -55,6 +55,7 @@ export const mainResourceFields: MainResourceFields = {
     word: 1,
     hiragana: 1,
     sense: 1,
+    tags: 1,
     createdAt: 0,
     updatedAt: 0,
   },

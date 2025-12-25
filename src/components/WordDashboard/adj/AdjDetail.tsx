@@ -1,11 +1,6 @@
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-
 import { styled } from '@mui/material/styles'
 
-import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
-import { getFetchWordDetailData } from 'src/selectors/wordDetail'
-import { RootState } from 'src/types/redux'
+import { useWordDetail } from 'src/hooks/useWordDetail'
 import { AdjWord } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
@@ -33,31 +28,29 @@ interface AdjDetailProps {
 }
 
 const AdjDetail = ({ wordId }: AdjDetailProps) => {
-  const dispatch = useDispatch()
+  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
 
-  const word = useSelector((state: RootState) => getFetchWordDetailData(state)) as AdjWord | null
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
-  useEffect(() => {
-    if (wordId) {
-      dispatch(fetchWordDetailAction({ id: parseInt(wordId, 10) }))
-    } else {
-      dispatch(fetchWordDetailActionReset())
-    }
-  }, [wordId, dispatch])
+  if (error || !word) {
+    return null
+  }
 
-  if (!word) return null
+  const adjWord = word as AdjWord
 
   const types: string[] = [
-    word.isIConjugation === true ? 'IADJ' : null,
-    word.isIConjugation === false ? 'NAADJ' : null,
+    adjWord.isIConjugation === true ? 'IADJ' : null,
+    adjWord.isIConjugation === false ? 'NAADJ' : null,
   ].filter((t): t is string => t !== null)
 
   return (
     <Root className={classes.wordDetail}>
-      <WordTitle {...word} />
+      <WordTitle {...adjWord} />
       <WordActions />
       <WordTypeDisplay types={types} />
-      <WordSense {...word} />
+      <WordSense {...adjWord} />
     </Root>
   )
 }

@@ -1,7 +1,8 @@
 import { styled } from '@mui/material/styles'
 
-import { getWordGroupIconMatch } from 'src/constants/resources'
+import { getWordGroupIconMatch, nounTags } from 'src/constants/resources'
 import WordGroupIcon from 'src/components/common/WordGroupIcon'
+import WordTagIcon from 'src/components/common/WordTagIcon'
 
 const PREFIX = 'WordTypeDisplay'
 
@@ -43,14 +44,23 @@ const WordTypeDisplay = ({ types }: WordTypeDisplayProps) => {
 
   return (
     <Root className={classes.root}>
-      {items.map(t => (
-        <div className={classes.row} key={t.type}>
-          <span className={classes.iconCell}>
-            <WordGroupIcon type={t.type} />
-          </span>
-          <span className={classes.valueCell}>{t.match?.value}</span>
-        </div>
-      ))}
+      {items.map(t => {
+        // Check if this is a noun tag
+        const isNounTag = Object.values(nounTags).some(nt => nt.name === t.type)
+
+        return (
+          <div className={classes.row} key={t.type}>
+            <span className={classes.iconCell}>
+              {isNounTag ? (
+                <WordTagIcon tagName={t.type} />
+              ) : (
+                <WordGroupIcon type={t.type} />
+              )}
+            </span>
+            <span className={classes.valueCell}>{t.match?.value}</span>
+          </div>
+        )
+      })}
     </Root>
   )
 }

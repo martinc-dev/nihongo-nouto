@@ -1,14 +1,15 @@
 /* eslint-disable new-cap, no-console */
-const Sequelize = require('sequelize')
-const env = require('../../env')
+import { Sequelize } from 'sequelize'
+import env from '../../env'
 
-const getDBConnection = () =>
+export const getDBConnection = (): Sequelize =>
   new Sequelize(env.database.name, env.database.username, env.database.password, {
     host: env.database.host,
     port: env.database.port,
     dialect: 'mysql',
   })
-const testConnectionAsync = async () => {
+
+export const testConnectionAsync = async (): Promise<boolean> => {
   try {
     await getDBConnection().authenticate()
 
@@ -22,7 +23,3 @@ const testConnectionAsync = async () => {
   }
 }
 
-module.exports = {
-  getDBConnection,
-  testConnectionAsync,
-}

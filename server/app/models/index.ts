@@ -1,10 +1,81 @@
 /* eslint-disable new-cap, no-console */
-const { DataTypes } = require('sequelize')
-const { getDBConnection } = require('../utils/db')
+import { DataTypes, Model, Sequelize } from 'sequelize'
+import { getDBConnection } from '../utils/db'
 
-const connection = getDBConnection()
+const connection: Sequelize = getDBConnection()
 
-const NounTag = connection.define(
+export interface NounTagAttributes {
+  id: number
+  name: string
+}
+
+export interface NounAttributes {
+  id: number
+  word: string
+  hiragana: string
+  sense: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export interface NounTagRelAttributes {
+  id: number
+  nounId: number
+  tagId: number
+}
+
+export interface OtherAttributes {
+  id: number
+  word: string
+  hiragana: string
+  sense: string
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export interface AdjAttributes {
+  id: number
+  word: string
+  hiragana: string
+  sense: string
+  isIConjugation: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export type VerbGroup =
+  | 'V5U'
+  | 'V5K'
+  | 'V5KS'
+  | 'V5G'
+  | 'V5S'
+  | 'V5T'
+  | 'V5M'
+  | 'V5B'
+  | 'V5N'
+  | 'V5R'
+  | 'V1'
+  | 'IRS'
+  | 'IRK'
+
+export interface VerbAttributes {
+  id: number
+  word: string
+  hiragana: string
+  group: VerbGroup | null
+  sense: string
+  stem: string
+  teForm: string
+  aDan: string
+  eDan: string
+  oDan: string
+  isTransitive: boolean
+  isIntransitive: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+export const NounTag = connection.define<Model<NounTagAttributes>>(
   'noun_tag',
   {
     id: {
@@ -25,7 +96,7 @@ const NounTag = connection.define(
   }
 )
 
-const Noun = connection.define(
+export const Noun = connection.define<Model<NounAttributes>>(
   'noun',
   {
     id: {
@@ -55,7 +126,8 @@ const Noun = connection.define(
     underscored: true,
   }
 )
-const NounTagRel = connection.define(
+
+export const NounTagRel = connection.define<Model<NounTagRelAttributes>>(
   'noun_tag_rel',
   {
     id: {
@@ -86,7 +158,8 @@ const NounTagRel = connection.define(
     underscored: true,
   }
 )
-const Other = connection.define(
+
+export const Other = connection.define<Model<OtherAttributes>>(
   'other',
   {
     id: {
@@ -116,7 +189,8 @@ const Other = connection.define(
     underscored: true,
   }
 )
-const Adj = connection.define(
+
+export const Adj = connection.define<Model<AdjAttributes>>(
   'adj',
   {
     id: {
@@ -151,7 +225,8 @@ const Adj = connection.define(
     underscored: true,
   }
 )
-const Verb = connection.define(
+
+export const Verb = connection.define<Model<VerbAttributes>>(
   'verb',
   {
     id: {
@@ -171,7 +246,7 @@ const Verb = connection.define(
       defaultValue: '',
     },
     group: {
-      type: DataTypes.ENUM([
+      type: DataTypes.ENUM(
         'V5U',
         'V5K',
         'V5KS',
@@ -184,8 +259,8 @@ const Verb = connection.define(
         'V5R',
         'V1',
         'IRS',
-        'IRK',
-      ]),
+        'IRK'
+      ),
       allowNull: true,
       defaultValue: null,
     },
@@ -237,13 +312,5 @@ const Verb = connection.define(
 )
 
 Noun.hasMany(NounTagRel, { as: 'nounTagRel', foreignKey: 'nounId' })
-NounTagRel.hasMany(NounTag, { as: 'nounTag', foreignKey: 'id' })
+NounTagRel.belongsTo(NounTag, { as: 'nounTag', foreignKey: 'tagId' })
 
-module.exports = {
-  NounTag,
-  Noun,
-  NounTagRel,
-  Other,
-  Adj,
-  Verb,
-}

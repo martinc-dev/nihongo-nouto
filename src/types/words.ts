@@ -59,6 +59,17 @@ export interface OtherWord extends BaseWord {
 // Union type for all word types
 export type Word = VerbWord | AdjWord | NounWord | OtherWord
 
+// Noun tag relation (from API)
+export interface NounTagRelItem {
+  id?: number
+  nounId?: number
+  tagId: number
+  nounTag?: {
+    id: number
+    name: string
+  }
+}
+
 // Word list item (simplified version for list display)
 export interface WordListItem {
   id: number
@@ -70,7 +81,8 @@ export interface WordListItem {
   sense?: string
   isTransitive?: boolean
   isIntransitive?: boolean
-  [key: string]: string | number | boolean | VerbGroup | null | undefined | React.ReactNode
+  nounTagRel?: NounTagRelItem[] // For nouns
+  [key: string]: string | number | boolean | VerbGroup | null | undefined | React.ReactNode | NounTagRelItem[] | undefined
 }
 
 // Word detail (full word object)

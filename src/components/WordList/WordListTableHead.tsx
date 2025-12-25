@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import clxn from 'classnames'
 
 import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
@@ -109,11 +108,7 @@ const WordListTableHead = ({
                 role={undefined}
               >
                 <ListItemIcon>
-                  <Checkbox
-                    checked={displayOptionsMap[key]}
-                    edge='start'
-                    tabIndex={-1}
-                  />
+                  <Checkbox checked={displayOptionsMap[key]} edge='start' tabIndex={-1} />
                 </ListItemIcon>
                 <ListItemText primary={key} />
               </ListItemButton>
@@ -175,4 +170,3 @@ const WordListTableHead = ({
 }
 
 export default WordListTableHead
-

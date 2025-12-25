@@ -7,9 +7,9 @@ import Container from '@mui/material/Container'
 
 import resourceTypes from 'src/constants/resourceTypes'
 import { getCurrentContentType } from 'src/selectors/nav'
-import { fetchWordListAction } from 'src/actions/wordList'
 import { setCurrentContentType } from 'src/actions/nav'
 import { ResourceTypeKey } from 'src/types'
+import { useWordList } from 'src/hooks/useWordList'
 import WordList from 'src/components/WordList'
 import VerbDetail from 'src/components/WordDashboard/verb/VerbDetail'
 import VerbEditor from 'src/components/WordDashboard/verb/VerbEditor'
@@ -33,15 +33,12 @@ const WordDashboard = () => {
         )?.key as ResourceTypeKey) ?? null
       : null
 
+  // Trigger word list fetch when content type changes (React Query handles caching)
+  useWordList()
+
   useEffect(() => {
     if (currentContentType !== contentType) {
       dispatch(setCurrentContentType(contentType))
-    }
-  }, [currentContentType, contentType, dispatch])
-
-  useEffect(() => {
-    if (currentContentType && currentContentType === contentType) {
-      dispatch(fetchWordListAction())
     }
   }, [currentContentType, contentType, dispatch])
 

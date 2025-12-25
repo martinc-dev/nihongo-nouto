@@ -9,16 +9,19 @@ import {
   mainResourceFields,
   mainResourceFilterables,
   getWordGroupIconMatch,
+  nounTags,
 } from 'src/constants/resources'
 import { adjTypes } from 'src/constants/jisho'
 import { deserializeBoolList } from 'src/utils/boolean'
 import { getCurrentContentType } from 'src/selectors/nav'
-import { getWordListData } from 'src/selectors/wordList'
 import { RootState } from 'src/types/redux'
-import { WordListItem, VerbGroup } from 'src/types/words'
+import { WordListItem, VerbGroup, NounTagRelItem } from 'src/types/words'
+import { useWordList } from 'src/hooks/useWordList'
 import WordGroupIcon from 'src/components/common/WordGroupIcon'
+import WordTagIcon from 'src/components/common/WordTagIcon'
 import WordListTableHead from 'src/components/WordList/WordListTableHead'
 import WordListTable from 'src/components/WordList/WordListTable'
+import resourceTypes from 'src/constants/resourceTypes'
 
 const PREFIX = 'WordList'
 
@@ -57,6 +60,7 @@ interface WordListTableRow {
   sense?: string
   isTransitive?: boolean
   isIntransitive?: boolean
+  tags?: ReactNode // For nouns - will be rendered as icons
   [key: string]: string | number | boolean | VerbGroup | null | undefined | ReactNode
 }
 
@@ -64,7 +68,7 @@ const WordList = () => {
   const currentContentType = useSelector((state: RootState) =>
     getCurrentContentType(state),
   )
-  const words = useSelector((state: RootState) => getWordListData(state))
+  const { data: words = [], isLoading, error } = useWordList()
 
   const [filterOptionsMap, setFilterOptionsMap] = useState<Record<
     string,
@@ -95,7 +99,23 @@ const WordList = () => {
       )
     }
   }, [currentContentType])
-console.log(words)
+
+  if (isLoading) {
+    return (
+      <Root className={classes.wordList}>
+        <div>Loading...</div>
+      </Root>
+    )
+  }
+
+  if (error) {
+    return (
+      <Root className={classes.wordList}>
+        <div>Error loading words: {error.error?.toString()}</div>
+      </Root>
+    )
+  }
+
   return displayOptionsMap ? (
     <Root className={classes.wordList}>
       <WordListTableHead
@@ -107,15 +127,58 @@ console.log(words)
       />
       <WordListTable
         columns={getKeysInObj(pickBy(displayOptionsMap, t => t)) || []}
-        wordToRow={(t: WordListItem): WordListTableRow => ({
-          ...t,
-          ...(t.group && { group: <WordGroupIcon type={t.group} /> }),
-          ...(t.isIConjugation !== undefined && {
-            isIConjugation: (
-              <WordGroupIcon type={t.isIConjugation ? adjTypes.IADJ : adjTypes.NAADJ} />
-            ),
-          }),
-        })}
+        wordToRow={(t: WordListItem): WordListTableRow => {
+          const { nounTagRel, ...rest } = t
+          const row: WordListTableRow = {
+            ...rest,
+            ...(t.group && { group: <WordGroupIcon type={t.group} /> }),
+            ...(t.isIConjugation !== undefined && {
+              isIConjugation: (
+                <WordGroupIcon type={t.isIConjugation ? adjTypes.IADJ : adjTypes.NAADJ} />
+              ),
+            }),
+          }
+
+          // Add noun tags as icons for nouns
+          if (
+            currentContentType === resourceTypes.NOUN.key &&
+            nounTagRel &&
+            Array.isArray(nounTagRel) &&
+            nounTagRel.length > 0
+          ) {
+            const tagIcons = nounTagRel
+              .map((rel: NounTagRelItem) => {
+                // Handle both nested nounTag and direct tagId lookup
+                const tagName = rel.nounTag?.name
+
+                if (!tagName) {
+                  // Fallback: try to find tag by tagId if nounTag is not populated
+                  if (rel.tagId) {
+                    const tag = Object.values(nounTags).find(nt => nt.id === rel.tagId)
+
+                    if (tag) {
+                      return <WordTagIcon key={rel.tagId || rel.id} tagName={tag.name} />
+                    }
+                  }
+
+                  return null
+                }
+
+                return <WordTagIcon key={rel.tagId || rel.id} tagName={tagName} />
+              })
+              .filter((icon): icon is JSX.Element => icon !== null)
+
+            if (tagIcons.length > 0) {
+              row.tags = (
+                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                  {tagIcons}
+                </div>
+              )
+            }
+          }
+
+          return row
+        }}
         words={words.filter((t: WordListItem) => {
           if (t.group)
             return filterOptionsMap?.[getWordGroupIconMatch(t.group)?.filterKey ?? '']

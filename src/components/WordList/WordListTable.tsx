@@ -69,6 +69,7 @@ interface WordListTableRow {
   sense?: string
   isTransitive?: boolean
   isIntransitive?: boolean
+  tags?: ReactNode // For nouns - will be rendered as icons
   [key: string]: string | number | boolean | VerbGroup | null | undefined | ReactNode
 }
 

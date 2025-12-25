@@ -1,4 +1,3 @@
-import { ForkEffect } from 'redux-saga/effects'
 import { SagaIterator } from 'redux-saga'
 import { watchFetchWordList } from 'src/sagas/wordList'
 import {
@@ -18,4 +17,3 @@ const sagas: (() => SagaIterator)[] = [
 ]
 
 export default sagas
-

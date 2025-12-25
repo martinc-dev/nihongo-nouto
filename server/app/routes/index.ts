@@ -1,12 +1,22 @@
-const { Router } = require('express')
-const {
+import { Router, Request, Response } from 'express'
+import {
   NounTagController,
   NounTagRelController,
   NounController,
   OtherController,
   AdjController,
   VerbController,
-} = require('../controllers')
+} from '../controllers'
+
+interface CRUDEndpoints {
+  isSearchable: boolean
+  getMultiple: (req: Request, res: Response) => Promise<void>
+  getOne: (req: Request, res: Response) => Promise<void>
+  createOne: (req: Request, res: Response) => Promise<void>
+  updateOne: (req: Request, res: Response) => Promise<void>
+  deleteOne: (req: Request, res: Response) => Promise<void>
+  getMultipleByWord: (req: Request, res: Response) => Promise<void>
+}
 
 const registerCRUDEndpoints = ({
   isSearchable,
@@ -16,7 +26,7 @@ const registerCRUDEndpoints = ({
   updateOne,
   deleteOne,
   getMultipleByWord,
-}) => {
+}: CRUDEndpoints): Router => {
   const router = Router()
 
   if (isSearchable) router.get('/search', (req, res) => getMultipleByWord(req, res))
@@ -39,6 +49,5 @@ router.use('/other', registerCRUDEndpoints(new OtherController()))
 router.use('/adj', registerCRUDEndpoints(new AdjController()))
 router.use('/verb', registerCRUDEndpoints(new VerbController()))
 
-module.exports = {
-  router,
-}
+export { router }
+

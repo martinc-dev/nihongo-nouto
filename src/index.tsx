@@ -8,6 +8,7 @@ import StoreProvider from 'src/store/StoreProvider'
 import App from 'src/components/common/App'
 
 const container = document.getElementById('root')
+
 if (!container) {
   throw new Error('Root element not found')
 }

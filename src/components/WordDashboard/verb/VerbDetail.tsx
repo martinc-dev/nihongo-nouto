@@ -1,11 +1,6 @@
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-
 import { styled } from '@mui/material/styles'
 
-import { fetchWordDetailAction, fetchWordDetailActionReset } from 'src/actions/wordDetail'
-import { getFetchWordDetailData } from 'src/selectors/wordDetail'
-import { RootState } from 'src/types/redux'
+import { useWordDetail } from 'src/hooks/useWordDetail'
 import { VerbWord } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
@@ -36,35 +31,35 @@ interface VerbDetailProps {
 }
 
 const VerbDetail = ({ wordId }: VerbDetailProps) => {
-  const dispatch = useDispatch()
+  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
 
-  const word = useSelector((state: RootState) => getFetchWordDetailData(state)) as VerbWord | null
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
-  useEffect(() => {
-    if (wordId) {
-      dispatch(fetchWordDetailAction({ id: parseInt(wordId, 10) }))
-    } else {
-      dispatch(fetchWordDetailActionReset())
-    }
-  }, [wordId, dispatch])
+  if (error || !word) {
+    return null
+  }
 
-  if (!word) return null
+  const verbWord = word as VerbWord
 
   const types: string[] = [
-    word.group,
-    word.isTransitive === true ? 'TRANSITIVE' : null,
-    word.isIntransitive === true ? 'INTRANSITIVE' : null,
+    verbWord.group,
+    verbWord.isTransitive === true ? 'TRANSITIVE' : null,
+    verbWord.isIntransitive === true ? 'INTRANSITIVE' : null,
   ].filter((t): t is string => t !== null)
 
   return (
     <Root className={classes.wordDetail}>
-      <WordTitle {...word} />
+      <WordTitle {...verbWord} />
       <WordActions />
-      {word.conjugation && <VerbMainFormRow conjugation={word.conjugation} />}
+      {verbWord.conjugation && <VerbMainFormRow conjugation={verbWord.conjugation} />}
       <WordTypeDisplay types={types} />
-      {word.conjugation && <VerbConjFormRow group={word.group} word={word.word} conjugation={word.conjugation} />}
-      <WordSense {...word} />
-      {word.conjugation && <VerbConjFormAdditional conjugation={word.conjugation} />}
+      {verbWord.conjugation && (
+        <VerbConjFormRow conjugation={verbWord.conjugation} group={verbWord.group} word={verbWord.word} />
+      )}
+      <WordSense {...verbWord} />
+      {verbWord.conjugation && <VerbConjFormAdditional conjugation={verbWord.conjugation} />}
     </Root>
   )
 }
