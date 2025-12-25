@@ -6,6 +6,7 @@ import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
+import { NUMBERS } from 'src/constants/numbers'
 
 const PREFIX = 'AdjDetail'
 
@@ -28,7 +29,11 @@ interface AdjDetailProps {
 }
 
 const AdjDetail = ({ wordId }: AdjDetailProps) => {
-  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
+  const {
+    data: word,
+    isLoading,
+    error,
+  } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -40,10 +45,11 @@ const AdjDetail = ({ wordId }: AdjDetailProps) => {
 
   const adjWord = word as AdjWord
 
-  const types: string[] = [
-    adjWord.isIConjugation === true ? 'IADJ' : null,
-    adjWord.isIConjugation === false ? 'NAADJ' : null,
-  ].filter((t): t is string => t !== null)
+  // Build types array for display - always show I/Na group
+  // IsIConjugation === true means I-adjective, false means Na-adjective
+  const types: string[] = [adjWord.isIConjugation === true ? 'IADJ' : 'NAADJ'].filter(
+    (t): t is string => t !== null,
+  )
 
   return (
     <Root className={classes.wordDetail}>
@@ -56,4 +62,3 @@ const AdjDetail = ({ wordId }: AdjDetailProps) => {
 }
 
 export default AdjDetail
-

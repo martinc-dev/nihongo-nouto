@@ -6,6 +6,7 @@ import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
+import { NUMBERS } from 'src/constants/numbers'
 
 const PREFIX = 'OtherDetail'
 
@@ -28,7 +29,7 @@ interface OtherDetailProps {
 }
 
 const OtherDetail = ({ wordId }: OtherDetailProps) => {
-  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
+  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
 
   if (isLoading) {
     return <div>Loading...</div>

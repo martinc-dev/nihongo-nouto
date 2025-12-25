@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 
 import { useDeleteWordDetail } from 'src/hooks/useWordDetail'
+import { NUMBERS } from 'src/constants/numbers'
 
 const PREFIX = 'WordActions'
 
@@ -30,6 +31,7 @@ const WordActions = () => {
   const handleEdit = () => {
     if (wordId) {
       const currentPath = window.location.pathname
+
       navigate(`${currentPath}/edit`)
     }
   }
@@ -38,21 +40,21 @@ const WordActions = () => {
     if (wordId) {
       // eslint-disable-next-line no-alert
       if (window.confirm('Are you sure you want to delete this word?')) {
-        deleteWordMutation.mutate({ id: parseInt(wordId, 10) })
+        deleteWordMutation.mutate({ id: parseInt(wordId, NUMBERS.DECIMAL_RADIX) })
       }
     }
   }
 
   return (
     <Root className={classes.wordActions}>
-      <Button className={classes.editButton} onClick={handleEdit} type='button' disabled={!wordId}>
+      <Button className={classes.editButton} disabled={!wordId} onClick={handleEdit} type='button'>
         Edit
       </Button>
       <Button
         className={classes.deleteButton}
+        disabled={!wordId || deleteWordMutation.isPending}
         onClick={handleDelete}
         type='button'
-        disabled={!wordId || deleteWordMutation.isPending}
       >
         {deleteWordMutation.isPending ? 'Deleting...' : 'Delete'}
       </Button>

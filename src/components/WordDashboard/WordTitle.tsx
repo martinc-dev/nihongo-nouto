@@ -32,17 +32,20 @@ const Root = styled('div')(({ theme }) => ({
 interface WordTitleProps {
   word: string
   hiragana?: string
+  romaji?: string
 }
 
-const WordTitle = ({ word, hiragana }: WordTitleProps) => {
+const WordTitle = ({ word, hiragana, romaji }: WordTitleProps) => {
+  const reading = hiragana || romaji
+
   return (
     <Root className={classes.wordTitle}>
       <Typography className={classes.wordTitleWord} variant='h2'>
         {word}
       </Typography>
-      {hiragana && (
+      {reading && (
         <Typography className={classes.wordTitleHiragana} variant='h4'>
-          {hiragana}
+          {reading}
         </Typography>
       )}
     </Root>

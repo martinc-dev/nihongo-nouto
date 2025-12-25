@@ -2,6 +2,12 @@
 // Base on the work of Pomax's node-jp-conjugations
 // Github: https://github.com/Pomax/node-jp-conjugations
 
+import {
+  verbPOSTypeMarkers,
+  verbPOSTypeRegexMarkers,
+  verbClassificationNaiveGuess,
+} from '../constants/jisho'
+
 interface ConjugationForm {
   name: string
   forms: string[]
@@ -899,5 +905,180 @@ const conjugation = (verb: string, type: string): ConjugationResult => {
   return result
 }
 
-export default conjugation
+export interface ConjugationFormsFromSense {
+  stem: string
+  aDan: string
+  eDan: string
+  oDan: string
+  teForm: string
+}
 
+/**
+ * Finds verb type from parts of speech array using exact matches
+ */
+const findVerbTypeByExactMatch = (partsOfSpeech: string[]): string | null => {
+  for (const pos of partsOfSpeech) {
+    const posLower = pos.toLowerCase()
+
+    if (verbPOSTypeMarkers[posLower]) {
+      return verbPOSTypeMarkers[posLower]
+    }
+  }
+
+  return null
+}
+
+/**
+ * Handles V5 (godan) verb type guessing from word ending
+ */
+const handleV5TypeGuessing = (word: string): string => {
+  if (word.length === 0) {
+    return 'V5'
+  }
+
+  const lastChar = word.slice(-1)
+
+  return verbClassificationNaiveGuess[lastChar] || 'V5'
+}
+
+/**
+ * Finds verb type from parts of speech array using regex patterns
+ */
+const findVerbTypeByRegex = (partsOfSpeech: string[], word: string): string | null => {
+  for (const pos of partsOfSpeech) {
+    const posLower = pos.toLowerCase()
+
+    for (const [type, regex] of Object.entries(verbPOSTypeRegexMarkers)) {
+      const regexPattern = regex as RegExp
+
+      if (!regexPattern.test(posLower)) {
+        continue
+      }
+
+      // For V5 (godan), try to guess the specific type from word ending
+      if (type === 'V5') {
+        return handleV5TypeGuessing(word)
+      }
+
+      return type
+    }
+  }
+
+  return null
+}
+
+/**
+ * Guesses verb type from word ending
+ */
+const guessVerbTypeFromWord = (word: string): string | null => {
+  if (word.length === 0) {
+    return null
+  }
+
+  const lastChar = word.slice(-1)
+
+  if (verbClassificationNaiveGuess[lastChar]) {
+    return verbClassificationNaiveGuess[lastChar]
+  }
+
+  // Could be ichidan or godan with ru ending - default to V1 for ichidan
+  if (lastChar === 'る') {
+    return 'V1'
+  }
+
+  return null
+}
+
+/**
+ * Finds verb type from parts of speech array
+ */
+const findVerbTypeFromPartsOfSpeech = (
+  partsOfSpeech: string[],
+  word: string,
+): string | null => {
+  // First, try exact matches
+  const exactMatch = findVerbTypeByExactMatch(partsOfSpeech)
+
+  if (exactMatch) {
+    return exactMatch
+  }
+
+  // If no exact match, try regex patterns
+  const regexMatch = findVerbTypeByRegex(partsOfSpeech, word)
+
+  if (regexMatch) {
+    return regexMatch
+  }
+
+  // If still no type found, try to guess from word ending
+  return guessVerbTypeFromWord(word)
+}
+
+/**
+ * Extracts conjugation forms (stem, a-dan, e-dan, o-dan, te-form) from a Jisho API sense
+ * @param word - The verb word (kanji) from japanese[0].word
+ * @param partsOfSpeech - Array of parts of speech strings from sense.parts_of_speech
+ * @returns Conjugation forms or null if not a verb or cannot determine type
+ */
+export const getConjugationFormsFromSense = (
+  word: string,
+  partsOfSpeech: string[],
+): ConjugationFormsFromSense | null => {
+  if (!word || !partsOfSpeech || partsOfSpeech.length === 0) {
+    return null
+  }
+
+  const verbType = findVerbTypeFromPartsOfSpeech(partsOfSpeech, word)
+
+  if (!verbType) {
+    return null
+  }
+
+  // Get all conjugation forms
+  const allForms = conjugation(word, verbType)
+
+  // Determine if it's a godan verb
+  const isGoDan = verbType.includes('V5')
+
+  // Extract specific forms based on VerbConjFormRow logic
+  const stem = (allForms['polite affirmative'] || '').replace('ます', '')
+
+  // A-dan: plain negative without ない
+  const plainNegative = allForms['plain negative'] || ''
+  const aDan = plainNegative.replace('ない', '')
+
+  // E-dan: short potential without ending for godan, or verbstem for ichidan
+  let eDan = ''
+
+  if (isGoDan) {
+    const shortPotential = allForms['short potential'] || ''
+
+    eDan = shortPotential.slice(0, -1) // Remove last character (る)
+  } else {
+    eDan = stem
+  }
+
+  // O-dan: pseudo futurum without ending for godan, or verbstem for ichidan
+  let oDan = ''
+
+  if (isGoDan) {
+    const pseudoFuturum = allForms['pseudo futurum'] || ''
+
+    oDan = pseudoFuturum.slice(0, -1) // Remove last character (う)
+  } else {
+    oDan = stem
+  }
+
+  // Te-form: directly from conjugation result
+  const teForm = allForms['te form'] || ''
+
+  return {
+    stem,
+    aDan,
+    eDan,
+    oDan,
+    teForm,
+  }
+}
+
+export default conjugation

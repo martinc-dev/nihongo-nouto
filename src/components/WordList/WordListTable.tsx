@@ -9,6 +9,7 @@ import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import Typography from '@mui/material/Typography'
+import Tooltip from '@mui/material/Tooltip'
 
 import resourceTypes from 'src/constants/resourceTypes'
 import { getCurrentContentType } from 'src/selectors/nav'
@@ -27,37 +28,56 @@ const classes = {
   tableCellContent: `${PREFIX}-tableCellContent`,
 }
 
-const StyledTableContainer = styled(TableContainer)({
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   [`&.${classes.root}`]: {
     boxShadow: 'none',
+    overflowX: 'hidden',
+    width: '100%',
+    maxWidth: '100%',
   },
   [`& .${classes.table}`]: {
     width: '100%',
+    tableLayout: 'fixed',
   },
   [`& .${classes.tableRow}`]: {
-    maxWidth: '270px',
+    maxWidth: 'none',
+    [theme.breakpoints.up('md')]: {
+      maxWidth: '500px',
+    },
   },
   [`& .${classes.tableCell}`]: {
-    padding: 0,
+    padding: theme.spacing(1),
     border: 0,
-    maxWidth: '60px',
+    overflow: 'hidden',
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(0.5),
+    },
   },
   [`& .${classes.tableCellHead}`]: {
-    padding: 0,
+    padding: theme.spacing(1),
     border: 0,
-    maxWidth: '60px',
+    overflow: 'hidden',
+    [theme.breakpoints.up('md')]: {
+      padding: theme.spacing(0.5),
+    },
   },
   [`& .${classes.tableCellHeadContent}`]: {
-    display: 'inline-block',
-    maxWidth: 60,
+    display: 'block',
+    maxWidth: '100%',
     verticalAlign: 'middle',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   [`& .${classes.tableCellContent}`]: {
-    display: 'inline-block',
-    maxWidth: 60,
+    display: 'block',
+    maxWidth: '100%',
     verticalAlign: 'middle',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
-})
+}))
 
 interface WordListTableRow {
   id: number
@@ -87,6 +107,19 @@ const WordListTable = ({ wordToRow, words, columns }: WordListTableProps) => {
     ? (resourceTypes[currentContentType]?.path ?? null)
     : null
 
+  const getTooltipTitle = (value: string | number | boolean | VerbGroup | null | undefined | ReactNode): string => {
+    if (value === null || value === undefined) {
+      return ''
+    }
+
+    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+      return String(value)
+    }
+
+    // For ReactNode (like icons), return empty string to avoid showing tooltips for non-text content
+    return ''
+  }
+
   return (
     <StyledTableContainer className={classes.root}>
       <Table aria-label='word list table' className={classes.table} size='small'>
@@ -105,25 +138,29 @@ const WordListTable = ({ wordToRow, words, columns }: WordListTableProps) => {
                       key={column}
                       scope='row'
                     >
-                      <Typography
-                        className={classes.tableCellHeadContent}
-                        component='div'
-                        noWrap
-                        variant='caption'
-                      >
-                        <Link to={`/${resourcePath}/${row.id}`}>{row[column] ?? ''}</Link>
-                      </Typography>
+                      <Tooltip arrow title={getTooltipTitle(row[column])}>
+                        <Typography
+                          className={classes.tableCellHeadContent}
+                          component='div'
+                          noWrap
+                          variant='caption'
+                        >
+                          <Link to={`/${resourcePath}/${row.id}`}>{row[column] ?? ''}</Link>
+                        </Typography>
+                      </Tooltip>
                     </TableCell>
                   ) : (
                     <TableCell align='center' className={classes.tableCell} key={column}>
-                      <Typography
-                        className={classes.tableCellContent}
-                        component='div'
-                        noWrap
-                        variant='caption'
-                      >
-                        <Link to={`/${resourcePath}/${row.id}`}>{row[column] ?? ''}</Link>
-                      </Typography>
+                      <Tooltip arrow title={getTooltipTitle(row[column])}>
+                        <Typography
+                          className={classes.tableCellContent}
+                          component='div'
+                          noWrap
+                          variant='caption'
+                        >
+                          <Link to={`/${resourcePath}/${row.id}`}>{row[column] ?? ''}</Link>
+                        </Typography>
+                      </Tooltip>
                     </TableCell>
                   ),
                 )}

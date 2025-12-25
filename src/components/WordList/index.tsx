@@ -1,18 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { pickBy, keys as getKeysInObj } from 'lodash'
 import { ReactNode } from 'react'
 
 import { styled } from '@mui/material/styles'
+import Pagination from '@mui/material/Pagination'
+import Box from '@mui/material/Box'
 
 import {
   mainResourceFields,
   mainResourceFilterables,
-  getWordGroupIconMatch,
   nounTags,
 } from 'src/constants/resources'
 import { adjTypes } from 'src/constants/jisho'
 import { deserializeBoolList } from 'src/utils/boolean'
+import { DEFAULT_WORD_LIST_LIMIT } from 'src/constants/pagination'
+import { NUMBERS, UI_DIMENSIONS, ARRAY } from 'src/constants/numbers'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { WordListItem, VerbGroup, NounTagRelItem } from 'src/types/words'
@@ -22,6 +26,7 @@ import WordTagIcon from 'src/components/common/WordTagIcon'
 import WordListTableHead from 'src/components/WordList/WordListTableHead'
 import WordListTable from 'src/components/WordList/WordListTable'
 import resourceTypes from 'src/constants/resourceTypes'
+import LocalStorageUtil from 'src/utils/localStorage'
 
 const PREFIX = 'WordList'
 
@@ -32,8 +37,9 @@ const classes = {
 const Root = styled('div')(() => ({
   [`&.${classes.wordList}`]: {
     display: 'inline-block',
-    width: '30%',
-    maxWidth: 270,
+    width: UI_DIMENSIONS.WORD_LIST_WIDTH,
+    maxWidth: UI_DIMENSIONS.WORD_LIST_MAX_WIDTH,
+    marginRight: UI_DIMENSIONS.WORD_LIST_MARGIN_RIGHT,
     verticalAlign: 'top',
   },
 }))
@@ -65,11 +71,18 @@ interface WordListTableRow {
 }
 
 const WordList = () => {
+  const navigate = useNavigate()
   const currentContentType = useSelector((state: RootState) =>
     getCurrentContentType(state),
   )
-  const { data: words = [], isLoading, error } = useWordList()
+  const [page, setPage] = useState(() => {
+    const storageKey = `wordList_page_${currentContentType}`
 
+    return LocalStorageUtil.getNumber(storageKey, NUMBERS.DEFAULT_PAGE)
+  })
+  const [limit] = useState(DEFAULT_WORD_LIST_LIMIT)
+  const [orderBy, setOrderBy] = useState<string>('id')
+  const [isAsc, setIsAsc] = useState<boolean>(true)
   const [filterOptionsMap, setFilterOptionsMap] = useState<Record<
     string,
     boolean
@@ -78,6 +91,101 @@ const WordList = () => {
     string,
     boolean
   > | null>(null)
+
+  // Get active filters
+  const activeFilters = filterOptionsMap
+    ? Object.keys(filterOptionsMap).filter(key => filterOptionsMap[key])
+    : []
+
+  // Use refs to track previous values to detect actual changes
+  const prevOrderByRef = useRef<string>(orderBy)
+  const prevIsAscRef = useRef<boolean>(isAsc)
+  const prevActiveFiltersRef = useRef<string>(activeFilters.join(','))
+  const prevCurrentContentTypeRef = useRef<string | null>(currentContentType)
+
+  const { data, isLoading, error } = useWordList({
+    page,
+    limit,
+    orderBy,
+    isAsc,
+    filters: activeFilters,
+    enabled: !!currentContentType && !!displayOptionsMap && !!filterOptionsMap,
+  })
+
+  const words = data?.data ?? []
+  const pagination = data?.pagination
+
+  useEffect(() => {
+    if (
+      prevCurrentContentTypeRef.current &&
+      prevCurrentContentTypeRef.current !== currentContentType
+    ) {
+      setPage(NUMBERS.DEFAULT_PAGE)
+
+      const prevStorageKey = `wordList_page_${prevCurrentContentTypeRef.current}`
+
+      LocalStorageUtil.remove(prevStorageKey)
+    }
+
+    prevCurrentContentTypeRef.current = currentContentType
+  }, [currentContentType])
+
+  // Reset to page 1 when sort or filter changes
+  useEffect(() => {
+    const orderByChanged = prevOrderByRef.current && prevOrderByRef.current !== orderBy
+    const isAscChanged = prevIsAscRef.current && prevIsAscRef.current !== isAsc
+    const filtersChanged =
+      prevActiveFiltersRef.current &&
+      prevActiveFiltersRef.current !== activeFilters.join(',')
+
+    if (orderByChanged || isAscChanged || filtersChanged) {
+      setPage(NUMBERS.DEFAULT_PAGE)
+
+      const storageKey = `wordList_page_${prevCurrentContentTypeRef.current}`
+
+      LocalStorageUtil.remove(storageKey)
+
+      // Update refs
+      prevOrderByRef.current = orderBy
+      prevIsAscRef.current = isAsc
+      prevActiveFiltersRef.current = activeFilters.join(',')
+    }
+  }, [orderBy, isAsc, activeFilters])
+
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value)
+
+    const storageKey = `wordList_page_${currentContentType}`
+
+    LocalStorageUtil.setNumber(storageKey, value)
+    // Scroll to top of word list when page changes
+    window.scrollTo({ top: NUMBERS.SCROLL_TOP, behavior: 'smooth' })
+  }
+
+  const handleCreateClick = () => {
+    if (currentContentType) {
+      const resourcePath = resourceTypes[currentContentType]?.pathName
+
+      if (resourcePath) {
+        navigate(`/${resourcePath}/create`)
+      }
+    }
+  }
+
+  const handleSortChange = (newOrderBy: string) => {
+    if (newOrderBy === orderBy) {
+      // Toggle direction if same field
+      setIsAsc(!isAsc)
+    } else {
+      // Set new field with ascending default
+      setOrderBy(newOrderBy)
+      setIsAsc(true)
+    }
+  }
+
+  const handleFilterChange = (map: Record<string, boolean> | null) => {
+    setFilterOptionsMap(map)
+  }
 
   useEffect(() => {
     if (currentContentType) {
@@ -100,7 +208,7 @@ const WordList = () => {
     }
   }, [currentContentType])
 
-  if (isLoading) {
+  if (isLoading || !currentContentType || !displayOptionsMap || !filterOptionsMap) {
     return (
       <Root className={classes.wordList}>
         <div>Loading...</div>
@@ -121,9 +229,12 @@ const WordList = () => {
       <WordListTableHead
         displayOptionsMap={displayOptionsMap}
         filterOptionsMap={filterOptionsMap}
-        onCreateClick={() => true}
+        isAsc={isAsc}
+        onCreateClick={handleCreateClick}
         onDisplayChange={setDisplayOptionsMap}
-        onFilterChange={setFilterOptionsMap}
+        onFilterChange={handleFilterChange}
+        onSortChange={handleSortChange}
+        orderBy={orderBy}
       />
       <WordListTable
         columns={getKeysInObj(pickBy(displayOptionsMap, t => t)) || []}
@@ -144,7 +255,7 @@ const WordList = () => {
             currentContentType === resourceTypes.NOUN.key &&
             nounTagRel &&
             Array.isArray(nounTagRel) &&
-            nounTagRel.length > 0
+            nounTagRel.length > ARRAY.EMPTY_LENGTH
           ) {
             const tagIcons = nounTagRel
               .map((rel: NounTagRelItem) => {
@@ -168,9 +279,9 @@ const WordList = () => {
               })
               .filter((icon): icon is JSX.Element => icon !== null)
 
-            if (tagIcons.length > 0) {
+            if (tagIcons.length > ARRAY.EMPTY_LENGTH) {
               row.tags = (
-                <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: `${UI_DIMENSIONS.SPACING_XS}px`, flexWrap: 'wrap' }}>
                   {tagIcons}
                 </div>
               )
@@ -179,17 +290,19 @@ const WordList = () => {
 
           return row
         }}
-        words={words.filter((t: WordListItem) => {
-          if (t.group)
-            return filterOptionsMap?.[getWordGroupIconMatch(t.group)?.filterKey ?? '']
-          if (t.isIConjugation !== undefined)
-            return filterOptionsMap?.[
-              getWordGroupIconMatch(t.isIConjugation ? 'IADJ' : 'NAADJ')?.filterKey ?? ''
-            ]
-
-          return true
-        })}
+        words={words}
       />
+      {pagination && pagination.totalPages > ARRAY.MIN_NON_EMPTY_LENGTH && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}>
+          <Pagination
+            color='primary'
+            count={pagination.totalPages}
+            onChange={handlePageChange}
+            page={pagination.page}
+            size='small'
+          />
+        </Box>
+      )}
     </Root>
   ) : null
 }

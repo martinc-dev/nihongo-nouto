@@ -1,0 +1,2 @@
+export const DEFAULT_WORD_LIST_LIMIT = 50
+

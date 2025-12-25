@@ -55,7 +55,7 @@ const VerbMainFormRow = ({ conjugation }: VerbMainFormRowProps) => {
       <div className={classes.stem}>
         <span className={classes.name}>Stem</span>
         <span className={classes.value}>
-          {conjugation.verbstem || conjugation['te form'].replace('て', '')}
+          {(conjugation['polite affirmative'] || '').replace('ます', '')}
         </span>
         <span className={classes.suffix}>〜</span>
       </div>
@@ -68,4 +68,3 @@ const VerbMainFormRow = ({ conjugation }: VerbMainFormRowProps) => {
 }
 
 export default VerbMainFormRow
-

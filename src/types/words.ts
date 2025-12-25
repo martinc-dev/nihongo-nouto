@@ -1,5 +1,17 @@
 import { ConjugationResult } from 'src/utils/conjugation'
 
+export interface PaginationMeta {
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
+export interface PaginatedResponse<T> {
+  data: T[]
+  pagination: PaginationMeta
+}
+
 // Base word interface
 export interface BaseWord {
   id: number
@@ -42,18 +54,18 @@ export interface VerbWord extends BaseWord {
 export type AdjType = 'IADJ' | 'NAADJ'
 
 export interface AdjWord extends BaseWord {
-  romaji: string
+  hiragana: string
   isIConjugation: boolean
 }
 
 // Noun-specific fields
 export interface NounWord extends BaseWord {
-  romaji: string
+  hiragana: string
 }
 
 // Other word type
 export interface OtherWord extends BaseWord {
-  romaji: string
+  hiragana: string
 }
 
 // Union type for all word types
@@ -115,6 +127,7 @@ export interface JishoSense {
 }
 
 export interface JishoDataItem {
+  slug?: string
   japanese?: JishoWordOption[]
   senses?: JishoSense[]
 }
@@ -128,6 +141,20 @@ export interface JishoRawResponse {
   data?: JishoDataItem[]
 }
 
+export interface JishoSlugOption {
+  slug: string
+  japanese: JishoWordOption[]
+  senses: Array<{
+    definitions: string[]
+    partsOfSpeech: string[]
+    verbType?: string | null
+    verbClassification?: string | null
+    verbIsTransitive?: boolean
+    verbIsInTransitive?: boolean
+    adjType?: string | null
+  }>
+}
+
 export interface JishoWordSearchResult {
   wordOptions: JishoWordOption[]
   definitionOptions: Array<{
@@ -138,6 +165,7 @@ export interface JishoWordSearchResult {
     verbIsInTransitive?: boolean
     adjType?: string | null
   }>
+  slugOptions?: JishoSlugOption[]
 }
 
 // Word dupe search result

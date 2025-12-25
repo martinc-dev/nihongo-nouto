@@ -9,6 +9,7 @@ import VerbConjFormRow from 'src/components/WordDashboard/verb/VerbConjFormRow'
 import VerbConjFormAdditional from 'src/components/WordDashboard/verb/VerbConjFormAdditional'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
+import { NUMBERS } from 'src/constants/numbers'
 
 const PREFIX = 'VerbDetail'
 
@@ -31,7 +32,7 @@ interface VerbDetailProps {
 }
 
 const VerbDetail = ({ wordId }: VerbDetailProps) => {
-  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, 10) : null)
+  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
 
   if (isLoading) {
     return <div>Loading...</div>

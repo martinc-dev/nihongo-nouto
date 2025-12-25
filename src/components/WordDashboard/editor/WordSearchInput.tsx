@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import { colors } from 'src/themes/colors'
 import { useWordSearch } from 'src/hooks/useWordSearch'
 import { JishoWordOption } from 'src/types/words'
+import { NUMBERS, UI_DIMENSIONS } from 'src/constants/numbers'
 
 interface WordSearchInputProps {
   onInputBlur: () => void
@@ -55,9 +56,7 @@ const WordSearchInput = ({
           }}
           label='Word'
           onKeyDown={e => {
-            const enterKeyCode = 13
-
-            if (e.keyCode === enterKeyCode && word) {
+            if (e.keyCode === NUMBERS.ENTER_KEY_CODE && word) {
               setSearchResult(null)
               wordSearchMutation.mutate(word, {
                 onSuccess: (data) => {
@@ -78,17 +77,17 @@ const WordSearchInput = ({
           {...props}
         >
           <Typography
-            sx={{ fontSize: 16, color: colors.shibafuGreen }}
+            sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_LARGE, color: colors.shibafuGreen }}
             variant='subtitle1'
           >
             {typeof option === 'string' ? option : option.word}
           </Typography>
-          <Typography sx={{ fontSize: 14 }} variant='subtitle1'>
+          <Typography sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_MEDIUM }} variant='subtitle1'>
             {typeof option === 'string' ? '' : option.reading}
           </Typography>
         </Box>
       )}
-      sx={{ width: 250 }}
+      sx={{ width: UI_DIMENSIONS.WORD_SEARCH_INPUT_WIDTH }}
       value={{ word }}
     />
   )

@@ -12,13 +12,14 @@ import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
 
 import { useWordDetail, useSaveWordDetail } from 'src/hooks/useWordDetail'
-import { useVerbFromJisho } from 'src/hooks/useVerbFromJisho'
-import { VerbWord, VerbGroup, JishoSlugOption, JishoWordOption } from 'src/types/words'
+import { useAdjFromJisho } from 'src/hooks/useAdjFromJisho'
+import { AdjWord, JishoSlugOption, JishoWordOption } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import { colors } from 'src/themes/colors'
-import { NUMBERS } from 'src/constants/numbers'
+import { NUMBERS, UI_DIMENSIONS } from 'src/constants/numbers'
+import { adjTypes } from 'src/constants/jisho'
 
-const PREFIX = 'VerbEditor'
+const PREFIX = 'AdjEditor'
 
 const classes = {
   wordEditor: `${PREFIX}-wordEditor`,
@@ -31,8 +32,6 @@ const classes = {
   label: `${PREFIX}-label`,
   selectField: `${PREFIX}-selectField`,
   mainFields: `${PREFIX}-mainFields`,
-  conjugationFields: `${PREFIX}-conjugationFields`,
-  booleanFields: `${PREFIX}-booleanFields`,
   senseField: `${PREFIX}-senseField`,
 }
 
@@ -40,18 +39,18 @@ const Root = styled('div')(({ theme }) => ({
   [`&.${classes.wordEditor}`]: {
     display: 'inline-block',
     position: 'relative',
-    width: '70%',
-    borderRadius: 3,
+    width: UI_DIMENSIONS.WORD_DASHBOARD_WIDTH,
+    borderRadius: UI_DIMENSIONS.WORD_DASHBOARD_BORDER_RADIUS,
     verticalAlign: 'top',
   },
 
   [`& .${classes.editorActions}`]: {
     display: 'inline-block',
-    marginBottom: 20,
+    marginBottom: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_BOTTOM,
   },
 
   [`& .${classes.saveButton}`]: {
-    marginRight: 10,
+    marginRight: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_RIGHT,
     backgroundColor: theme.palette.shibafuGreen.main,
     color: theme.palette.white.main,
     '&:hover': {
@@ -68,17 +67,17 @@ const Root = styled('div')(({ theme }) => ({
   },
 
   [`& .${classes.formSection}`]: {
-    width: '100%',
-    marginBottom: 20,
-    paddingBottom: 20,
+    width: UI_DIMENSIONS.FORM_FIELD_WIDTH_FULL,
+    marginBottom: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_BOTTOM,
+    paddingBottom: UI_DIMENSIONS.WORD_DASHBOARD_PADDING_BOTTOM,
     borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
   },
 
   [`& .${classes.formRow}`]: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: 15,
-    gap: 15,
+    marginBottom: UI_DIMENSIONS.WORD_DASHBOARD_GAP,
+    gap: UI_DIMENSIONS.WORD_DASHBOARD_GAP,
   },
 
   [`& .${classes.formField}`]: {
@@ -103,15 +102,15 @@ const Root = styled('div')(({ theme }) => ({
   },
 
   [`& .${classes.label}`]: {
-    minWidth: 120,
-    marginRight: 20,
-    padding: '0 5px',
+    minWidth: UI_DIMENSIONS.WORD_DASHBOARD_MIN_WIDTH,
+    marginRight: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_RIGHT,
+    padding: UI_DIMENSIONS.WORD_DASHBOARD_PADDING,
     textTransform: 'uppercase',
-    borderRadius: 4,
+    borderRadius: UI_DIMENSIONS.WORD_DASHBOARD_BORDER_RADIUS_SMALL,
     backgroundColor: theme.palette.soraBlue.main,
     color: theme.palette.prussianBlue.main,
-    fontSize: 12,
-    fontWeight: 600,
+    fontSize: UI_DIMENSIONS.FONT_SIZE_SMALL,
+    fontWeight: UI_DIMENSIONS.FONT_WEIGHT_BOLD,
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -141,28 +140,13 @@ const Root = styled('div')(({ theme }) => ({
   [`& .${classes.mainFields}`]: {
     display: 'flex',
     flexDirection: 'column',
-    gap: 15,
-  },
-
-  [`& .${classes.conjugationFields}`]: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: 15,
-    '& .MuiTextField-root': {
-      width: '100%',
-    },
-  },
-
-  [`& .${classes.booleanFields}`]: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: 15,
+    gap: UI_DIMENSIONS.WORD_DASHBOARD_GAP,
   },
 
   [`& .${classes.senseField}`]: {
-    width: '100%',
+    width: UI_DIMENSIONS.FORM_FIELD_WIDTH_FULL,
     '& .MuiOutlinedInput-root': {
-      minHeight: 100,
+      minHeight: UI_DIMENSIONS.FORM_FIELD_MIN_HEIGHT,
       alignItems: 'flex-start',
     },
     '& .MuiOutlinedInput-input': {
@@ -171,27 +155,13 @@ const Root = styled('div')(({ theme }) => ({
   },
 }))
 
-const VERB_GROUPS: VerbGroup[] = [
-  'V5U',
-  'V5K',
-  'V5KS',
-  'V5G',
-  'V5S',
-  'V5T',
-  'V5M',
-  'V5B',
-  'V5N',
-  'V5R',
-  'V1',
-  'IRS',
-  'IRK',
-]
+const ADJ_TYPES = [adjTypes.IADJ, adjTypes.NAADJ]
 
-interface VerbEditorProps {
+interface AdjEditorProps {
   wordId?: string | null
 }
 
-const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
+const AdjEditor = ({ wordId = null }: AdjEditorProps) => {
   const navigate = useNavigate()
   const { wordId: paramWordId } = useParams<{ wordId?: string }>()
   const actualWordId = wordId || paramWordId
@@ -211,42 +181,28 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
     selectedSlug,
     selectedJapaneseOption,
     availableSenses,
-  } = useVerbFromJisho()
+  } = useAdjFromJisho()
 
   const [searchInputValue, setSearchInputValue] = useState('')
   const [selectedSenseIndex, setSelectedSenseIndex] = useState<number | null>(null)
 
-  const [formData, setFormData] = useState<Partial<VerbWord>>({
+  const [formData, setFormData] = useState<Partial<AdjWord>>({
     word: '',
     hiragana: '',
-    group: null,
+    isIConjugation: false,
     sense: '',
-    stem: '',
-    teForm: '',
-    aDan: '',
-    eDan: '',
-    oDan: '',
-    isTransitive: false,
-    isIntransitive: false,
   })
 
   // Load existing word data in edit mode
   useEffect(() => {
     if (!isCreateMode && word && 'word' in word) {
-      const verbWord = word as VerbWord
+      const adjWord = word as AdjWord
 
       setFormData({
-        word: verbWord.word || '',
-        hiragana: verbWord.hiragana || '',
-        group: verbWord.group || null,
-        sense: verbWord.sense || '',
-        stem: verbWord.stem || '',
-        teForm: verbWord.teForm || '',
-        aDan: verbWord.aDan || '',
-        eDan: verbWord.eDan || '',
-        oDan: verbWord.oDan || '',
-        isTransitive: verbWord.isTransitive || false,
-        isIntransitive: verbWord.isIntransitive || false,
+        word: adjWord.word || '',
+        hiragana: adjWord.hiragana || '',
+        isIConjugation: adjWord.isIConjugation || false,
+        sense: adjWord.sense || '',
       })
     }
   }, [word, isCreateMode])
@@ -258,23 +214,13 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         ...prev,
         word: prepopulatedData.word,
         hiragana: prepopulatedData.hiragana,
-        group: prepopulatedData.group,
+        isIConjugation: prepopulatedData.isIConjugation,
         sense: prepopulatedData.sense,
-        stem: prepopulatedData.stem,
-        teForm: prepopulatedData.teForm,
-        aDan: prepopulatedData.aDan,
-        eDan: prepopulatedData.eDan,
-        oDan: prepopulatedData.oDan,
-        isTransitive: prepopulatedData.isTransitive,
-        isIntransitive: prepopulatedData.isIntransitive,
       }))
     }
   }, [prepopulatedData, isCreateMode])
 
-  const handleFieldChange = (
-    field: keyof VerbWord,
-    value: string | boolean | VerbGroup | null,
-  ) => {
+  const handleFieldChange = (field: keyof AdjWord, value: string | boolean) => {
     setFormData(prev => ({
       ...prev,
       [field]: value,
@@ -342,7 +288,6 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
 
   const handleSearchInputChange = (value: string) => {
     setSearchInputValue(value)
-    // Don't trigger search - only update local state
   }
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -352,10 +297,8 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
 
       if (value) {
         searchWord(value)
-        // Reset selections when new search is performed
         setSelectedSenseIndex(null)
       } else {
-        // Clear results if input is empty
         searchWord('')
         setSelectedSenseIndex(null)
       }
@@ -389,11 +332,20 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
     <Root className={classes.wordEditor}>
       {isCreateMode ? (
         <div className={classes.formSection}>
-          <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h5'>
-            Create New Verb
+          <Typography
+            sx={{
+              marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM,
+              color: colors.shibafuGreen,
+            }}
+            variant='h5'
+          >
+            Create New Adjective
           </Typography>
           <Typography
-            sx={{ marginBottom: 2, color: colors.kujakuishiGreen }}
+            sx={{
+              marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM,
+              color: colors.kujakuishiGreen,
+            }}
             variant='body2'
           >
             Search for a word to prepopulate fields, or enter manually
@@ -409,7 +361,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
             onChange={e => handleSearchInputChange(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             sx={{
-              marginBottom: 2,
+              marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM,
               '& .MuiOutlinedInput-input': { color: colors.shibafuGreen },
             }}
             value={searchInputValue}
@@ -420,7 +372,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
             <FormControl
               className={classes.selectField}
               fullWidth
-              sx={{ marginBottom: 2 }}
+              sx={{ marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}
               variant='outlined'
             >
               <InputLabel>Select Entry (Slug)</InputLabel>
@@ -449,7 +401,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
             <FormControl
               className={classes.selectField}
               fullWidth
-              sx={{ marginBottom: 2 }}
+              sx={{ marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}
               variant='outlined'
             >
               <InputLabel>Select Japanese Form</InputLabel>
@@ -483,7 +435,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
             <FormControl
               className={classes.selectField}
               fullWidth
-              sx={{ marginBottom: 2 }}
+              sx={{ marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}
               variant='outlined'
             >
               <InputLabel>Select Sense/Definition</InputLabel>
@@ -502,12 +454,12 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
                 value={selectedSenseIndex !== null ? selectedSenseIndex : ''}
               >
                 {availableSenses.map((sense, index) => {
-                  const senseKey = `${sense.definitions.join('-')}-${sense.verbClassification || ''}-${index}`
+                  const senseKey = `${sense.definitions.join('-')}-${sense.adjType || ''}-${index}`
 
                   return (
                     <MenuItem key={senseKey} value={index}>
                       {sense.definitions.join('; ')}
-                      {sense.verbClassification && ` (${sense.verbClassification})`}
+                      {sense.adjType && ` (${sense.adjType})`}
                     </MenuItem>
                   )
                 })}
@@ -564,24 +516,21 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
             />
           </div>
           <div className={classes.formRow}>
-            <span className={classes.label}>Group</span>
+            <span className={classes.label}>Type</span>
             <FormControl className={classes.selectField} fullWidth variant='outlined'>
-              <InputLabel>Group</InputLabel>
+              <InputLabel>Type</InputLabel>
               <Select
-                label='Group'
+                label='Type'
                 onChange={e => {
                   const { value } = e.target
 
-                  handleFieldChange('group', value === '' ? null : (value as VerbGroup))
+                  handleFieldChange('isIConjugation', value === adjTypes.IADJ)
                 }}
-                value={formData.group || ''}
+                value={formData.isIConjugation ? adjTypes.IADJ : adjTypes.NAADJ}
               >
-                <MenuItem value=''>
-                  <em>None</em>
-                </MenuItem>
-                {VERB_GROUPS.map(group => (
-                  <MenuItem key={group} value={group}>
-                    {group}
+                {ADJ_TYPES.map(type => (
+                  <MenuItem key={type} value={type}>
+                    {type}
                   </MenuItem>
                 ))}
               </Select>
@@ -591,105 +540,13 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
       </div>
 
       <div className={classes.formSection}>
-        <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h6'>
-          Conjugation Forms
-        </Typography>
-        <div className={classes.conjugationFields}>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Stem</span>
-            <TextField
-              className={classes.formField}
-              label='Stem'
-              onChange={e => handleFieldChange('stem', e.target.value)}
-              value={formData.stem || ''}
-              variant='outlined'
-            />
-          </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Te Form</span>
-            <TextField
-              className={classes.formField}
-              label='Te Form'
-              onChange={e => handleFieldChange('teForm', e.target.value)}
-              value={formData.teForm || ''}
-              variant='outlined'
-            />
-          </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>A Dan</span>
-            <TextField
-              className={classes.formField}
-              label='A Dan'
-              onChange={e => handleFieldChange('aDan', e.target.value)}
-              value={formData.aDan || ''}
-              variant='outlined'
-            />
-          </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>E Dan</span>
-            <TextField
-              className={classes.formField}
-              label='E Dan'
-              onChange={e => handleFieldChange('eDan', e.target.value)}
-              value={formData.eDan || ''}
-              variant='outlined'
-            />
-          </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>O Dan</span>
-            <TextField
-              className={classes.formField}
-              label='O Dan'
-              onChange={e => handleFieldChange('oDan', e.target.value)}
-              value={formData.oDan || ''}
-              variant='outlined'
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.formSection}>
-        <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h6'>
-          Properties
-        </Typography>
-        <div className={classes.booleanFields}>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Transitive</span>
-            <FormControl className={classes.selectField} fullWidth variant='outlined'>
-              <InputLabel>Transitive</InputLabel>
-              <Select
-                label='Transitive'
-                onChange={e =>
-                  handleFieldChange('isTransitive', e.target.value === 'true')
-                }
-                value={formData.isTransitive ? 'true' : 'false'}
-              >
-                <MenuItem value='true'>Yes</MenuItem>
-                <MenuItem value='false'>No</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Intransitive</span>
-            <FormControl className={classes.selectField} fullWidth variant='outlined'>
-              <InputLabel>Intransitive</InputLabel>
-              <Select
-                label='Intransitive'
-                onChange={e =>
-                  handleFieldChange('isIntransitive', e.target.value === 'true')
-                }
-                value={formData.isIntransitive ? 'true' : 'false'}
-              >
-                <MenuItem value='true'>Yes</MenuItem>
-                <MenuItem value='false'>No</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-        </div>
-      </div>
-
-      <div className={classes.formSection}>
-        <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h6'>
+        <Typography
+          sx={{
+            marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM,
+            color: colors.shibafuGreen,
+          }}
+          variant='h6'
+        >
           Sense
         </Typography>
         <TextField
@@ -698,7 +555,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
           label='Sense'
           multiline
           onChange={e => handleFieldChange('sense', e.target.value)}
-          rows={4}
+          rows={UI_DIMENSIONS.FORM_FIELD_ROWS}
           value={formData.sense || ''}
           variant='outlined'
         />
@@ -729,4 +586,4 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
   )
 }
 
-export default VerbEditor
+export default AdjEditor

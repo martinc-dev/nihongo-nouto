@@ -49,3 +49,6 @@ export const adjTypes = {
   NAADJ: 'NAADJ',
 } as const
 
+// Throttle interval for Jisho API calls (in milliseconds)
+export const JISHO_API_THROTTLE_INTERVAL_MS = 1000 // 1 second
+

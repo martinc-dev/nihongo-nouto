@@ -1,9 +1,15 @@
-import { useQuery, useMutation, UseQueryResult, UseMutationResult } from '@tanstack/react-query'
+import {
+  useQuery,
+  useMutation,
+  UseQueryResult,
+  UseMutationResult,
+} from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
 
 import { sendGet } from 'src/utils/requests'
 import endpoints from 'src/constants/endpoints'
 import resourceTypes from 'src/constants/resourceTypes'
+import { TIME, HTTP_STATUS, ARRAY } from 'src/constants/numbers'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { ResourceTypeKey } from 'src/types'
@@ -15,6 +21,7 @@ import {
   JishoRawResponse,
   JishoWordSearchResult,
   JishoSense,
+  JishoSlugOption,
   ApiError,
 } from 'src/types/words'
 
@@ -40,12 +47,14 @@ const aggregateJisho = ({
   const result: JishoWordSearchResult = {
     wordOptions: [],
     definitionOptions: [],
+    slugOptions: [],
   }
 
-  if ((raw?.meta?.status ?? null) !== 200) return result
+  if ((raw?.meta?.status ?? null) !== HTTP_STATUS.OK) return result
 
   const casedRaw = camelCase(raw, { deep: true }) as {
     data?: Array<{
+      slug?: string
       japanese?: Array<{ word?: string; reading?: string }>
       senses?: Array<{
         englishDefinitions?: string[]
@@ -53,9 +62,69 @@ const aggregateJisho = ({
       }>
     }>
   }
-  const senses: JishoSense[] = (casedRaw?.data?.[0]?.senses as JishoSense[]) ?? []
 
-  result.wordOptions = (casedRaw?.data?.[0]?.japanese ?? []) as Array<{
+  // Build slug options with all data
+  const slugOptions: JishoSlugOption[] = []
+
+  if (casedRaw?.data) {
+    for (const item of casedRaw.data) {
+      const japanese = (item.japanese ?? []) as Array<{
+        word?: string
+        reading?: string
+      }>
+      const senses = (item.senses ?? []) as JishoSense[]
+
+      if (
+        item.slug &&
+        japanese.length > ARRAY.EMPTY_LENGTH &&
+        senses.length > ARRAY.EMPTY_LENGTH
+      ) {
+        const processedSenses = senses.map((sense: JishoSense) => {
+          const baseSense = {
+            definitions: sense.englishDefinitions || [],
+            partsOfSpeech: sense.partsOfSpeech || [],
+          }
+
+          switch (typeKey) {
+            case resourceTypes.VERB.key: {
+              return {
+                ...baseSense,
+                ...parseVerbProp({
+                  partsOfSpeechArray: sense.partsOfSpeech || [],
+                  word: japanese[0]?.word || word,
+                }),
+              }
+            }
+
+            case resourceTypes.ADJ.key: {
+              return {
+                ...baseSense,
+                ...parseAdjProp({ partsOfSpeechArray: sense.partsOfSpeech || [] }),
+              }
+            }
+
+            default: {
+              return baseSense
+            }
+          }
+        })
+
+        slugOptions.push({
+          slug: item.slug,
+          japanese,
+          senses: processedSenses,
+        })
+      }
+    }
+  }
+
+  result.slugOptions = slugOptions
+
+  // Keep backward compatibility with old format
+  const firstItem = casedRaw?.data?.[ARRAY.FIRST_INDEX]
+  const senses: JishoSense[] = (firstItem?.senses as JishoSense[]) ?? []
+
+  result.wordOptions = (firstItem?.japanese ?? []) as Array<{
     word?: string
     reading?: string
   }>
@@ -98,7 +167,10 @@ const aggregateJisho = ({
   return result
 }
 
-const fetchWordDupe = async ({ typeKey, word }: FetchWordDupeParams): Promise<WordDupeResult> => {
+const fetchWordDupe = async ({
+  typeKey,
+  word,
+}: FetchWordDupeParams): Promise<WordDupeResult> => {
   if (!word) {
     throw new Error('No word defined within dupe search')
   }
@@ -117,10 +189,13 @@ const fetchWordDupe = async ({ typeKey, word }: FetchWordDupeParams): Promise<Wo
   }
 
   // The response is the data directly when successful
-  return (response as unknown as WordDupeResult) as WordDupeResult
+  return response as unknown as WordDupeResult as WordDupeResult
 }
 
-const fetchWordSearch = async ({ typeKey, word }: FetchWordSearchParams): Promise<JishoWordSearchResult> => {
+const fetchWordSearch = async ({
+  typeKey,
+  word,
+}: FetchWordSearchParams): Promise<JishoWordSearchResult> => {
   if (!word) {
     throw new Error('No word defined within search')
   }
@@ -144,9 +219,11 @@ const fetchWordSearch = async ({ typeKey, word }: FetchWordSearchParams): Promis
 }
 
 export const useWordDupe = (
-  word: string | null | undefined
+  word: string | null | undefined,
 ): UseQueryResult<WordDupeResult, ApiError> => {
-  const currentContentType = useSelector((state: RootState) => getCurrentContentType(state))
+  const currentContentType = useSelector((state: RootState) =>
+    getCurrentContentType(state),
+  )
 
   return useQuery({
     queryKey: ['wordDupe', currentContentType, word],
@@ -154,10 +231,14 @@ export const useWordDupe = (
       if (!currentContentType || !word) {
         throw new Error('Missing content type or word')
       }
+
       return fetchWordDupe({ typeKey: currentContentType, word })
     },
-    enabled: !!currentContentType && !!word && (resourceTypes[currentContentType]?.isMain ?? false),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled:
+      !!currentContentType &&
+      !!word &&
+      (resourceTypes[currentContentType]?.isMain ?? false),
+    staleTime: TIME.FIVE_MINUTES_MS,
   })
 }
 
@@ -167,15 +248,17 @@ export const useWordSearch = (): UseMutationResult<
   string,
   unknown
 > => {
-  const currentContentType = useSelector((state: RootState) => getCurrentContentType(state))
+  const currentContentType = useSelector((state: RootState) =>
+    getCurrentContentType(state),
+  )
 
   return useMutation({
     mutationFn: (word: string) => {
       if (!currentContentType) {
         throw new Error('No content type selected')
       }
+
       return fetchWordSearch({ typeKey: currentContentType, word })
     },
   })
 }
-

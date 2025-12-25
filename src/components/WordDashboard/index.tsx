@@ -14,8 +14,11 @@ import WordList from 'src/components/WordList'
 import VerbDetail from 'src/components/WordDashboard/verb/VerbDetail'
 import VerbEditor from 'src/components/WordDashboard/verb/VerbEditor'
 import AdjDetail from 'src/components/WordDashboard/adj/AdjDetail'
+import AdjEditor from 'src/components/WordDashboard/adj/AdjEditor'
 import NounDetail from 'src/components/WordDashboard/noun/NounDetail'
+import NounEditor from 'src/components/WordDashboard/noun/NounEditor'
 import OtherDetail from 'src/components/WordDashboard/other/OtherDetail'
+import OtherEditor from 'src/components/WordDashboard/other/OtherEditor'
 import SplashScreen from 'src/components/WordDashboard/SplashScreen'
 
 const WordDashboard = () => {
@@ -25,13 +28,10 @@ const WordDashboard = () => {
   const location = useLocation()
 
   // Map resourceType parameter to ResourceTypeKey
-  const contentType: ResourceTypeKey | null =
-    resourceType
-      ? (findInObj(
-          resourceTypes,
-          t => t.pathName === resourceType.toLowerCase()
-        )?.key as ResourceTypeKey) ?? null
-      : null
+  const contentType: ResourceTypeKey | null = resourceType
+    ? ((findInObj(resourceTypes, t => t.pathName === resourceType.toLowerCase())
+        ?.key as ResourceTypeKey) ?? null)
+    : null
 
   // Trigger word list fetch when content type changes (React Query handles caching)
   useWordList()
@@ -43,22 +43,38 @@ const WordDashboard = () => {
   }, [currentContentType, contentType, dispatch])
 
   // Check if we're on an edit/create route
-  const isEditing = location.pathname.includes('/create') || location.pathname.includes('/edit')
+  const isEditing =
+    location.pathname.includes('/create') || location.pathname.includes('/edit')
 
   return (
-    <Container maxWidth='xl'>
+    <Container maxWidth={false}>
       {currentContentType ? (
         <>
           <WordList />
           {currentContentType === resourceTypes.VERB.key &&
-            (isEditing ? <VerbEditor wordId={wordId ?? null} /> : <VerbDetail wordId={wordId ?? null} />)}
-          {currentContentType === resourceTypes.ADJ.key && <AdjDetail wordId={wordId ?? null} />}
-          {currentContentType === resourceTypes.NOUN.key && (
-            <NounDetail wordId={wordId ?? null} />
-          )}
-          {currentContentType === resourceTypes.OTHER.key && (
-            <OtherDetail wordId={wordId ?? null} />
-          )}
+            (isEditing ? (
+              <VerbEditor wordId={wordId ?? null} />
+            ) : (
+              <VerbDetail wordId={wordId ?? null} />
+            ))}
+          {currentContentType === resourceTypes.ADJ.key &&
+            (isEditing ? (
+              <AdjEditor wordId={wordId ?? null} />
+            ) : (
+              <AdjDetail wordId={wordId ?? null} />
+            ))}
+          {currentContentType === resourceTypes.NOUN.key &&
+            (isEditing ? (
+              <NounEditor wordId={wordId ?? null} />
+            ) : (
+              <NounDetail wordId={wordId ?? null} />
+            ))}
+          {currentContentType === resourceTypes.OTHER.key &&
+            (isEditing ? (
+              <OtherEditor wordId={wordId ?? null} />
+            ) : (
+              <OtherDetail wordId={wordId ?? null} />
+            ))}
         </>
       ) : (
         <SplashScreen />

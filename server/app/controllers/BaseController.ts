@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { Op } from 'sequelize'
 import { logError } from '../utils/logger'
 import { NotFoundError, InternalServiceError } from '../constants/exceptions'
 import { BaseService } from '../services/BaseService'
@@ -46,6 +47,7 @@ export abstract class BaseController {
       const { word } = req.query
       const limit = Math.abs(parseInt((req.query?.limit as string) ?? '0', 10))
       const page = Math.abs(parseInt((req.query?.page as string) ?? '0', 10))
+      const orderBy = (req.query?.orderBy as string) ?? 'id'
       const isAsc = ((req.query?.asc as string) ?? 'false').toLowerCase() === 'true'
       const option = this.queryOption ? { options: this.queryOption } : null
 
@@ -53,34 +55,166 @@ export abstract class BaseController {
         conditionKV: { word },
         limit,
         page,
+        orderBy,
         isAsc,
         ...option,
       })
 
-      res.json(result?.rows.map(t => t.dataValues) ?? [])
+      if (!result) {
+        res.json({
+          data: [],
+          pagination: {
+            total: 0,
+            page: 1,
+            limit: limit || 0,
+            totalPages: 0,
+          },
+        })
+
+        return
+      }
+
+      // If no pagination params, return all data (backward compatibility)
+      if (limit === 0 || page === 0) {
+        res.json({
+          data: result.rows.map(t => t.dataValues),
+          pagination: {
+            total: result.count,
+            page: 1,
+            limit: result.count,
+            totalPages: 1,
+          },
+        })
+
+        return
+      }
+
+      const totalPages = Math.ceil(result.count / limit)
+
+      res.json({
+        data: result.rows.map(t => t.dataValues),
+        pagination: {
+          total: result.count,
+          page,
+          limit,
+          totalPages,
+        },
+      })
     } catch (error) {
       logError(error)
       this.handleError(error, res)
     }
   }
 
-  // No filters for now
+  // Helper to build filter conditions from filter query params
+  private buildFilterConditions(filters?: string | string[]): Record<string, unknown> | null {
+    if (!filters) return null
+
+    const filterArray = Array.isArray(filters) ? filters : [filters]
+
+    if (filterArray.length === 0) return null
+
+    // Map filter keys to database values
+    // For verbs: GoDan, IchiDan, SuRu, KuRu -> group values
+    // For adjectives: I-Adj, Na-Adj -> isIConjugation values
+    const verbGroupMap: Record<string, string[]> = {
+      GoDan: ['V5U', 'V5K', 'V5G', 'V5S', 'V5T', 'V5M', 'V5B', 'V5N', 'V5R', 'V5KS'],
+      IchiDan: ['V1'],
+      SuRu: ['IRS'],
+      KuRu: ['IRK'],
+    }
+
+    const conditions: Record<string, unknown> = {}
+
+    // Check if any verb filters are present
+    const verbFilters = filterArray.filter(f => ['GoDan', 'IchiDan', 'SuRu', 'KuRu'].includes(f))
+
+    if (verbFilters.length > 0) {
+      const groupValues = verbFilters.flatMap(filter => verbGroupMap[filter] || [])
+
+      if (groupValues.length > 0) {
+        conditions.group = { [Op.in]: groupValues }
+      }
+    }
+
+    // Check if any adjective filters are present
+    const adjFilters = filterArray.filter(f => ['I-Adj', 'Na-Adj'].includes(f))
+
+    if (adjFilters.length > 0) {
+      // If both are selected, no filter needed (show all)
+      // If only one is selected, filter by isIConjugation
+      if (adjFilters.length === 1) {
+        conditions.isIConjugation = adjFilters[0] === 'I-Adj'
+      }
+    }
+
+    return Object.keys(conditions).length > 0 ? conditions : null
+  }
+
   getMultiple = async (req: Request, res: Response): Promise<void> => {
     try {
       const limit = Math.abs(parseInt((req.query?.limit as string) ?? '0', 10))
       const page = Math.abs(parseInt((req.query?.page as string) ?? '0', 10))
+      const orderBy = (req.query?.orderBy as string) ?? 'id'
       const isAsc = ((req.query?.asc as string) ?? 'false').toLowerCase() === 'true'
+      const filters = req.query?.filters as string | string[] | undefined
       const option = this.queryOption ? { options: this.queryOption } : null
 
-      const result = await this.service.queryAsync({ limit, page, isAsc, ...option })
+      // Build filter conditions
+      const filterConditions = this.buildFilterConditions(filters)
+
+      // Combine filter conditions with existing queryOption conditions if any
+      const conditionKV = filterConditions || null
+
+      const result = await this.service.queryAsync({
+        conditionKV,
+        limit,
+        page,
+        orderBy,
+        isAsc,
+        ...option,
+      })
 
       if (!result) {
-        res.json([])
+        res.json({
+          data: [],
+          pagination: {
+            total: 0,
+            page: 1,
+            limit: limit || 0,
+            totalPages: 0,
+          },
+        })
 
         return
       }
 
-      res.json(result.rows.map(t => t.dataValues))
+      // If no pagination params, return all data (backward compatibility)
+      if (limit === 0 || page === 0) {
+        res.json({
+          data: result.rows.map(t => t.dataValues),
+          pagination: {
+            total: result.count,
+            page: 1,
+            limit: result.count,
+            totalPages: 1,
+          },
+        })
+
+        return
+      }
+
+      const totalPages = Math.ceil(result.count / limit)
+
+      res.json({
+        data: result.rows.map(t => t.dataValues),
+        pagination: {
+          total: result.count,
+          page,
+          limit,
+          totalPages,
+        },
+      })
     } catch (error) {
       logError(error)
       this.handleError(error, res)

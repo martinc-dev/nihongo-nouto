@@ -1,15 +1,22 @@
-import { useQuery, useMutation, useQueryClient, UseQueryResult, UseMutationResult } from '@tanstack/react-query'
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseQueryResult,
+  UseMutationResult,
+} from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 import { sendGet, sendPost, sendPatch, sendDelete } from 'src/utils/requests'
 import endpoints from 'src/constants/endpoints'
 import resourceTypes from 'src/constants/resourceTypes'
+import { TIME } from 'src/constants/numbers'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { ResourceTypeKey } from 'src/types'
 import verbConjugation from 'src/utils/conjugation'
-import { WordDetail, VerbWord, ApiError, WordListItem } from 'src/types/words'
+import { WordDetail, VerbWord, ApiError } from 'src/types/words'
 
 interface FetchWordDetailParams {
   typeKey: ResourceTypeKey
@@ -19,7 +26,7 @@ interface FetchWordDetailParams {
 interface SaveWordDetailParams {
   typeKey: ResourceTypeKey
   id?: string | number
-  data: Partial<WordDetail>
+  data: Partial<WordDetail> & { tagIds?: number[] }
 }
 
 interface DeleteWordDetailParams {
@@ -27,7 +34,10 @@ interface DeleteWordDetailParams {
   id: string | number
 }
 
-const fetchWordDetail = async ({ typeKey, id }: FetchWordDetailParams): Promise<WordDetail> => {
+const fetchWordDetail = async ({
+  typeKey,
+  id,
+}: FetchWordDetailParams): Promise<WordDetail> => {
   if (!typeKey || !(resourceTypes[typeKey]?.isMain ?? false)) {
     throw new Error('Target resource is not searchable')
   }
@@ -45,7 +55,7 @@ const fetchWordDetail = async ({ typeKey, id }: FetchWordDetailParams): Promise<
   }
 
   // The response is the data directly when successful
-  let result = (response as unknown as WordDetail) as WordDetail
+  let result = response as unknown as WordDetail as WordDetail
 
   // Add verb conjugation if it's a verb
   if (
@@ -66,10 +76,31 @@ const fetchWordDetail = async ({ typeKey, id }: FetchWordDetailParams): Promise<
     }
   }
 
+  if (
+    typeKey === resourceTypes.ADJ.key &&
+    result &&
+    'isIconjugation' in result &&
+    result.isIconjugation !== undefined
+  ) {
+    if (result.isIconjugation !== undefined) {
+      const isIConjugation = result.isIconjugation
+      const { isIconjugation: _, ...rest } = result
+
+      result = {
+        ...rest,
+        isIConjugation,
+      } as WordDetail
+    }
+  }
+
   return result
 }
 
-const saveWordDetail = async ({ typeKey, id, data }: SaveWordDetailParams): Promise<WordDetail> => {
+const saveWordDetail = async ({
+  typeKey,
+  id,
+  data,
+}: SaveWordDetailParams): Promise<WordDetail> => {
   if (!typeKey || !(resourceTypes[typeKey]?.isMain ?? false)) {
     throw new Error('Target resource is not searchable')
   }
@@ -85,7 +116,7 @@ const saveWordDetail = async ({ typeKey, id, data }: SaveWordDetailParams): Prom
     if (response.error) {
       throw response.error
     }
-    result = (response as unknown as WordDetail) as WordDetail
+    result = response as unknown as WordDetail as WordDetail
   } else {
     const response = await sendPost<WordDetail>({
       url: endpoints.getWordsUrl({ typeKey }),
@@ -95,7 +126,7 @@ const saveWordDetail = async ({ typeKey, id, data }: SaveWordDetailParams): Prom
     if (response.error) {
       throw response.error
     }
-    result = (response as unknown as WordDetail) as WordDetail
+    result = response as unknown as WordDetail as WordDetail
   }
 
   // Add verb conjugation if it's a verb
@@ -120,7 +151,10 @@ const saveWordDetail = async ({ typeKey, id, data }: SaveWordDetailParams): Prom
   return result
 }
 
-const deleteWordDetail = async ({ typeKey, id }: DeleteWordDetailParams): Promise<void> => {
+const deleteWordDetail = async ({
+  typeKey,
+  id,
+}: DeleteWordDetailParams): Promise<void> => {
   if (!typeKey || !(resourceTypes[typeKey]?.isMain ?? false)) {
     throw new Error('Target resource is not searchable')
   }
@@ -139,9 +173,11 @@ const deleteWordDetail = async ({ typeKey, id }: DeleteWordDetailParams): Promis
 }
 
 export const useWordDetail = (
-  wordId: string | number | null | undefined
+  wordId: string | number | null | undefined,
 ): UseQueryResult<WordDetail | null, ApiError> => {
-  const currentContentType = useSelector((state: RootState) => getCurrentContentType(state))
+  const currentContentType = useSelector((state: RootState) =>
+    getCurrentContentType(state),
+  )
 
   return useQuery({
     queryKey: ['wordDetail', currentContentType, wordId],
@@ -149,28 +185,41 @@ export const useWordDetail = (
       if (!currentContentType || !wordId) {
         return null
       }
+
       return fetchWordDetail({ typeKey: currentContentType, id: wordId })
     },
-    enabled: !!currentContentType && !!wordId && (resourceTypes[currentContentType]?.isMain ?? false),
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled:
+      !!currentContentType &&
+      !!wordId &&
+      (resourceTypes[currentContentType]?.isMain ?? false),
+    staleTime: TIME.FIVE_MINUTES_MS,
   })
 }
 
 export const useSaveWordDetail = (): UseMutationResult<
   WordDetail,
   ApiError,
-  { id?: string | number; data: Partial<WordDetail> },
+  { id?: string | number; data: Partial<WordDetail> & { tagIds?: number[] } },
   unknown
 > => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const currentContentType = useSelector((state: RootState) => getCurrentContentType(state))
+  const currentContentType = useSelector((state: RootState) =>
+    getCurrentContentType(state),
+  )
 
   return useMutation({
-    mutationFn: ({ id, data }: { id?: string | number; data: Partial<WordDetail> }) => {
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id?: string | number
+      data: Partial<WordDetail> & { tagIds?: number[] }
+    }) => {
       if (!currentContentType) {
         throw new Error('No content type selected')
       }
+
       return saveWordDetail({ typeKey: currentContentType, id, data })
     },
     onSuccess: (result, variables) => {
@@ -191,30 +240,41 @@ export const useSaveWordDetail = (): UseMutationResult<
   })
 }
 
-export const useDeleteWordDetail = (): UseMutationResult<void, ApiError, { id: string | number }, unknown> => {
+export const useDeleteWordDetail = (): UseMutationResult<
+  void,
+  ApiError,
+  { id: string | number },
+  unknown
+> => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const currentContentType = useSelector((state: RootState) => getCurrentContentType(state))
+  const currentContentType = useSelector((state: RootState) =>
+    getCurrentContentType(state),
+  )
 
   return useMutation({
     mutationFn: ({ id }: { id: string | number }) => {
       if (!currentContentType) {
         throw new Error('No content type selected')
       }
+
       return deleteWordDetail({ typeKey: currentContentType, id })
     },
     onSuccess: (_, variables) => {
       if (!currentContentType) return
 
       // Remove from word detail cache
-      queryClient.removeQueries({ queryKey: ['wordDetail', currentContentType, variables.id] })
+      queryClient.removeQueries({
+        queryKey: ['wordDetail', currentContentType, variables.id],
+      })
 
       // Invalidate and refetch word list
       queryClient.invalidateQueries({ queryKey: ['wordList', currentContentType] })
 
-      // Navigate back to list
-      navigate(`/${resourceTypes[currentContentType].pathName}`)
+      // Navigate to word list route
+      const listPath = `/${resourceTypes[currentContentType].pathName}`
+
+      navigate(listPath, { replace: true })
     },
   })
 }
-

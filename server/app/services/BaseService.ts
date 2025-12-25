@@ -39,7 +39,7 @@ export abstract class BaseService {
   async queryAsync({
     conditionKV = null,
     orderBy = 'id',
-    isAsc = false,
+    isAsc = true,
     limit = 0,
     page = 0,
     options = {},
@@ -61,7 +61,11 @@ export abstract class BaseService {
             ...options,
             ...pagination,
           } as FindAndCountOptions)
-        : await this.model.findAndCountAll({ ...options } as FindAndCountOptions)
+        : await this.model.findAndCountAll({
+            order: [[orderBy, isAsc ? 'ASC' : 'DESC']],
+            ...options,
+            ...pagination,
+          } as FindAndCountOptions)
 
       return result
     } catch (error) {
