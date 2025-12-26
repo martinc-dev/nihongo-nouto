@@ -34,13 +34,17 @@ const classes = {
   wordList: `${PREFIX}-wordList`,
 }
 
-const Root = styled('div')(() => ({
+const Root = styled('div')(({ theme }) => ({
   [`&.${classes.wordList}`]: {
     display: 'inline-block',
     width: UI_DIMENSIONS.WORD_LIST_WIDTH,
     maxWidth: UI_DIMENSIONS.WORD_LIST_MAX_WIDTH,
-    marginRight: UI_DIMENSIONS.WORD_LIST_MARGIN_RIGHT,
+    paddingRight: UI_DIMENSIONS.WORD_LIST_PADDING_RIGHT,
     verticalAlign: 'top',
+    [theme.breakpoints.down('xl')]: {
+      width: UI_DIMENSIONS.WORD_LIST_MAX_WIDTH_MOBILE,
+      maxWidth: UI_DIMENSIONS.WORD_LIST_MAX_WIDTH_MOBILE,
+    },
   },
 }))
 
@@ -144,12 +148,11 @@ const WordList = () => {
       const storageKey = `wordList_page_${prevCurrentContentTypeRef.current}`
 
       LocalStorageUtil.remove(storageKey)
-
-      // Update refs
-      prevOrderByRef.current = orderBy
-      prevIsAscRef.current = isAsc
-      prevActiveFiltersRef.current = activeFilters.join(',')
     }
+    // Update refs
+    prevOrderByRef.current = orderBy
+    prevIsAscRef.current = isAsc
+    prevActiveFiltersRef.current = activeFilters.join(',')
   }, [orderBy, isAsc, activeFilters])
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
@@ -281,7 +284,13 @@ const WordList = () => {
 
             if (tagIcons.length > ARRAY.EMPTY_LENGTH) {
               row.tags = (
-                <div style={{ display: 'flex', gap: `${UI_DIMENSIONS.SPACING_XS}px`, flexWrap: 'wrap' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: `${UI_DIMENSIONS.SPACING_XS}px`,
+                    flexWrap: 'wrap',
+                  }}
+                >
                   {tagIcons}
                 </div>
               )
@@ -293,7 +302,13 @@ const WordList = () => {
         words={words}
       />
       {pagination && pagination.totalPages > ARRAY.MIN_NON_EMPTY_LENGTH && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM,
+          }}
+        >
           <Pagination
             color='primary'
             count={pagination.totalPages}

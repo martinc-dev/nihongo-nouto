@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { ReactNode } from 'react'
 
@@ -22,6 +22,7 @@ const classes = {
   root: `${PREFIX}-root`,
   table: `${PREFIX}-table`,
   tableRow: `${PREFIX}-tableRow`,
+  tableRowLink: `${PREFIX}-tableRowLink`,
   tableCell: `${PREFIX}-tableCell`,
   tableCellHead: `${PREFIX}-tableCellHead`,
   tableCellHeadContent: `${PREFIX}-tableCellHeadContent`,
@@ -41,9 +42,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
   [`& .${classes.tableRow}`]: {
     maxWidth: 'none',
-    [theme.breakpoints.up('md')]: {
-      maxWidth: '500px',
-    },
+    cursor: 'pointer',
   },
   [`& .${classes.tableCell}`]: {
     padding: theme.spacing(1),
@@ -103,16 +102,24 @@ const WordListTable = ({ wordToRow, words, columns }: WordListTableProps) => {
   const currentContentType = useSelector((state: RootState) =>
     getCurrentContentType(state),
   )
+  const navigate = useNavigate()
+
   const resourcePath = currentContentType
     ? (resourceTypes[currentContentType]?.path ?? null)
     : null
 
-  const getTooltipTitle = (value: string | number | boolean | VerbGroup | null | undefined | ReactNode): string => {
+  const getTooltipTitle = (
+    value: string | number | boolean | VerbGroup | null | undefined | ReactNode,
+  ): string => {
     if (value === null || value === undefined) {
       return ''
     }
 
-    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    if (
+      typeof value === 'string' ||
+      typeof value === 'number' ||
+      typeof value === 'boolean'
+    ) {
       return String(value)
     }
 
@@ -128,7 +135,11 @@ const WordListTable = ({ wordToRow, words, columns }: WordListTableProps) => {
             const row = wordToRow(word)
 
             return (
-              <TableRow className={classes.tableRow} key={row.id}>
+              <TableRow
+                className={classes.tableRow}
+                key={row.id}
+                onClick={() => navigate(`/${resourcePath}/${row.id}`)}
+              >
                 {columns.map((column, idx) =>
                   !idx ? (
                     <TableCell
@@ -145,7 +156,7 @@ const WordListTable = ({ wordToRow, words, columns }: WordListTableProps) => {
                           noWrap
                           variant='caption'
                         >
-                          <Link to={`/${resourcePath}/${row.id}`}>{row[column] ?? ''}</Link>
+                          {row[column] ?? ''}
                         </Typography>
                       </Tooltip>
                     </TableCell>
@@ -158,7 +169,7 @@ const WordListTable = ({ wordToRow, words, columns }: WordListTableProps) => {
                           noWrap
                           variant='caption'
                         >
-                          <Link to={`/${resourcePath}/${row.id}`}>{row[column] ?? ''}</Link>
+                          {row[column] ?? ''}
                         </Typography>
                       </Tooltip>
                     </TableCell>

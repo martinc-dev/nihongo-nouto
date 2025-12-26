@@ -1,5 +1,3 @@
-import { styled } from '@mui/material/styles'
-
 import { useWordDetail } from 'src/hooks/useWordDetail'
 import { VerbWord } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
@@ -9,23 +7,8 @@ import VerbConjFormRow from 'src/components/WordDashboard/verb/VerbConjFormRow'
 import VerbConjFormAdditional from 'src/components/WordDashboard/verb/VerbConjFormAdditional'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
+import WordDetailContainer from 'src/components/WordDashboard/WordDetailContainer'
 import { NUMBERS } from 'src/constants/numbers'
-
-const PREFIX = 'VerbDetail'
-
-const classes = {
-  wordDetail: `${PREFIX}-wordDetail`,
-}
-
-const Root = styled('div')(() => ({
-  [`&.${classes.wordDetail}`]: {
-    display: 'inline-block',
-    position: 'relative',
-    width: '70%',
-    borderRadius: 3,
-    verticalAlign: 'top',
-  },
-}))
 
 interface VerbDetailProps {
   wordId?: string | null
@@ -51,7 +34,7 @@ const VerbDetail = ({ wordId }: VerbDetailProps) => {
   ].filter((t): t is string => t !== null)
 
   return (
-    <Root className={classes.wordDetail}>
+    <WordDetailContainer>
       <WordTitle {...verbWord} />
       <WordActions />
       {verbWord.conjugation && <VerbMainFormRow conjugation={verbWord.conjugation} />}
@@ -61,7 +44,7 @@ const VerbDetail = ({ wordId }: VerbDetailProps) => {
       )}
       <WordSense {...verbWord} />
       {verbWord.conjugation && <VerbConjFormAdditional conjugation={verbWord.conjugation} />}
-    </Root>
+    </WordDetailContainer>
   )
 }
 

@@ -1,28 +1,11 @@
-import { styled } from '@mui/material/styles'
-
 import { useWordDetail } from 'src/hooks/useWordDetail'
 import { NounWord } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import WordActions from 'src/components/WordDashboard/WordActions'
 import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
+import WordDetailContainer from 'src/components/WordDashboard/WordDetailContainer'
 import { NUMBERS } from 'src/constants/numbers'
-
-const PREFIX = 'NounDetail'
-
-const classes = {
-  wordDetail: `${PREFIX}-wordDetail`,
-}
-
-const Root = styled('div')(() => ({
-  [`&.${classes.wordDetail}`]: {
-    display: 'inline-block',
-    position: 'relative',
-    width: '70%',
-    borderRadius: 3,
-    verticalAlign: 'top',
-  },
-}))
 
 interface NounDetailProps {
   wordId?: string | null
@@ -61,12 +44,12 @@ const NounDetail = ({ wordId }: NounDetailProps) => {
       ?.filter((name): name is string => name !== undefined && name !== null) ?? []
 
   return (
-    <Root className={classes.wordDetail}>
+    <WordDetailContainer>
       <WordTitle {...nounWord} />
       <WordActions />
       <WordTypeDisplay types={types} />
       <WordSense {...nounWord} />
-    </Root>
+    </WordDetailContainer>
   )
 }
 
