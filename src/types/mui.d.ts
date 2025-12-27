@@ -45,4 +45,3 @@ declare module '@mui/material/styles' {
     transparent?: PaletteColorOptions
   }
 }
-

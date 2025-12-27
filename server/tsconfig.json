@@ -7,15 +7,15 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "noEmit": true,
-    "rootDir": "./"
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*", "app/*"],
+      "app/*": ["app/*"]
+    }
   },
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ],
+  "include": ["./**/*.ts", "../server/**/*.ts"],
+  "exclude": ["node_modules", "dist"],
   "ts-node": {
     "esm": false,
     "transpileOnly": true,

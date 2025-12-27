@@ -1,13 +1,13 @@
-# 日本語ノート
+# 日本語ノート (Nihongo Nouto)
 日本語勉強のための知識ベースみたいなオンラインノート
 
 ## Prerequisites
 
 - **Node.js v24** or higher
-- **MySQL** database server
 - **npm** or **yarn** package manager
+- **MariaDB** or **MySQL** (Local or via Docker)
 
-## Setup
+## Development Setup
 
 ### 1. Install Dependencies
 
@@ -17,96 +17,116 @@ npm install
 yarn install
 ```
 
-### 2. Database Setup
+### 2. Configuration
 
-1. Create a MySQL database named `nihongo-nouto` (or your preferred name)
-2. Update the database credentials in the backend configuration file
+**Environment Variables:**
+This project uses environment variables for configuration. You can set them in `server/env.ts` directly for dev (though creating a `.env` file or environment variables is preferred for production).
 
-### 3. Backend Configuration
-
-1. Copy the sample environment file:
-   ```bash
-   cp server/env.js_sample server/env.js
-   ```
-
-2. Edit `server/env.js` and update the database credentials:
-   ```javascript
-   module.exports = {
-     server: {
-       port: 3000  // Backend server port
-     },
-     database: {
-       username: 'root',        // Your MySQL username
-       password: 'root',        // Your MySQL password
-       host: 'localhost',
-       port: 3306,
-       name: 'nihongo-nouto'   // Your database name
-     },
-     environment: 'dev'
-   }
-   ```
-
-### 4. Frontend Configuration
-
-1. Create a `.env` file in the root directory:
-   ```bash
-   cp .env_example .env
-   ```
-
-2. Update `.env` with your backend API URL:
-   ```env
-   REACT_APP_API_HOST=http://localhost:3000
-   ```
-
-   **Note:** If your backend runs on a different port, update this accordingly. The default backend port is 3000.
-
-## Running the Development Environment
-
-### Option 1: Run Both Servers Separately (Recommended)
-
-Open two terminal windows:
-
-**Terminal 1 - Backend Server:**
-```bash
-npm run serve:dev
-# or
-yarn serve:dev
+Example default configuration (`server/env.ts`):
+```typescript
+  server: {
+    port: Number(process.env.PORT) || 3000,
+  },
+  database: {
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'nihongo-nouto',
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 3306,
+    name: process.env.DB_NAME || 'nihongo-nouto',
+  },
 ```
 
-The backend server will start on `http://localhost:3000` (or the port specified in `server/env.js`).
+### 3. Running Development Server
 
-**Terminal 2 - Frontend Development Server:**
-```bash
-npm start
-# or
-yarn start
-```
-
-The frontend will start on `http://localhost:3001` (or the next available port if 3001 is taken). The React app will automatically open in your browser.
-
-### Option 2: Using a Process Manager
-
-You can use tools like `concurrently` or `npm-run-all` to run both servers with a single command. First install one of these:
+To start both the backend and frontend servers concurrently with a single command:
 
 ```bash
-npm install --save-dev concurrently
+npm run dev
 # or
-npm install --save-dev npm-run-all
+yarn dev
 ```
 
-Then add a script to `package.json`:
-```json
-"dev": "concurrently \"npm run serve:dev\" \"npm start\""
-```
+This will:
+- Start the backend server on `http://localhost:3000`
+- Start the frontend development server on `http://localhost:3001`
+- Proxy API requests from frontend to backend automatically
+
+### 4. Database (Local Dev)
+
+Ensure you have a MariaDB/MySQL instance running locally matching the credentials in `server/env.ts`, or update the file to match your local setup.
+
+## Deployment with Docker (Recommended)
+
+The application is containerized using Docker, which is the easiest way to deploy to a server or NAS (like Synology, QNAP, or a Raspberry Pi).
+
+### Docker Setup
+
+The `docker-compose.yml` file sets up two services:
+1.  **app**: The Node.js application (serving both frontend and backend).
+2.  **db**: A MariaDB database instance.
+
+### Deploying to a Local Server / NAS
+
+1.  **Transfer Files**: Copy the project files to your server (e.g., via SSH, SCP, or Git). You primarily need:
+    *   `Dockerfile`
+    *   `docker-compose.yml`
+    *   `package.json`
+    *   `yarn.lock`
+    *   `server/`
+    *   `src/`
+    *   `public/`
+    *   `craco.config.js`
+    *   `tsconfig.json`
+    *   `devnotes/nihongo_nouto_backup/note/nihongo-nouto_2025-12-24.sql` (Initial DB Seed)
+
+2.  **Configure Environment (Optional)**:
+    You can customize the environment variables in `docker-compose.yml` if you want to change passwords or ports.
+    
+    ```yaml
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_USER=nn_user
+      - MYSQL_PASSWORD=nn_password
+      - MYSQL_DATABASE=nihongo-nouto
+    ```
+
+3.  **Build and Run**:
+    Navigate to the directory containing `docker-compose.yml` on your server and run:
+
+    ```bash
+    docker-compose up -d --build
+    ```
+
+    *   `-d`: Detached mode (runs in background).
+    *   `--build`: Forces a rebuild of the images.
+
+4.  **Access the Application**:
+    Open your browser and navigate to `http://<YOUR_SERVER_IP>:3000`.
+
+### Database Persistence & Backups
+
+*   **Persistence**: Database data is stored in a Docker volume named `db_data`. This ensures data persists even if you restart or remove containers.
+*   **Initial Seed**: The `docker-compose.yml` is configured to automatically seed the database with `nihongo-nouto_2025-12-24.sql` on the **first run only** (when the volume is empty).
+
+### Updating the Application
+
+To update the application code on your server:
+
+1.  Pull the latest changes (e.g., `git pull`).
+2.  Rebuild the container:
+    ```bash
+    docker-compose up -d --build app
+    ```
+    This will rebuild the `app` service with new code and restart it with zero/minimal downtime (depending on configuration), while keeping the database running.
 
 ## Available Scripts
 
 - `npm start` - Start the React development server
-- `npm run serve:dev` - Start the backend server with nodemon (auto-reload on changes)
-- `npm run build` - Build the React app for production
+- `npm run serve:dev` - Start the backend server with nodemon
+- `npm run dev` - Start both servers concurrently
+- `npm run build` - Build both frontend and backend for production
 - `npm test` - Run tests
 - `npm run lint` - Run ESLint
-- `npm run prettier:fix` - Format code with Prettier
 - `npm run check` - Run linting and formatting
 
 ## Project Structure
@@ -115,29 +135,8 @@ Then add a script to `package.json`:
 nihongo-nouto/
 ├── src/              # React frontend source code
 ├── server/           # Express backend server
-│   └── app/         # Backend application code
-│       ├── controllers/
-│       ├── models/
-│       ├── routes/
-│       ├── services/
-│       └── utils/
-├── public/          # Static assets
-└── package.json
+│   └── app/          # Backend application code
+├── public/           # Static assets
+├── docker-compose.yml # Docker services configuration
+└── Dockerfile        # Docker build instructions
 ```
-
-## Troubleshooting
-
-### Backend won't start
-- Check that MySQL is running
-- Verify database credentials in `server/env.js`
-- Ensure the database exists
-
-### Frontend can't connect to backend
-- Verify the backend is running on the port specified in `server/env.js`
-- Check that `REACT_APP_API_HOST` in `.env` matches the backend URL
-- Ensure CORS is enabled (it should be by default)
-
-### Port conflicts
-- If port 3000 is already in use, change the backend port in `server/env.js`
-- Update `REACT_APP_API_HOST` in `.env` to match the new backend port
-- The frontend will automatically use the next available port if the default is taken

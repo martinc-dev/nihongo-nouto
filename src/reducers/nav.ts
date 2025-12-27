@@ -5,7 +5,7 @@ import { ResourceTypeKey } from 'src/types'
 
 const currentContentType: Reducer<ResourceTypeKey | null, AnyAction> = (
   state: ResourceTypeKey | null = null,
-  action: AnyAction
+  action: AnyAction,
 ): ResourceTypeKey | null => {
   switch (action.type) {
     case NAV_ACTION_TYPES.SET_CURRENT_CONTENT_TYPE:
@@ -19,4 +19,3 @@ const currentContentType: Reducer<ResourceTypeKey | null, AnyAction> = (
 const navReducer = combineReducers({ currentContentType })
 
 export default navReducer as Reducer<NavState, AnyAction>
-

@@ -17,7 +17,9 @@ import { useVerbFromJisho } from 'src/hooks/useVerbFromJisho'
 import { VerbWord, VerbGroup, JishoSlugOption, JishoWordOption } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import { colors } from 'src/themes/colors'
-import WordEditorContainer, { editorClasses } from 'src/components/WordDashboard/WordEditorContainer'
+import WordEditorContainer, {
+  editorClasses,
+} from 'src/components/WordDashboard/WordEditorContainer'
 
 const VERB_GROUPS: VerbGroup[] = [
   'V5U',
@@ -395,7 +397,11 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
           </div>
           <div className={editorClasses.formRow}>
             <span className={editorClasses.label}>Group</span>
-            <FormControl className={editorClasses.selectField} fullWidth variant='outlined'>
+            <FormControl
+              className={editorClasses.selectField}
+              fullWidth
+              variant='outlined'
+            >
               <InputLabel>Group</InputLabel>
               <Select
                 label='Group'
@@ -485,7 +491,11 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         <div className={editorClasses.booleanFields}>
           <div className={editorClasses.formRow}>
             <span className={editorClasses.label}>Transitive</span>
-            <FormControl className={editorClasses.selectField} fullWidth variant='outlined'>
+            <FormControl
+              className={editorClasses.selectField}
+              fullWidth
+              variant='outlined'
+            >
               <InputLabel>Transitive</InputLabel>
               <Select
                 label='Transitive'
@@ -501,7 +511,11 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
           </div>
           <div className={editorClasses.formRow}>
             <span className={editorClasses.label}>Intransitive</span>
-            <FormControl className={editorClasses.selectField} fullWidth variant='outlined'>
+            <FormControl
+              className={editorClasses.selectField}
+              fullWidth
+              variant='outlined'
+            >
               <InputLabel>Intransitive</InputLabel>
               <Select
                 label='Intransitive'

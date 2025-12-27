@@ -43,4 +43,3 @@ const WordGroupIcon = ({ type }: WordGroupIconProps) => {
 }
 
 export default WordGroupIcon
-

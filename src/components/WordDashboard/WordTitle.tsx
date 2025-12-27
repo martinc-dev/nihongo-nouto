@@ -53,4 +53,3 @@ const WordTitle = ({ word, hiragana, romaji }: WordTitleProps) => {
 }
 
 export default WordTitle
-

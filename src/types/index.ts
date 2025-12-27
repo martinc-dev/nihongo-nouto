@@ -19,4 +19,3 @@ export interface ResourceTypes {
 }
 
 export type ResourceTypeKey = keyof ResourceTypes
-

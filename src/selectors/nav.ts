@@ -6,6 +6,5 @@ const getNavStore = (state: RootState) => state.nav || { currentContentType: nul
 
 export const getCurrentContentType = createSelector(
   getNavStore,
-  (store): ResourceTypeKey | null => store.currentContentType
+  (store): ResourceTypeKey | null => store.currentContentType,
 )
-

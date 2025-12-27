@@ -10,4 +10,3 @@ const createRootReducer = (routerReducer: Reducer): Reducer<RootState, AnyAction
   }) as Reducer<RootState, AnyAction>
 
 export default createRootReducer
-

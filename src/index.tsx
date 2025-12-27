@@ -22,6 +22,5 @@ root.render(
         <App />
       </HistoryRouter>
     </StrictMode>
-  </StoreProvider>
+  </StoreProvider>,
 )
-

@@ -59,4 +59,3 @@ const resourceTypes: ResourceTypes = {
 }
 
 export default resourceTypes
-

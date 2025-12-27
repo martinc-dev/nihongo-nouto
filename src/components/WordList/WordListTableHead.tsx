@@ -198,7 +198,13 @@ const WordListTableHead = ({
           aria-controls='sort-menu'
           aria-haspopup='true'
           className={classes.button}
-          endIcon={isAsc ? <ArrowUpwardIcon fontSize='small' /> : <ArrowDownwardIcon fontSize='small' />}
+          endIcon={
+            isAsc ? (
+              <ArrowUpwardIcon fontSize='small' />
+            ) : (
+              <ArrowDownwardIcon fontSize='small' />
+            )
+          }
           onClick={handleSortClick}
           size='small'
           startIcon={<SortIcon />}
@@ -222,8 +228,12 @@ const WordListTableHead = ({
                 selected={orderBy === option.value}
               >
                 <ListItemIcon>
-                  {orderBy === option.value && isAsc && <ArrowUpwardIcon fontSize='small' />}
-                  {orderBy === option.value && !isAsc && <ArrowDownwardIcon fontSize='small' />}
+                  {orderBy === option.value && isAsc && (
+                    <ArrowUpwardIcon fontSize='small' />
+                  )}
+                  {orderBy === option.value && !isAsc && (
+                    <ArrowDownwardIcon fontSize='small' />
+                  )}
                   {orderBy !== option.value && <div style={{ width: 24 }} />}
                 </ListItemIcon>
                 <ListItemText primary={option.label} />

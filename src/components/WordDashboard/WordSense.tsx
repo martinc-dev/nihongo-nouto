@@ -34,4 +34,3 @@ const WordSense = ({ sense }: WordSenseProps) => {
 }
 
 export default WordSense
-

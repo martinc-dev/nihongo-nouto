@@ -75,12 +75,18 @@ export abstract class BaseService {
     }
   }
 
-  async createAsync({ fieldKV, editableFields = null }: CreateAsyncParams): Promise<Model | null> {
+  async createAsync({
+    fieldKV,
+    editableFields = null,
+  }: CreateAsyncParams): Promise<Model | null> {
     try {
       if (editableFields?.length)
-        return this.model.create(fieldKV as Record<string, unknown>, {
-          fields: editableFields,
-        } as CreateOptions)
+        return this.model.create(
+          fieldKV as Record<string, unknown>,
+          {
+            fields: editableFields,
+          } as CreateOptions,
+        )
 
       return this.model.create(fieldKV as Record<string, unknown>)
     } catch (error) {
@@ -121,4 +127,3 @@ export abstract class BaseService {
     }
   }
 }
-

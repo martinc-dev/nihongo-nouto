@@ -19,7 +19,9 @@ import { KEYCODES } from 'src/constants/events'
 import { NUMBERS } from 'src/constants/numbers'
 import { UI_DIMENSIONS } from 'src/themes/sizes'
 import { adjTypes } from 'src/constants/jisho'
-import WordEditorContainer, { editorClasses } from 'src/components/WordDashboard/WordEditorContainer'
+import WordEditorContainer, {
+  editorClasses,
+} from 'src/components/WordDashboard/WordEditorContainer'
 
 const ADJ_TYPES = [adjTypes.IADJ, adjTypes.NAADJ]
 
@@ -366,7 +368,11 @@ const AdjEditor = ({ wordId = null }: AdjEditorProps) => {
           </div>
           <div className={editorClasses.formRow}>
             <span className={editorClasses.label}>Type</span>
-            <FormControl className={editorClasses.selectField} fullWidth variant='outlined'>
+            <FormControl
+              className={editorClasses.selectField}
+              fullWidth
+              variant='outlined'
+            >
               <InputLabel>Type</InputLabel>
               <Select
                 label='Type'

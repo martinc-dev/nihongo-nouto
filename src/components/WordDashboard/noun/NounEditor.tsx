@@ -26,7 +26,9 @@ import { KEYCODES } from 'src/constants/events'
 import { UI_DIMENSIONS } from 'src/themes/sizes'
 import { nounTags } from 'src/constants/resources'
 import { NUMBERS } from 'src/constants/numbers'
-import WordEditorContainer, { editorClasses } from 'src/components/WordDashboard/WordEditorContainer'
+import WordEditorContainer, {
+  editorClasses,
+} from 'src/components/WordDashboard/WordEditorContainer'
 
 interface NounEditorProps {
   wordId?: string | null

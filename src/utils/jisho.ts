@@ -26,7 +26,10 @@ interface ParseAdjPropParams {
   partsOfSpeechArray: string[]
 }
 
-export const parseVerbProp = ({ partsOfSpeechArray, word }: ParseVerbPropParams): VerbProp => {
+export const parseVerbProp = ({
+  partsOfSpeechArray,
+  word,
+}: ParseVerbPropParams): VerbProp => {
   const verbProp: VerbProp = {
     verbType: null,
     verbClassification: null,
@@ -67,4 +70,3 @@ export const parseAdjProp = ({ partsOfSpeechArray }: ParseAdjPropParams): AdjPro
 
   return adjProp
 }
-

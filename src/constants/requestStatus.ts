@@ -5,7 +5,6 @@ export const requestStatus = {
   ERROR: 'ERROR',
 } as const
 
-export type RequestStatus = typeof requestStatus[keyof typeof requestStatus]
+export type RequestStatus = (typeof requestStatus)[keyof typeof requestStatus]
 
 export default requestStatus
-

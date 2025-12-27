@@ -42,14 +42,17 @@ export class NounService extends BaseService {
     })
     const id = (newWord?.dataValues as { id?: number })?.id ?? 0
 
-    if (!id) throw new InternalServiceError({ message: 'Cannot establish new noun record' })
+    if (!id)
+      throw new InternalServiceError({ message: 'Cannot establish new noun record' })
 
     const nounTagRelService = new NounTagRelService()
     const nounTagService = new NounTagService()
     const allTagIds = (await nounTagService.queryAsync())?.rows ?? []
     const verifiedTagIds =
       tagIds?.filter(
-        t => t && allTagIds.map(k => (k?.dataValues as { id?: number })?.id ?? null).includes(t)
+        t =>
+          t &&
+          allTagIds.map(k => (k?.dataValues as { id?: number })?.id ?? null).includes(t),
       ) ?? []
 
     await Promise.all(
@@ -59,8 +62,8 @@ export class NounService extends BaseService {
             nounId: id,
             tagId: t,
           },
-        })
-      )
+        }),
+      ),
     )
 
     return newWord
@@ -77,8 +80,11 @@ export class NounService extends BaseService {
 
     if (tagIds) {
       const nounTagRelIds = (
-        (result.rows[0].dataValues as { nounTagRel?: Array<{ dataValues?: { tagId?: number } }> })
-          ?.nounTagRel ?? []
+        (
+          result.rows[0].dataValues as {
+            nounTagRel?: Array<{ dataValues?: { tagId?: number } }>
+          }
+        )?.nounTagRel ?? []
       )
         .map(t => (t.dataValues as { tagId?: number })?.tagId ?? null)
         .filter((t): t is number => t !== null)
@@ -91,8 +97,8 @@ export class NounService extends BaseService {
         relIdsToDel.map(t =>
           nounTagRelService.removeAsync({
             conditionKV: { nounId: id, tagId: t },
-          })
-        )
+          }),
+        ),
       )
       await Promise.all(
         relIdsToAdd.map(t =>
@@ -101,8 +107,8 @@ export class NounService extends BaseService {
               nounId: id,
               tagId: t,
             },
-          })
-        )
+          }),
+        ),
       )
     }
 
@@ -122,4 +128,3 @@ export class NounService extends BaseService {
     })
   }
 }
-

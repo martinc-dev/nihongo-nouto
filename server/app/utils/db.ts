@@ -22,4 +22,3 @@ export const testConnectionAsync = async (): Promise<boolean> => {
     return false
   }
 }
-

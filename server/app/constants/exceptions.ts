@@ -24,4 +24,3 @@ export class NotFoundError extends BaseError {
     this.status = 404
   }
 }
-

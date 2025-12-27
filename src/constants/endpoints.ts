@@ -21,9 +21,7 @@ const endpoints = {
     `/api/${resourceTypes[typeKey].path}/${id}`,
   getWordDupeSearchUrl: ({ typeKey }: GetWordDupeSearchUrlParams): string =>
     `/api/${resourceTypes[typeKey].path}/search`,
-  getJishoSearchUrl: (keyword: string): string =>
-    `/api/jisho/${keyword}`,
+  getJishoSearchUrl: (keyword: string): string => `/api/jisho/${keyword}`,
 }
-
 
 export default endpoints

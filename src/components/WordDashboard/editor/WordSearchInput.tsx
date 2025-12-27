@@ -8,8 +8,8 @@ import Typography from '@mui/material/Typography'
 import { colors } from 'src/themes/colors'
 import { useWordSearch } from 'src/hooks/useWordSearch'
 import { JishoWordOption } from 'src/types/words'
-import { KEYCODES } from "src/constants/events"
-import { UI_DIMENSIONS } from "src/themes/sizes"
+import { KEYCODES } from 'src/constants/events'
+import { UI_DIMENSIONS } from 'src/themes/sizes'
 
 interface WordSearchInputProps {
   onInputBlur: () => void
@@ -25,7 +25,9 @@ const WordSearchInput = ({
   initWord = '',
 }: WordSearchInputProps) => {
   const [word, setWord] = useState('')
-  const [searchResult, setSearchResult] = useState<{ wordOptions?: JishoWordOption[] } | null>(null)
+  const [searchResult, setSearchResult] = useState<{
+    wordOptions?: JishoWordOption[]
+  } | null>(null)
   const wordSearchMutation = useWordSearch()
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const WordSearchInput = ({
             if (e.keyCode === KEYCODES.ENTER_KEY_CODE && word) {
               setSearchResult(null)
               wordSearchMutation.mutate(word, {
-                onSuccess: (data) => {
+                onSuccess: data => {
                   setSearchResult(data)
                 },
               })
@@ -83,7 +85,10 @@ const WordSearchInput = ({
           >
             {typeof option === 'string' ? option : option.word}
           </Typography>
-          <Typography sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_MEDIUM }} variant='subtitle1'>
+          <Typography
+            sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_MEDIUM }}
+            variant='subtitle1'
+          >
             {typeof option === 'string' ? '' : option.reading}
           </Typography>
         </Box>
@@ -95,4 +100,3 @@ const WordSearchInput = ({
 }
 
 export default WordSearchInput
-

@@ -32,7 +32,12 @@ const Root = styled('div')(({ theme }) => ({
 const Header = () => {
   return (
     <Root className={classes.root}>
-      <AppBar color='info' enableColorOnDark position='fixed' sx={{ backgroundColor: 'prussianBlue.main' }}>
+      <AppBar
+        color='info'
+        enableColorOnDark
+        position='fixed'
+        sx={{ backgroundColor: 'prussianBlue.main' }}
+      >
         <Toolbar className={classes.toolbar}>
           <NavMenu />
           <Typography className={classes.title} variant='h6'>
@@ -45,4 +50,3 @@ const Header = () => {
 }
 
 export default Header
-

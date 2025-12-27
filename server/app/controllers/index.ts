@@ -53,7 +53,8 @@ export class NounController extends BaseController {
         options: this.queryOption,
       })
 
-      if (!result?.count) throw new InternalServiceError({ message: 'Cannot find new record' })
+      if (!result?.count)
+        throw new InternalServiceError({ message: 'Cannot find new record' })
 
       res.json(result.rows[0].dataValues)
     } catch (error) {
@@ -67,7 +68,8 @@ export class NounController extends BaseController {
       const { id } = req.params
       const result = await this.service.updateNoun({ ...req.body, id: parseInt(id, 10) })
 
-      if (!result?.count) throw new InternalServiceError({ message: 'Cannot find new record' })
+      if (!result?.count)
+        throw new InternalServiceError({ message: 'Cannot find new record' })
 
       res.json(result.rows[0].dataValues)
     } catch (error) {

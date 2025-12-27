@@ -18,7 +18,9 @@ import { colors } from 'src/themes/colors'
 import { KEYCODES } from 'src/constants/events'
 import { NUMBERS } from 'src/constants/numbers'
 import { UI_DIMENSIONS } from 'src/themes/sizes'
-import WordEditorContainer, { editorClasses } from 'src/components/WordDashboard/WordEditorContainer'
+import WordEditorContainer, {
+  editorClasses,
+} from 'src/components/WordDashboard/WordEditorContainer'
 
 interface OtherEditorProps {
   wordId?: string | null

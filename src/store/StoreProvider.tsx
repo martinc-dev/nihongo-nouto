@@ -7,6 +7,8 @@ interface StoreProviderProps {
   children?: ReactNode
 }
 
-const StoreProvider = ({ children }: StoreProviderProps) => <Provider store={store}>{children}</Provider>
+const StoreProvider = ({ children }: StoreProviderProps) => (
+  <Provider store={store}>{children}</Provider>
+)
 
 export default StoreProvider

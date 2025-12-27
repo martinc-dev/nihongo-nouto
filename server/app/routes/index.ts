@@ -51,7 +51,7 @@ router.use('/adj', registerCRUDEndpoints(new AdjController()))
 router.use('/verb', registerCRUDEndpoints(new VerbController()))
 
 const jishoController = new JishoController()
+
 router.get('/jisho/:keyword', jishoController.search)
 
 export { router }
-

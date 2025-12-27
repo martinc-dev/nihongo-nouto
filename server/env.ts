@@ -14,17 +14,18 @@ export interface EnvConfig {
 
 const env: EnvConfig = {
   server: {
-    port: 3000,
+    // eslint-disable-next-line no-magic-numbers
+    port: Number(process.env.PORT) || 3000,
   },
   database: {
-    username: 'root',
-    password: 'nihongo-nouto',
-    host: 'localhost',
-    port: 3306,
-    name: 'nihongo-nouto',
+    username: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'nihongo-nouto',
+    host: process.env.DB_HOST || 'localhost',
+    // eslint-disable-next-line no-magic-numbers
+    port: Number(process.env.DB_PORT) || 3306,
+    name: process.env.DB_NAME || 'nihongo-nouto',
   },
-  environment: 'dev',
+  environment: process.env.NODE_ENV || 'dev',
 }
 
 export default env
-

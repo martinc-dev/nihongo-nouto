@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles'
 
-import { UI_DIMENSIONS } from "src/themes/sizes"
+import { UI_DIMENSIONS } from 'src/themes/sizes'
 
 const PREFIX = 'WordDetailContainer'
 
@@ -31,4 +31,3 @@ const WordDetailContainer = ({ children }: WordDetailContainerProps) => {
 }
 
 export default WordDetailContainer
-

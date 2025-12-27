@@ -19,4 +19,3 @@ export const colors = {
   sameGray: '#1d2125',
   transparent: 'rgba(0, 0, 0, 0)',
 } as const
-

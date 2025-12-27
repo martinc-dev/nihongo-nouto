@@ -93,7 +93,7 @@ export const NounTag = connection.define<Model<NounTagAttributes>>(
   {
     timestamps: false,
     underscored: true,
-  }
+  },
 )
 
 export const Noun = connection.define<Model<NounAttributes>>(
@@ -124,7 +124,7 @@ export const Noun = connection.define<Model<NounAttributes>>(
   {
     timestamps: true,
     underscored: true,
-  }
+  },
 )
 
 export const NounTagRel = connection.define<Model<NounTagRelAttributes>>(
@@ -156,7 +156,7 @@ export const NounTagRel = connection.define<Model<NounTagRelAttributes>>(
   {
     timestamps: false,
     underscored: true,
-  }
+  },
 )
 
 export const Other = connection.define<Model<OtherAttributes>>(
@@ -187,7 +187,7 @@ export const Other = connection.define<Model<OtherAttributes>>(
   {
     timestamps: true,
     underscored: true,
-  }
+  },
 )
 
 export const Adj = connection.define<Model<AdjAttributes>>(
@@ -223,7 +223,7 @@ export const Adj = connection.define<Model<AdjAttributes>>(
   {
     timestamps: true,
     underscored: true,
-  }
+  },
 )
 
 export const Verb = connection.define<Model<VerbAttributes>>(
@@ -259,7 +259,7 @@ export const Verb = connection.define<Model<VerbAttributes>>(
         'V5R',
         'V1',
         'IRS',
-        'IRK'
+        'IRK',
       ),
       allowNull: true,
       defaultValue: null,
@@ -308,9 +308,8 @@ export const Verb = connection.define<Model<VerbAttributes>>(
   {
     timestamps: true,
     underscored: true,
-  }
+  },
 )
 
 Noun.hasMany(NounTagRel, { as: 'nounTagRel', foreignKey: 'nounId' })
 NounTagRel.belongsTo(NounTag, { as: 'nounTag', foreignKey: 'tagId' })
-

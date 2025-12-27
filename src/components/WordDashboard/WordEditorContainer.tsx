@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles'
-import { UI_DIMENSIONS } from "src/themes/sizes"
+import { UI_DIMENSIONS } from 'src/themes/sizes'
 import { colors } from 'src/themes/colors'
 
 const PREFIX = 'WordEditorContainer'
@@ -181,4 +181,3 @@ const WordEditorContainer = ({ children }: WordEditorContainerProps) => {
 }
 
 export default WordEditorContainer
-
