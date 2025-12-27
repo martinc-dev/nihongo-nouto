@@ -148,6 +148,23 @@ export abstract class BaseController {
       conditions.isIConjugation = adjFilters[0] === 'I-Adj'
     }
 
+    const nounTagMap: Record<string, number> = {
+      Things: 1,
+      Abstract: 2,
+      Location: 3,
+      Time: 4,
+      People: 5,
+      Other: 6,
+    }
+
+    const nounFilters = filterArray.filter(f => Object.keys(nounTagMap).includes(f))
+
+    if (nounFilters.length > 0) {
+      const tagIds = nounFilters.map(f => nounTagMap[f])
+
+      conditions['$nounTagRel.tag_id$'] = { [Op.in]: tagIds }
+    }
+
     return Object.keys(conditions).length > 0 ? conditions : null
   }
 

@@ -16,7 +16,6 @@ import {
 import { adjTypes } from 'src/constants/jisho'
 import { deserializeBoolList } from 'src/utils/boolean'
 import { PAGINATION } from 'src/constants/pagination'
-import { KEYCODES } from 'src/constants/events'
 import { UI_DIMENSIONS } from 'src/themes/sizes'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'

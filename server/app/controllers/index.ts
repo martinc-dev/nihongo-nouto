@@ -26,6 +26,10 @@ export class NounController extends BaseController {
   service = new NounService()
   editableFields = ['word', 'hiragana', 'sense']
   queryOption = {
+    // SubQuery: false is critical here when filtering by associated model (nounTagRel)
+    // With limit/offset (pagination). Without it, Sequelize creates a subquery
+    // For pagination that excludes the joined table, causing "Unknown column" error.
+    subQuery: false,
     include: [
       {
         model: NounTagRel,

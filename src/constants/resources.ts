@@ -64,7 +64,7 @@ export const mainResourceFields: MainResourceFields = {
 export const mainResourceFilterables: Record<ResourceTypeKey, string[]> = {
   VERB: ['GoDan', 'IchiDan', 'SuRu', 'KuRu'],
   ADJ: ['I-Adj', 'Na-Adj'],
-  NOUN: [],
+  NOUN: ['Things', 'Abstract', 'Location', 'Time', 'People', 'Other'],
   OTHER: [],
   NOUN_TAG_REL: [],
   NOUN_TAG: [],
@@ -212,36 +212,42 @@ export const getWordGroupIconMatch = (type: string): WordGroupIconMatch | null =
         text: 'T',
         colorName: nounTags.THINGS.color,
         value: nounTags.THINGS.value,
+        filterKey: nounTags.THINGS.value,
       }
     case nounTags.ABSTRACT.name:
       return {
         text: 'A',
         colorName: nounTags.ABSTRACT.color,
         value: nounTags.ABSTRACT.value,
+        filterKey: nounTags.ABSTRACT.value,
       }
     case nounTags.LOCATION.name:
       return {
         text: 'L',
         colorName: nounTags.LOCATION.color,
         value: nounTags.LOCATION.value,
+        filterKey: nounTags.LOCATION.value,
       }
     case nounTags.TIME.name:
       return {
         text: 'T',
         colorName: nounTags.TIME.color,
         value: nounTags.TIME.value,
+        filterKey: nounTags.TIME.value,
       }
     case nounTags.PEOPLE.name:
       return {
         text: 'P',
         colorName: nounTags.PEOPLE.color,
         value: nounTags.PEOPLE.value,
+        filterKey: nounTags.PEOPLE.value,
       }
     case nounTags.OTHER.name:
       return {
         text: 'O',
         colorName: nounTags.OTHER.color,
         value: nounTags.OTHER.value,
+        filterKey: nounTags.OTHER.value,
       }
 
     default:
