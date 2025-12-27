@@ -26,12 +26,10 @@ interface WordTagIconProps {
 }
 
 const WordTagIcon = ({ tagName }: WordTagIconProps) => {
-  // Find the tag in nounTags
   const tag = Object.values(nounTags).find(nt => nt.name === tagName)
 
   if (!tag) return null
 
-  // Use getWordGroupIconMatch to get the icon details (it already handles noun tags)
   const iconDetail = getWordGroupIconMatch(tag.name)
 
   if (!iconDetail) return null
@@ -49,4 +47,3 @@ const WordTagIcon = ({ tagName }: WordTagIconProps) => {
 }
 
 export default WordTagIcon
-

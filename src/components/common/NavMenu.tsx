@@ -15,7 +15,6 @@ const classes = {
   menuButton: `${PREFIX}-menuButton`,
 }
 
-// TODO jss-to-styled codemod: The Fragment root was replaced by div. Change the tag if needed.
 const Root = styled('div')(({ theme }) => ({
   [`& .${classes.menuButton}`]: {
     marginRight: theme.spacing(2),
@@ -68,7 +67,9 @@ const NavMenu = () => {
         <MenuItem onClick={() => handleClickItem(resourceTypes.NOUN.pathName || 'noun')}>
           {resourceTypes.NOUN.pname}
         </MenuItem>
-        <MenuItem onClick={() => handleClickItem(resourceTypes.OTHER.pathName || 'other')}>
+        <MenuItem
+          onClick={() => handleClickItem(resourceTypes.OTHER.pathName || 'other')}
+        >
           {resourceTypes.OTHER.pname}
         </MenuItem>
       </Menu>
@@ -77,4 +78,3 @@ const NavMenu = () => {
 }
 
 export default NavMenu
-

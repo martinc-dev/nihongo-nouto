@@ -88,7 +88,7 @@ interface WordListTableRow {
   sense?: string
   isTransitive?: boolean
   isIntransitive?: boolean
-  tags?: ReactNode // For nouns - will be rendered as icons
+  tags?: ReactNode
   [key: string]: string | number | boolean | VerbGroup | null | undefined | ReactNode
 }
 
@@ -123,7 +123,6 @@ const WordListTable = ({ wordToRow, words, columns }: WordListTableProps) => {
       return String(value)
     }
 
-    // For ReactNode (like icons), return empty string to avoid showing tooltips for non-text content
     return ''
   }
 

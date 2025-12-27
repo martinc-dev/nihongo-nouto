@@ -6,7 +6,6 @@ import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
 import WordDetailContainer from 'src/components/WordDashboard/WordDetailContainer'
 import { NUMBERS } from 'src/constants/numbers'
-
 interface NounDetailProps {
   wordId?: string | null
 }
@@ -25,7 +24,11 @@ interface NounWordWithTags extends NounWord {
 }
 
 const NounDetail = ({ wordId }: NounDetailProps) => {
-  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
+  const {
+    data: word,
+    isLoading,
+    error,
+  } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -54,4 +57,3 @@ const NounDetail = ({ wordId }: NounDetailProps) => {
 }
 
 export default NounDetail
-

@@ -39,15 +39,12 @@ interface UseVerbFromJishoResult {
   }>
 }
 
-/**
- * Hook to prepopulate verb form data from Jisho API
- * Allows searching for a word and selecting slug → japanese option → sense to auto-fill form fields
- */
 export const useVerbFromJisho = (): UseVerbFromJishoResult => {
   const [prepopulatedData, setPrepopulatedData] = useState<VerbFromJishoData | null>(null)
   const [slugOptions, setSlugOptions] = useState<JishoSlugOption[]>([])
   const [selectedSlug, setSelectedSlug] = useState<JishoSlugOption | null>(null)
-  const [selectedJapaneseOption, setSelectedJapaneseOption] = useState<JishoWordOption | null>(null)
+  const [selectedJapaneseOption, setSelectedJapaneseOption] =
+    useState<JishoWordOption | null>(null)
 
   const wordSearchMutation = useWordSearch()
 
@@ -77,7 +74,7 @@ export const useVerbFromJisho = (): UseVerbFromJishoResult => {
         },
       })
     },
-    [wordSearchMutation]
+    [wordSearchMutation],
   )
 
   const selectSlug = useCallback((slugOption: JishoSlugOption) => {
@@ -86,13 +83,10 @@ export const useVerbFromJisho = (): UseVerbFromJishoResult => {
     setPrepopulatedData(null)
   }, [])
 
-  const selectJapaneseOption = useCallback(
-    (japaneseOption: JishoWordOption) => {
-      setSelectedJapaneseOption(japaneseOption)
-      setPrepopulatedData(null)
-    },
-    []
-  )
+  const selectJapaneseOption = useCallback((japaneseOption: JishoWordOption) => {
+    setSelectedJapaneseOption(japaneseOption)
+    setPrepopulatedData(null)
+  }, [])
 
   const selectSense = useCallback(
     (senseIndex: number) => {
@@ -109,7 +103,6 @@ export const useVerbFromJisho = (): UseVerbFromJishoResult => {
       const word = selectedJapaneseOption.word || ''
       const partsOfSpeech = sense.partsOfSpeech || []
 
-      // Get conjugation forms
       const conjugationForms = getConjugationFormsFromSense(word, partsOfSpeech)
 
       const verbData: VerbFromJishoData = {
@@ -128,7 +121,7 @@ export const useVerbFromJisho = (): UseVerbFromJishoResult => {
 
       setPrepopulatedData(verbData)
     },
-    [selectedSlug, selectedJapaneseOption]
+    [selectedSlug, selectedJapaneseOption],
   )
 
   const availableSenses = selectedSlug?.senses || []
@@ -147,4 +140,3 @@ export const useVerbFromJisho = (): UseVerbFromJishoResult => {
     availableSenses,
   }
 }
-

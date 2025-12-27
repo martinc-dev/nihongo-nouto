@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
@@ -16,143 +15,10 @@ import { useWordFromJisho } from 'src/hooks/useWordFromJisho'
 import { OtherWord, JishoSlugOption, JishoWordOption } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import { colors } from 'src/themes/colors'
-import { NUMBERS, UI_DIMENSIONS } from 'src/constants/numbers'
-
-const PREFIX = 'OtherEditor'
-
-const classes = {
-  wordEditor: `${PREFIX}-wordEditor`,
-  editorActions: `${PREFIX}-editorActions`,
-  saveButton: `${PREFIX}-saveButton`,
-  cancelButton: `${PREFIX}-cancelButton`,
-  formSection: `${PREFIX}-formSection`,
-  formRow: `${PREFIX}-formRow`,
-  formField: `${PREFIX}-formField`,
-  label: `${PREFIX}-label`,
-  mainFields: `${PREFIX}-mainFields`,
-  senseField: `${PREFIX}-senseField`,
-  selectField: `${PREFIX}-selectField`,
-}
-
-const Root = styled('div')(({ theme }) => ({
-  [`&.${classes.wordEditor}`]: {
-    display: 'inline-block',
-    position: 'relative',
-    width: UI_DIMENSIONS.WORD_DASHBOARD_WIDTH,
-    borderRadius: UI_DIMENSIONS.WORD_DASHBOARD_BORDER_RADIUS,
-    verticalAlign: 'top',
-  },
-
-  [`& .${classes.editorActions}`]: {
-    display: 'inline-block',
-    marginBottom: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_BOTTOM,
-  },
-
-  [`& .${classes.saveButton}`]: {
-    marginRight: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_RIGHT,
-    backgroundColor: theme.palette.shibafuGreen.main,
-    color: theme.palette.white.main,
-    '&:hover': {
-      backgroundColor: theme.palette.shinmeGreen.main,
-    },
-  },
-
-  [`& .${classes.cancelButton}`]: {
-    backgroundColor: theme.palette.ichigoRed.main,
-    color: theme.palette.white.main,
-    '&:hover': {
-      backgroundColor: theme.palette.mikanOrange.main,
-    },
-  },
-
-  [`& .${classes.formSection}`]: {
-    width: UI_DIMENSIONS.FORM_FIELD_WIDTH_FULL,
-    marginBottom: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_BOTTOM,
-    paddingBottom: UI_DIMENSIONS.WORD_DASHBOARD_PADDING_BOTTOM,
-    borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
-  },
-
-  [`& .${classes.formRow}`]: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: UI_DIMENSIONS.WORD_DASHBOARD_GAP,
-    gap: UI_DIMENSIONS.WORD_DASHBOARD_GAP,
-  },
-
-  [`& .${classes.formField}`]: {
-    flex: 1,
-    '& .MuiOutlinedInput-input': {
-      color: colors.shibafuGreen,
-    },
-    '& .MuiInputLabel-root': {
-      color: colors.kujakuishiGreen,
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: colors.kumoriBlue,
-      },
-      '&:hover fieldset': {
-        borderColor: colors.soraBlue,
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: colors.shibafuGreen,
-      },
-    },
-  },
-
-  [`& .${classes.label}`]: {
-    minWidth: UI_DIMENSIONS.WORD_DASHBOARD_MIN_WIDTH,
-    marginRight: UI_DIMENSIONS.WORD_DASHBOARD_MARGIN_RIGHT,
-    padding: UI_DIMENSIONS.WORD_DASHBOARD_PADDING,
-    textTransform: 'uppercase',
-    borderRadius: UI_DIMENSIONS.WORD_DASHBOARD_BORDER_RADIUS_SMALL,
-    backgroundColor: theme.palette.soraBlue.main,
-    color: theme.palette.prussianBlue.main,
-    fontSize: UI_DIMENSIONS.FONT_SIZE_SMALL,
-    fontWeight: UI_DIMENSIONS.FONT_WEIGHT_BOLD,
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  [`& .${classes.mainFields}`]: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: UI_DIMENSIONS.WORD_DASHBOARD_GAP,
-  },
-
-  [`& .${classes.senseField}`]: {
-    width: UI_DIMENSIONS.FORM_FIELD_WIDTH_FULL,
-    '& .MuiOutlinedInput-root': {
-      minHeight: UI_DIMENSIONS.FORM_FIELD_MIN_HEIGHT,
-      alignItems: 'flex-start',
-    },
-    '& .MuiOutlinedInput-input': {
-      color: colors.shibafuGreen,
-    },
-  },
-
-  [`& .${classes.selectField}`]: {
-    flex: 1,
-    '& .MuiOutlinedInput-input': {
-      color: colors.shibafuGreen,
-    },
-    '& .MuiInputLabel-root': {
-      color: colors.kujakuishiGreen,
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: colors.kumoriBlue,
-      },
-      '&:hover fieldset': {
-        borderColor: colors.soraBlue,
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: colors.shibafuGreen,
-      },
-    },
-  },
-}))
+import { KEYCODES } from 'src/constants/events'
+import { NUMBERS } from 'src/constants/numbers'
+import { UI_DIMENSIONS } from 'src/themes/sizes'
+import WordEditorContainer, { editorClasses } from 'src/components/WordDashboard/WordEditorContainer'
 
 interface OtherEditorProps {
   wordId?: string | null
@@ -189,7 +55,6 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
     sense: '',
   })
 
-  // Load existing word data in edit mode
   useEffect(() => {
     if (!isCreateMode && word && 'word' in word) {
       const otherWord = word as OtherWord
@@ -202,7 +67,6 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
     }
   }, [word, isCreateMode])
 
-  // Prepopulate form data from Jisho in create mode
   useEffect(() => {
     if (isCreateMode && prepopulatedData) {
       setFormData(prev => ({
@@ -223,14 +87,12 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
 
   const handleSave = () => {
     if (isCreateMode) {
-      // Create new word
       saveWordMutation.mutate(
         {
           data: formData,
         },
         {
           onSuccess: result => {
-            // Navigate to the newly created word's detail page
             if (result && 'id' in result) {
               const currentPath = window.location.pathname
               const detailPath = currentPath.replace('/create', `/${result.id}`)
@@ -241,7 +103,6 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
         },
       )
     } else {
-      // Update existing word
       if (!actualWordId) {
         return
       }
@@ -253,7 +114,6 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
         },
         {
           onSuccess: () => {
-            // Navigate back to detail view
             const currentPath = window.location.pathname
             const detailPath = currentPath.replace('/edit', '')
 
@@ -266,13 +126,11 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
 
   const handleCancel = () => {
     if (isCreateMode) {
-      // Navigate back to list
       const currentPath = window.location.pathname
       const listPath = currentPath.replace('/create', '')
 
       navigate(listPath)
     } else {
-      // Navigate back to detail view
       const currentPath = window.location.pathname
       const detailPath = currentPath.replace('/edit', '')
 
@@ -285,7 +143,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
   }
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === NUMBERS.ENTER_KEY_CODE) {
+    if (e.keyCode === KEYCODES.ENTER_KEY_CODE) {
       e.preventDefault()
       const value = searchInputValue.trim()
 
@@ -323,9 +181,9 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
   }
 
   return (
-    <Root className={classes.wordEditor}>
+    <WordEditorContainer>
       {isCreateMode ? (
-        <div className={classes.formSection}>
+        <div className={editorClasses.formSection}>
           <Typography
             sx={{
               marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM,
@@ -344,8 +202,6 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
           >
             Search for a word to prepopulate fields, or enter manually
           </Typography>
-
-          {/* Search Input */}
           <TextField
             autoFocus={isCreateMode}
             disabled={isJishoLoading}
@@ -360,11 +216,9 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
             }}
             value={searchInputValue}
           />
-
-          {/* Slug Selection Dropdown */}
           {slugOptions.length > 0 && (
             <FormControl
-              className={classes.selectField}
+              className={editorClasses.selectField}
               fullWidth
               sx={{ marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}
               variant='outlined'
@@ -389,11 +243,9 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
               </Select>
             </FormControl>
           )}
-
-          {/* Japanese Option Selection Dropdown */}
           {selectedSlug && selectedSlug.japanese.length > 0 && (
             <FormControl
-              className={classes.selectField}
+              className={editorClasses.selectField}
               fullWidth
               sx={{ marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}
               variant='outlined'
@@ -423,11 +275,9 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
               </Select>
             </FormControl>
           )}
-
-          {/* Sense Selection Dropdown */}
           {selectedJapaneseOption && availableSenses.length > 0 && (
             <FormControl
-              className={classes.selectField}
+              className={editorClasses.selectField}
               fullWidth
               sx={{ marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM }}
               variant='outlined'
@@ -463,9 +313,9 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
       ) : (
         <>
           <WordTitle hiragana={formData.hiragana || ''} word={formData.word || ''} />
-          <div className={classes.editorActions}>
+          <div className={editorClasses.editorActions}>
             <Button
-              className={classes.saveButton}
+              className={editorClasses.saveButton}
               disabled={saveWordMutation.isPending || !actualWordId}
               onClick={handleSave}
               type='button'
@@ -473,7 +323,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
               {saveWordMutation.isPending ? 'Saving...' : 'Save'}
             </Button>
             <Button
-              className={classes.cancelButton}
+              className={editorClasses.cancelButton}
               disabled={saveWordMutation.isPending}
               onClick={handleCancel}
               type='button'
@@ -484,12 +334,12 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
         </>
       )}
 
-      <div className={classes.formSection}>
-        <div className={classes.mainFields}>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Word</span>
+      <div className={editorClasses.formSection}>
+        <div className={editorClasses.mainFields}>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Word</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               fullWidth
               label='Word'
               onChange={e => handleFieldChange('word', e.target.value)}
@@ -497,10 +347,10 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
               variant='outlined'
             />
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Hiragana</span>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Hiragana</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               fullWidth
               label='Hiragana'
               onChange={e => handleFieldChange('hiragana', e.target.value)}
@@ -511,7 +361,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
         </div>
       </div>
 
-      <div className={classes.formSection}>
+      <div className={editorClasses.formSection}>
         <Typography
           sx={{
             marginBottom: UI_DIMENSIONS.FORM_FIELD_MARGIN_BOTTOM,
@@ -522,7 +372,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
           Sense
         </Typography>
         <TextField
-          className={classes.senseField}
+          className={editorClasses.senseField}
           fullWidth
           label='Sense'
           multiline
@@ -532,12 +382,10 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
           variant='outlined'
         />
       </div>
-
-      {/* Create/Cancel buttons at bottom for create mode */}
       {isCreateMode && (
-        <div className={classes.editorActions}>
+        <div className={editorClasses.editorActions}>
           <Button
-            className={classes.saveButton}
+            className={editorClasses.saveButton}
             disabled={saveWordMutation.isPending}
             onClick={handleSave}
             type='button'
@@ -545,7 +393,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
             {saveWordMutation.isPending ? 'Creating...' : 'Create'}
           </Button>
           <Button
-            className={classes.cancelButton}
+            className={editorClasses.cancelButton}
             disabled={saveWordMutation.isPending}
             onClick={handleCancel}
             type='button'
@@ -554,7 +402,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
           </Button>
         </div>
       )}
-    </Root>
+    </WordEditorContainer>
   )
 }
 

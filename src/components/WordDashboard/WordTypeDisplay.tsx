@@ -45,7 +45,6 @@ const WordTypeDisplay = ({ types }: WordTypeDisplayProps) => {
   return (
     <Root className={classes.root}>
       {items.map(t => {
-        // Check if this is a noun tag
         const isNounTag = Object.values(nounTags).some(nt => nt.name === t.type)
 
         return (
@@ -66,4 +65,3 @@ const WordTypeDisplay = ({ types }: WordTypeDisplayProps) => {
 }
 
 export default WordTypeDisplay
-

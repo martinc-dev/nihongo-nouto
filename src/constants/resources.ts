@@ -86,7 +86,7 @@ export interface NounTags {
   OTHER: NounTag
 }
 
-// TODO: fetch dynamically after switching to graphql
+// TODO: fetch dynamically
 export const nounTags: NounTags = {
   THINGS: {
     id: 1,

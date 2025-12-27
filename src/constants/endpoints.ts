@@ -21,6 +21,9 @@ const endpoints = {
     `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}/${id}`,
   getWordDupeSearchUrl: ({ typeKey }: GetWordDupeSearchUrlParams): string =>
     `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}/search`,
+  getJishoSearchUrl: (keyword: string): string =>
+    `${process.env.REACT_APP_API_HOST || ''}/api/jisho/${keyword}`,
 }
+
 
 export default endpoints

@@ -47,7 +47,12 @@ const WordActions = () => {
 
   return (
     <Root className={classes.wordActions}>
-      <Button className={classes.editButton} disabled={!wordId} onClick={handleEdit} type='button'>
+      <Button
+        className={classes.editButton}
+        disabled={!wordId}
+        onClick={handleEdit}
+        type='button'
+      >
         Edit
       </Button>
       <Button
@@ -63,4 +68,3 @@ const WordActions = () => {
 }
 
 export default WordActions
-

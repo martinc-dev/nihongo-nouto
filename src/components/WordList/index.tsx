@@ -15,8 +15,9 @@ import {
 } from 'src/constants/resources'
 import { adjTypes } from 'src/constants/jisho'
 import { deserializeBoolList } from 'src/utils/boolean'
-import { DEFAULT_WORD_LIST_LIMIT } from 'src/constants/pagination'
-import { NUMBERS, UI_DIMENSIONS, ARRAY } from 'src/constants/numbers'
+import { PAGINATION } from 'src/constants/pagination'
+import { KEYCODES } from 'src/constants/events'
+import { UI_DIMENSIONS } from 'src/themes/sizes'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { WordListItem, VerbGroup, NounTagRelItem } from 'src/types/words'
@@ -70,7 +71,7 @@ interface WordListTableRow {
   sense?: string
   isTransitive?: boolean
   isIntransitive?: boolean
-  tags?: ReactNode // For nouns - will be rendered as icons
+  tags?: ReactNode
   [key: string]: string | number | boolean | VerbGroup | null | undefined | ReactNode
 }
 
@@ -82,9 +83,9 @@ const WordList = () => {
   const [page, setPage] = useState(() => {
     const storageKey = `wordList_page_${currentContentType}`
 
-    return LocalStorageUtil.getNumber(storageKey, NUMBERS.DEFAULT_PAGE)
+    return LocalStorageUtil.getNumber(storageKey, PAGINATION.DEFAULT_PAGE)
   })
-  const [limit] = useState(DEFAULT_WORD_LIST_LIMIT)
+  const [limit] = useState(PAGINATION.DEFAULT_WORD_LIST_LIMIT)
   const [orderBy, setOrderBy] = useState<string>('id')
   const [isAsc, setIsAsc] = useState<boolean>(true)
   const [filterOptionsMap, setFilterOptionsMap] = useState<Record<
@@ -96,12 +97,10 @@ const WordList = () => {
     boolean
   > | null>(null)
 
-  // Get active filters
   const activeFilters = filterOptionsMap
     ? Object.keys(filterOptionsMap).filter(key => filterOptionsMap[key])
     : []
 
-  // Use refs to track previous values to detect actual changes
   const prevOrderByRef = useRef<string>(orderBy)
   const prevIsAscRef = useRef<boolean>(isAsc)
   const prevActiveFiltersRef = useRef<string>(activeFilters.join(','))
@@ -124,7 +123,7 @@ const WordList = () => {
       prevCurrentContentTypeRef.current &&
       prevCurrentContentTypeRef.current !== currentContentType
     ) {
-      setPage(NUMBERS.DEFAULT_PAGE)
+      setPage(PAGINATION.DEFAULT_PAGE)
 
       const prevStorageKey = `wordList_page_${prevCurrentContentTypeRef.current}`
 
@@ -134,7 +133,6 @@ const WordList = () => {
     prevCurrentContentTypeRef.current = currentContentType
   }, [currentContentType])
 
-  // Reset to page 1 when sort or filter changes
   useEffect(() => {
     const orderByChanged = prevOrderByRef.current && prevOrderByRef.current !== orderBy
     const isAscChanged = prevIsAscRef.current && prevIsAscRef.current !== isAsc
@@ -143,13 +141,12 @@ const WordList = () => {
       prevActiveFiltersRef.current !== activeFilters.join(',')
 
     if (orderByChanged || isAscChanged || filtersChanged) {
-      setPage(NUMBERS.DEFAULT_PAGE)
+      setPage(PAGINATION.DEFAULT_PAGE)
 
       const storageKey = `wordList_page_${prevCurrentContentTypeRef.current}`
 
       LocalStorageUtil.remove(storageKey)
     }
-    // Update refs
     prevOrderByRef.current = orderBy
     prevIsAscRef.current = isAsc
     prevActiveFiltersRef.current = activeFilters.join(',')
@@ -162,7 +159,7 @@ const WordList = () => {
 
     LocalStorageUtil.setNumber(storageKey, value)
     // Scroll to top of word list when page changes
-    window.scrollTo({ top: NUMBERS.SCROLL_TOP, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleCreateClick = () => {
@@ -177,10 +174,8 @@ const WordList = () => {
 
   const handleSortChange = (newOrderBy: string) => {
     if (newOrderBy === orderBy) {
-      // Toggle direction if same field
       setIsAsc(!isAsc)
     } else {
-      // Set new field with ascending default
       setOrderBy(newOrderBy)
       setIsAsc(true)
     }
@@ -253,12 +248,11 @@ const WordList = () => {
             }),
           }
 
-          // Add noun tags as icons for nouns
           if (
             currentContentType === resourceTypes.NOUN.key &&
             nounTagRel &&
             Array.isArray(nounTagRel) &&
-            nounTagRel.length > ARRAY.EMPTY_LENGTH
+            nounTagRel.length > 0
           ) {
             const tagIcons = nounTagRel
               .map((rel: NounTagRelItem) => {
@@ -282,7 +276,7 @@ const WordList = () => {
               })
               .filter((icon): icon is JSX.Element => icon !== null)
 
-            if (tagIcons.length > ARRAY.EMPTY_LENGTH) {
+            if (tagIcons.length > 0) {
               row.tags = (
                 <div
                   style={{
@@ -301,7 +295,7 @@ const WordList = () => {
         }}
         words={words}
       />
-      {pagination && pagination.totalPages > ARRAY.MIN_NON_EMPTY_LENGTH && (
+      {pagination && pagination.totalPages > 1 && (
         <Box
           sx={{
             display: 'flex',

@@ -12,7 +12,11 @@ interface OtherDetailProps {
 }
 
 const OtherDetail = ({ wordId }: OtherDetailProps) => {
-  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
+  const {
+    data: word,
+    isLoading,
+    error,
+  } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -27,7 +31,9 @@ const OtherDetail = ({ wordId }: OtherDetailProps) => {
   const types: string[] = [
     'group' in otherWord ? otherWord.group : null,
     'isTransitive' in otherWord && otherWord.isTransitive === true ? 'TRANSITIVE' : null,
-    'isIntransitive' in otherWord && otherWord.isIntransitive === true ? 'INTRANSITIVE' : null,
+    'isIntransitive' in otherWord && otherWord.isIntransitive === true
+      ? 'INTRANSITIVE'
+      : null,
     'isIConjugation' in otherWord && otherWord.isIConjugation === true ? 'IADJ' : null,
     'isIConjugation' in otherWord && otherWord.isIConjugation === false ? 'NAADJ' : null,
   ].filter((t): t is string => t !== null)
@@ -43,4 +49,3 @@ const OtherDetail = ({ wordId }: OtherDetailProps) => {
 }
 
 export default OtherDetail
-

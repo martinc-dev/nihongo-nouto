@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import cors from 'cors' // TODO: Add auth
+import cors from 'cors'
 import env from '../env'
 import { router } from './routes'
 

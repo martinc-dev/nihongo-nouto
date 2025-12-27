@@ -12,7 +12,6 @@ export interface PaginatedResponse<T> {
   pagination: PaginationMeta
 }
 
-// Base word interface
 export interface BaseWord {
   id: number
   word: string
@@ -21,7 +20,6 @@ export interface BaseWord {
   updatedAt?: string
 }
 
-// Verb-specific fields
 export type VerbGroup =
   | 'V5U'
   | 'V5K'
@@ -50,7 +48,6 @@ export interface VerbWord extends BaseWord {
   conjugation?: ConjugationResult
 }
 
-// Adjective-specific fields
 export type AdjType = 'IADJ' | 'NAADJ'
 
 export interface AdjWord extends BaseWord {
@@ -58,20 +55,16 @@ export interface AdjWord extends BaseWord {
   isIConjugation: boolean
 }
 
-// Noun-specific fields
 export interface NounWord extends BaseWord {
   hiragana: string
 }
 
-// Other word type
 export interface OtherWord extends BaseWord {
   hiragana: string
 }
 
-// Union type for all word types
 export type Word = VerbWord | AdjWord | NounWord | OtherWord
 
-// Noun tag relation (from API)
 export interface NounTagRelItem {
   id?: number
   nounId?: number
@@ -94,13 +87,21 @@ export interface WordListItem {
   isTransitive?: boolean
   isIntransitive?: boolean
   nounTagRel?: NounTagRelItem[] // For nouns
-  [key: string]: string | number | boolean | VerbGroup | null | undefined | React.ReactNode | NounTagRelItem[] | undefined
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | VerbGroup
+    | null
+    | undefined
+    | React.ReactNode
+    | NounTagRelItem[]
+    | undefined
 }
 
 // Word detail (full word object)
 export type WordDetail = VerbWord | AdjWord | NounWord | OtherWord | null
 
-// API Error response
 export interface ApiError {
   message?: string
   error?: string
@@ -108,14 +109,12 @@ export interface ApiError {
   [key: string]: unknown
 }
 
-// API Response wrapper
 export interface ApiResponse<T = unknown> {
   error?: ApiError
   status?: number | null
   [key: string]: T | ApiError | number | null | undefined
 }
 
-// Jisho API types
 export interface JishoWordOption {
   word?: string
   reading?: string
@@ -168,10 +167,8 @@ export interface JishoWordSearchResult {
   slugOptions?: JishoSlugOption[]
 }
 
-// Word dupe search result
 export type WordDupeResult = WordListItem[]
 
-// Search state data
 export interface SearchData {
   wordOptions?: JishoWordOption[]
   definitionOptions?: Array<{
@@ -183,4 +180,3 @@ export interface SearchData {
     adjType?: string | null
   }>
 }
-

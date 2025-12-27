@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography'
 import { colors } from 'src/themes/colors'
 import { useWordSearch } from 'src/hooks/useWordSearch'
 import { JishoWordOption } from 'src/types/words'
-import { NUMBERS, UI_DIMENSIONS } from 'src/constants/numbers'
+import { KEYCODES } from "src/constants/events"
+import { UI_DIMENSIONS } from "src/themes/sizes"
 
 interface WordSearchInputProps {
   onInputBlur: () => void
@@ -56,7 +57,7 @@ const WordSearchInput = ({
           }}
           label='Word'
           onKeyDown={e => {
-            if (e.keyCode === NUMBERS.ENTER_KEY_CODE && word) {
+            if (e.keyCode === KEYCODES.ENTER_KEY_CODE && word) {
               setSearchResult(null)
               wordSearchMutation.mutate(word, {
                 onSuccess: (data) => {

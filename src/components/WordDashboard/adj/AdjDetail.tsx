@@ -6,7 +6,6 @@ import WordTypeDisplay from 'src/components/WordDashboard/WordTypeDisplay'
 import WordSense from 'src/components/WordDashboard/WordSense'
 import WordDetailContainer from 'src/components/WordDashboard/WordDetailContainer'
 import { NUMBERS } from 'src/constants/numbers'
-
 interface AdjDetailProps {
   wordId?: string | null
 }
@@ -28,8 +27,6 @@ const AdjDetail = ({ wordId }: AdjDetailProps) => {
 
   const adjWord = word as AdjWord
 
-  // Build types array for display - always show I/Na group
-  // IsIConjugation === true means I-adjective, false means Na-adjective
   const types: string[] = [adjWord.isIConjugation === true ? 'IADJ' : 'NAADJ'].filter(
     (t): t is string => t !== null,
   )

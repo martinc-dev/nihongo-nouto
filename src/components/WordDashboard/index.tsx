@@ -27,7 +27,6 @@ const WordDashboard = () => {
   const { resourceType, wordId } = useParams<{ resourceType?: string; wordId?: string }>()
   const location = useLocation()
 
-  // Map resourceType parameter to ResourceTypeKey
   const contentType: ResourceTypeKey | null = resourceType
     ? ((findInObj(resourceTypes, t => t.pathName === resourceType.toLowerCase())
         ?.key as ResourceTypeKey) ?? null)
@@ -42,7 +41,6 @@ const WordDashboard = () => {
     }
   }, [currentContentType, contentType, dispatch])
 
-  // Check if we're on an edit/create route
   const isEditing =
     location.pathname.includes('/create') || location.pathname.includes('/edit')
 

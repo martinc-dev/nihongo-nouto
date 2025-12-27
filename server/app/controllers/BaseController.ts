@@ -12,7 +12,9 @@ export abstract class BaseController {
 
   handleError = (error: unknown, res: Response): void => {
     if (
-      [error instanceof NotFoundError, error instanceof InternalServiceError].filter(t => t).length
+      [error instanceof NotFoundError, error instanceof InternalServiceError].filter(
+        t => t,
+      ).length
     )
       res.status((error as { status?: number }).status || 500).json(error)
     else {
@@ -41,7 +43,8 @@ export abstract class BaseController {
   }
 
   getMultipleByWord = async (req: Request, res: Response): Promise<void> => {
-    if (!this.isSearchable) throw new NotFoundError({ message: 'Not a searchable resource' })
+    if (!this.isSearchable)
+      throw new NotFoundError({ message: 'Not a searchable resource' })
 
     try {
       const { word } = req.query
@@ -74,7 +77,7 @@ export abstract class BaseController {
         return
       }
 
-      // If no pagination params, return all data (backward compatibility)
+      // !!! CAUTION: This could be a performance issue if the result is large
       if (limit === 0 || page === 0) {
         res.json({
           data: result.rows.map(t => t.dataValues),
@@ -106,8 +109,9 @@ export abstract class BaseController {
     }
   }
 
-  // Helper to build filter conditions from filter query params
-  private buildFilterConditions(filters?: string | string[]): Record<string, unknown> | null {
+  private buildFilterConditions(
+    filters?: string | string[],
+  ): Record<string, unknown> | null {
     if (!filters) return null
 
     const filterArray = Array.isArray(filters) ? filters : [filters]
@@ -126,8 +130,9 @@ export abstract class BaseController {
 
     const conditions: Record<string, unknown> = {}
 
-    // Check if any verb filters are present
-    const verbFilters = filterArray.filter(f => ['GoDan', 'IchiDan', 'SuRu', 'KuRu'].includes(f))
+    const verbFilters = filterArray.filter(f =>
+      ['GoDan', 'IchiDan', 'SuRu', 'KuRu'].includes(f),
+    )
 
     if (verbFilters.length > 0) {
       const groupValues = verbFilters.flatMap(filter => verbGroupMap[filter] || [])
@@ -137,15 +142,10 @@ export abstract class BaseController {
       }
     }
 
-    // Check if any adjective filters are present
     const adjFilters = filterArray.filter(f => ['I-Adj', 'Na-Adj'].includes(f))
 
-    if (adjFilters.length > 0) {
-      // If both are selected, no filter needed (show all)
-      // If only one is selected, filter by isIConjugation
-      if (adjFilters.length === 1) {
-        conditions.isIConjugation = adjFilters[0] === 'I-Adj'
-      }
+    if (adjFilters.length === 1) {
+      conditions.isIConjugation = adjFilters[0] === 'I-Adj'
     }
 
     return Object.keys(conditions).length > 0 ? conditions : null
@@ -160,10 +160,8 @@ export abstract class BaseController {
       const filters = req.query?.filters as string | string[] | undefined
       const option = this.queryOption ? { options: this.queryOption } : null
 
-      // Build filter conditions
       const filterConditions = this.buildFilterConditions(filters)
 
-      // Combine filter conditions with existing queryOption conditions if any
       const conditionKV = filterConditions || null
 
       const result = await this.service.queryAsync({
@@ -189,7 +187,7 @@ export abstract class BaseController {
         return
       }
 
-      // If no pagination params, return all data (backward compatibility)
+      // !!! CAUTION: This could be a performance issue if the result is large
       if (limit === 0 || page === 0) {
         res.json({
           data: result.rows.map(t => t.dataValues),
@@ -251,7 +249,8 @@ export abstract class BaseController {
       const option = this.queryOption ? { options: this.queryOption } : null
       const result = await this.service.queryAsync({ conditionKV: { id }, ...option })
 
-      if (!result || !result.count) throw new NotFoundError({ message: 'No record found' })
+      if (!result || !result.count)
+        throw new NotFoundError({ message: 'No record found' })
 
       res.json(result.rows[0].dataValues)
     } catch (error) {
@@ -273,4 +272,3 @@ export abstract class BaseController {
     }
   }
 }
-

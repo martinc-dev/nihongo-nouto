@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles'
 
-import { UI_DIMENSIONS } from 'src/constants/numbers'
+import { UI_DIMENSIONS } from "src/themes/sizes"
 
 const PREFIX = 'WordDetailContainer'
 

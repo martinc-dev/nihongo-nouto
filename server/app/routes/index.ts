@@ -6,6 +6,7 @@ import {
   OtherController,
   AdjController,
   VerbController,
+  JishoController,
 } from '../controllers'
 
 interface CRUDEndpoints {
@@ -48,6 +49,9 @@ router.use('/noun_tag_rel', registerCRUDEndpoints(new NounTagRelController()))
 router.use('/other', registerCRUDEndpoints(new OtherController()))
 router.use('/adj', registerCRUDEndpoints(new AdjController()))
 router.use('/verb', registerCRUDEndpoints(new VerbController()))
+
+const jishoController = new JishoController()
+router.get('/jisho/:keyword', jishoController.search)
 
 export { router }
 

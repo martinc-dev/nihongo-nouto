@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux'
 import { sendGet, sendPost, sendPatch, sendDelete } from 'src/utils/requests'
 import endpoints from 'src/constants/endpoints'
 import resourceTypes from 'src/constants/resourceTypes'
-import { TIME } from 'src/constants/numbers'
+import { TIME } from 'src/constants/times'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { ResourceTypeKey } from 'src/types'
@@ -54,10 +54,8 @@ const fetchWordDetail = async ({
     throw response.error
   }
 
-  // The response is the data directly when successful
-  let result = response as unknown as WordDetail as WordDetail
+  let result = response as unknown as WordDetail
 
-  // Add verb conjugation if it's a verb
   if (
     typeKey === resourceTypes.VERB.key &&
     result &&
@@ -116,7 +114,7 @@ const saveWordDetail = async ({
     if (response.error) {
       throw response.error
     }
-    result = response as unknown as WordDetail as WordDetail
+    result = response as unknown as WordDetail
   } else {
     const response = await sendPost<WordDetail>({
       url: endpoints.getWordsUrl({ typeKey }),
@@ -126,10 +124,9 @@ const saveWordDetail = async ({
     if (response.error) {
       throw response.error
     }
-    result = response as unknown as WordDetail as WordDetail
+    result = response as unknown as WordDetail
   }
 
-  // Add verb conjugation if it's a verb
   if (
     typeKey === resourceTypes.VERB.key &&
     result &&
@@ -225,14 +222,11 @@ export const useSaveWordDetail = (): UseMutationResult<
     onSuccess: (result, variables) => {
       if (!currentContentType) return
 
-      // Invalidate and refetch word list
       queryClient.invalidateQueries({ queryKey: ['wordList', currentContentType] })
 
-      // Update word detail cache
       if (variables.id) {
         queryClient.setQueryData(['wordDetail', currentContentType, variables.id], result)
       } else if (result && 'id' in result) {
-        // New word created - navigate to it
         queryClient.setQueryData(['wordDetail', currentContentType, result.id], result)
         navigate(`/${resourceTypes[currentContentType].pathName}/${result.id}`)
       }
@@ -263,15 +257,12 @@ export const useDeleteWordDetail = (): UseMutationResult<
     onSuccess: (_, variables) => {
       if (!currentContentType) return
 
-      // Remove from word detail cache
       queryClient.removeQueries({
         queryKey: ['wordDetail', currentContentType, variables.id],
       })
 
-      // Invalidate and refetch word list
       queryClient.invalidateQueries({ queryKey: ['wordList', currentContentType] })
 
-      // Navigate to word list route
       const listPath = `/${resourceTypes[currentContentType].pathName}`
 
       navigate(listPath, { replace: true })

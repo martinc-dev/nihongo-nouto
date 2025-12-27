@@ -29,15 +29,12 @@ interface UseAdjFromJishoResult {
   }>
 }
 
-/**
- * Hook to prepopulate adjective form data from Jisho API
- * Allows searching for a word and selecting slug → japanese option → sense to auto-fill form fields
- */
 export const useAdjFromJisho = (): UseAdjFromJishoResult => {
   const [prepopulatedData, setPrepopulatedData] = useState<AdjFromJishoData | null>(null)
   const [slugOptions, setSlugOptions] = useState<JishoSlugOption[]>([])
   const [selectedSlug, setSelectedSlug] = useState<JishoSlugOption | null>(null)
-  const [selectedJapaneseOption, setSelectedJapaneseOption] = useState<JishoWordOption | null>(null)
+  const [selectedJapaneseOption, setSelectedJapaneseOption] =
+    useState<JishoWordOption | null>(null)
 
   const wordSearchMutation = useWordSearch()
 
@@ -67,7 +64,7 @@ export const useAdjFromJisho = (): UseAdjFromJishoResult => {
         },
       })
     },
-    [wordSearchMutation]
+    [wordSearchMutation],
   )
 
   const selectSlug = useCallback((slugOption: JishoSlugOption) => {
@@ -76,13 +73,10 @@ export const useAdjFromJisho = (): UseAdjFromJishoResult => {
     setPrepopulatedData(null)
   }, [])
 
-  const selectJapaneseOption = useCallback(
-    (japaneseOption: JishoWordOption) => {
-      setSelectedJapaneseOption(japaneseOption)
-      setPrepopulatedData(null)
-    },
-    []
-  )
+  const selectJapaneseOption = useCallback((japaneseOption: JishoWordOption) => {
+    setSelectedJapaneseOption(japaneseOption)
+    setPrepopulatedData(null)
+  }, [])
 
   const selectSense = useCallback(
     (senseIndex: number) => {
@@ -99,7 +93,6 @@ export const useAdjFromJisho = (): UseAdjFromJishoResult => {
       const word = selectedJapaneseOption.word || ''
       const partsOfSpeech = sense.partsOfSpeech || []
 
-      // Parse adjective properties
       const adjProps = parseAdjProp({ partsOfSpeechArray: partsOfSpeech })
 
       const adjData: AdjFromJishoData = {
@@ -111,7 +104,7 @@ export const useAdjFromJisho = (): UseAdjFromJishoResult => {
 
       setPrepopulatedData(adjData)
     },
-    [selectedSlug, selectedJapaneseOption]
+    [selectedSlug, selectedJapaneseOption],
   )
 
   const availableSenses = selectedSlug?.senses || []
@@ -130,4 +123,3 @@ export const useAdjFromJisho = (): UseAdjFromJishoResult => {
     availableSenses,
   }
 }
-

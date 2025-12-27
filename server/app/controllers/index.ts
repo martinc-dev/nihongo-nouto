@@ -100,3 +100,4 @@ export class VerbController extends BaseController {
   ]
 }
 
+export * from './JishoController'

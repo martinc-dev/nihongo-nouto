@@ -26,15 +26,12 @@ interface UseWordFromJishoResult {
   }>
 }
 
-/**
- * Hook to prepopulate word form data from Jisho API (for nouns and other words)
- * Allows searching for a word and selecting slug → japanese option → sense to auto-fill form fields
- */
 export const useWordFromJisho = (): UseWordFromJishoResult => {
   const [prepopulatedData, setPrepopulatedData] = useState<WordFromJishoData | null>(null)
   const [slugOptions, setSlugOptions] = useState<JishoSlugOption[]>([])
   const [selectedSlug, setSelectedSlug] = useState<JishoSlugOption | null>(null)
-  const [selectedJapaneseOption, setSelectedJapaneseOption] = useState<JishoWordOption | null>(null)
+  const [selectedJapaneseOption, setSelectedJapaneseOption] =
+    useState<JishoWordOption | null>(null)
 
   const wordSearchMutation = useWordSearch()
 
@@ -64,7 +61,7 @@ export const useWordFromJisho = (): UseWordFromJishoResult => {
         },
       })
     },
-    [wordSearchMutation]
+    [wordSearchMutation],
   )
 
   const selectSlug = useCallback((slugOption: JishoSlugOption) => {
@@ -73,13 +70,10 @@ export const useWordFromJisho = (): UseWordFromJishoResult => {
     setPrepopulatedData(null)
   }, [])
 
-  const selectJapaneseOption = useCallback(
-    (japaneseOption: JishoWordOption) => {
-      setSelectedJapaneseOption(japaneseOption)
-      setPrepopulatedData(null)
-    },
-    []
-  )
+  const selectJapaneseOption = useCallback((japaneseOption: JishoWordOption) => {
+    setSelectedJapaneseOption(japaneseOption)
+    setPrepopulatedData(null)
+  }, [])
 
   const selectSense = useCallback(
     (senseIndex: number) => {
@@ -103,7 +97,7 @@ export const useWordFromJisho = (): UseWordFromJishoResult => {
 
       setPrepopulatedData(wordData)
     },
-    [selectedSlug, selectedJapaneseOption]
+    [selectedSlug, selectedJapaneseOption],
   )
 
   const availableSenses = selectedSlug?.senses || []
@@ -122,4 +116,3 @@ export const useWordFromJisho = (): UseWordFromJishoResult => {
     availableSenses,
   }
 }
-

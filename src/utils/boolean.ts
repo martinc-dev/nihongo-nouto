@@ -1,8 +1,7 @@
-// [true, false, true, true] -> (1101) -> 13
 export const serializeBoolList = (list: boolean[]): number =>
   parseInt(
     list.reduce((m, n) => String(Number(n)) + m, ''),
-    2
+    2,
   )
 
 export const deserializeBoolList = (posInt: number): boolean[] =>
@@ -11,4 +10,3 @@ export const deserializeBoolList = (posInt: number): boolean[] =>
     .split('')
     .reverse()
     .map(t => t === '1')
-

@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-import { styled } from '@mui/material/styles'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import Select from '@mui/material/Select'
@@ -11,165 +10,14 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import Typography from '@mui/material/Typography'
 
+import { KEYCODES } from 'src/constants/events'
+import { NUMBERS } from 'src/constants/numbers'
 import { useWordDetail, useSaveWordDetail } from 'src/hooks/useWordDetail'
 import { useVerbFromJisho } from 'src/hooks/useVerbFromJisho'
 import { VerbWord, VerbGroup, JishoSlugOption, JishoWordOption } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import { colors } from 'src/themes/colors'
-import { NUMBERS } from 'src/constants/numbers'
-
-const PREFIX = 'VerbEditor'
-
-const classes = {
-  wordEditor: `${PREFIX}-wordEditor`,
-  editorActions: `${PREFIX}-editorActions`,
-  saveButton: `${PREFIX}-saveButton`,
-  cancelButton: `${PREFIX}-cancelButton`,
-  formSection: `${PREFIX}-formSection`,
-  formRow: `${PREFIX}-formRow`,
-  formField: `${PREFIX}-formField`,
-  label: `${PREFIX}-label`,
-  selectField: `${PREFIX}-selectField`,
-  mainFields: `${PREFIX}-mainFields`,
-  conjugationFields: `${PREFIX}-conjugationFields`,
-  booleanFields: `${PREFIX}-booleanFields`,
-  senseField: `${PREFIX}-senseField`,
-}
-
-const Root = styled('div')(({ theme }) => ({
-  [`&.${classes.wordEditor}`]: {
-    display: 'inline-block',
-    position: 'relative',
-    width: '70%',
-    borderRadius: 3,
-    verticalAlign: 'top',
-  },
-
-  [`& .${classes.editorActions}`]: {
-    display: 'inline-block',
-    marginBottom: 20,
-  },
-
-  [`& .${classes.saveButton}`]: {
-    marginRight: 10,
-    backgroundColor: theme.palette.shibafuGreen.main,
-    color: theme.palette.white.main,
-    '&:hover': {
-      backgroundColor: theme.palette.shinmeGreen.main,
-    },
-  },
-
-  [`& .${classes.cancelButton}`]: {
-    backgroundColor: theme.palette.ichigoRed.main,
-    color: theme.palette.white.main,
-    '&:hover': {
-      backgroundColor: theme.palette.mikanOrange.main,
-    },
-  },
-
-  [`& .${classes.formSection}`]: {
-    width: '100%',
-    marginBottom: 20,
-    paddingBottom: 20,
-    borderBottom: `1px solid ${theme.palette.kumoriBlue.main}`,
-  },
-
-  [`& .${classes.formRow}`]: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: 15,
-    gap: 15,
-  },
-
-  [`& .${classes.formField}`]: {
-    flex: 1,
-    '& .MuiOutlinedInput-input': {
-      color: colors.shibafuGreen,
-    },
-    '& .MuiInputLabel-root': {
-      color: colors.kujakuishiGreen,
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: colors.kumoriBlue,
-      },
-      '&:hover fieldset': {
-        borderColor: colors.soraBlue,
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: colors.shibafuGreen,
-      },
-    },
-  },
-
-  [`& .${classes.label}`]: {
-    minWidth: 120,
-    marginRight: 20,
-    padding: '0 5px',
-    textTransform: 'uppercase',
-    borderRadius: 4,
-    backgroundColor: theme.palette.soraBlue.main,
-    color: theme.palette.prussianBlue.main,
-    fontSize: 12,
-    fontWeight: 600,
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  [`& .${classes.selectField}`]: {
-    flex: 1,
-    '& .MuiOutlinedInput-input': {
-      color: colors.shibafuGreen,
-    },
-    '& .MuiInputLabel-root': {
-      color: colors.kujakuishiGreen,
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: colors.kumoriBlue,
-      },
-      '&:hover fieldset': {
-        borderColor: colors.soraBlue,
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: colors.shibafuGreen,
-      },
-    },
-  },
-
-  [`& .${classes.mainFields}`]: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 15,
-  },
-
-  [`& .${classes.conjugationFields}`]: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: 15,
-    '& .MuiTextField-root': {
-      width: '100%',
-    },
-  },
-
-  [`& .${classes.booleanFields}`]: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: 15,
-  },
-
-  [`& .${classes.senseField}`]: {
-    width: '100%',
-    '& .MuiOutlinedInput-root': {
-      minHeight: 100,
-      alignItems: 'flex-start',
-    },
-    '& .MuiOutlinedInput-input': {
-      color: colors.shibafuGreen,
-    },
-  },
-}))
+import WordEditorContainer, { editorClasses } from 'src/components/WordDashboard/WordEditorContainer'
 
 const VERB_GROUPS: VerbGroup[] = [
   'V5U',
@@ -230,7 +78,6 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
     isIntransitive: false,
   })
 
-  // Load existing word data in edit mode
   useEffect(() => {
     if (!isCreateMode && word && 'word' in word) {
       const verbWord = word as VerbWord
@@ -251,7 +98,6 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
     }
   }, [word, isCreateMode])
 
-  // Prepopulate form data from Jisho in create mode
   useEffect(() => {
     if (isCreateMode && prepopulatedData) {
       setFormData(prev => ({
@@ -283,14 +129,12 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
 
   const handleSave = () => {
     if (isCreateMode) {
-      // Create new word
       saveWordMutation.mutate(
         {
           data: formData,
         },
         {
           onSuccess: result => {
-            // Navigate to the newly created word's detail page
             if (result && 'id' in result) {
               const currentPath = window.location.pathname
               const detailPath = currentPath.replace('/create', `/${result.id}`)
@@ -301,7 +145,6 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         },
       )
     } else {
-      // Update existing word
       if (!actualWordId) {
         return
       }
@@ -313,7 +156,6 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         },
         {
           onSuccess: () => {
-            // Navigate back to detail view
             const currentPath = window.location.pathname
             const detailPath = currentPath.replace('/edit', '')
 
@@ -326,13 +168,11 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
 
   const handleCancel = () => {
     if (isCreateMode) {
-      // Navigate back to list
       const currentPath = window.location.pathname
       const listPath = currentPath.replace('/create', '')
 
       navigate(listPath)
     } else {
-      // Navigate back to detail view
       const currentPath = window.location.pathname
       const detailPath = currentPath.replace('/edit', '')
 
@@ -342,20 +182,18 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
 
   const handleSearchInputChange = (value: string) => {
     setSearchInputValue(value)
-    // Don't trigger search - only update local state
   }
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === NUMBERS.ENTER_KEY_CODE) {
+    if (e.keyCode === KEYCODES.ENTER_KEY_CODE) {
       e.preventDefault()
       const value = searchInputValue.trim()
 
       if (value) {
         searchWord(value)
-        // Reset selections when new search is performed
+
         setSelectedSenseIndex(null)
       } else {
-        // Clear results if input is empty
         searchWord('')
         setSelectedSenseIndex(null)
       }
@@ -386,9 +224,9 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
   }
 
   return (
-    <Root className={classes.wordEditor}>
+    <WordEditorContainer>
       {isCreateMode ? (
-        <div className={classes.formSection}>
+        <div className={editorClasses.formSection}>
           <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h5'>
             Create New Verb
           </Typography>
@@ -398,8 +236,6 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
           >
             Search for a word to prepopulate fields, or enter manually
           </Typography>
-
-          {/* Search Input */}
           <TextField
             autoFocus={isCreateMode}
             disabled={isJishoLoading}
@@ -414,11 +250,9 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
             }}
             value={searchInputValue}
           />
-
-          {/* Slug Selection Dropdown */}
           {slugOptions.length > 0 && (
             <FormControl
-              className={classes.selectField}
+              className={editorClasses.selectField}
               fullWidth
               sx={{ marginBottom: 2 }}
               variant='outlined'
@@ -443,11 +277,9 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
               </Select>
             </FormControl>
           )}
-
-          {/* Japanese Option Selection Dropdown */}
           {selectedSlug && selectedSlug.japanese.length > 0 && (
             <FormControl
-              className={classes.selectField}
+              className={editorClasses.selectField}
               fullWidth
               sx={{ marginBottom: 2 }}
               variant='outlined'
@@ -477,11 +309,9 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
               </Select>
             </FormControl>
           )}
-
-          {/* Sense Selection Dropdown */}
           {selectedJapaneseOption && availableSenses.length > 0 && (
             <FormControl
-              className={classes.selectField}
+              className={editorClasses.selectField}
               fullWidth
               sx={{ marginBottom: 2 }}
               variant='outlined'
@@ -518,9 +348,9 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
       ) : (
         <>
           <WordTitle hiragana={formData.hiragana || ''} word={formData.word || ''} />
-          <div className={classes.editorActions}>
+          <div className={editorClasses.editorActions}>
             <Button
-              className={classes.saveButton}
+              className={editorClasses.saveButton}
               disabled={saveWordMutation.isPending || !actualWordId}
               onClick={handleSave}
               type='button'
@@ -528,7 +358,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
               {saveWordMutation.isPending ? 'Saving...' : 'Save'}
             </Button>
             <Button
-              className={classes.cancelButton}
+              className={editorClasses.cancelButton}
               disabled={saveWordMutation.isPending}
               onClick={handleCancel}
               type='button'
@@ -539,12 +369,12 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         </>
       )}
 
-      <div className={classes.formSection}>
-        <div className={classes.mainFields}>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Word</span>
+      <div className={editorClasses.formSection}>
+        <div className={editorClasses.mainFields}>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Word</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               fullWidth
               label='Word'
               onChange={e => handleFieldChange('word', e.target.value)}
@@ -552,10 +382,10 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
               variant='outlined'
             />
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Hiragana</span>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Hiragana</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               fullWidth
               label='Hiragana'
               onChange={e => handleFieldChange('hiragana', e.target.value)}
@@ -563,9 +393,9 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
               variant='outlined'
             />
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Group</span>
-            <FormControl className={classes.selectField} fullWidth variant='outlined'>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Group</span>
+            <FormControl className={editorClasses.selectField} fullWidth variant='outlined'>
               <InputLabel>Group</InputLabel>
               <Select
                 label='Group'
@@ -590,55 +420,55 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         </div>
       </div>
 
-      <div className={classes.formSection}>
+      <div className={editorClasses.formSection}>
         <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h6'>
           Conjugation Forms
         </Typography>
-        <div className={classes.conjugationFields}>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Stem</span>
+        <div className={editorClasses.conjugationFields}>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Stem</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               label='Stem'
               onChange={e => handleFieldChange('stem', e.target.value)}
               value={formData.stem || ''}
               variant='outlined'
             />
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Te Form</span>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Te Form</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               label='Te Form'
               onChange={e => handleFieldChange('teForm', e.target.value)}
               value={formData.teForm || ''}
               variant='outlined'
             />
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>A Dan</span>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>A Dan</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               label='A Dan'
               onChange={e => handleFieldChange('aDan', e.target.value)}
               value={formData.aDan || ''}
               variant='outlined'
             />
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>E Dan</span>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>E Dan</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               label='E Dan'
               onChange={e => handleFieldChange('eDan', e.target.value)}
               value={formData.eDan || ''}
               variant='outlined'
             />
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>O Dan</span>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>O Dan</span>
             <TextField
-              className={classes.formField}
+              className={editorClasses.formField}
               label='O Dan'
               onChange={e => handleFieldChange('oDan', e.target.value)}
               value={formData.oDan || ''}
@@ -648,14 +478,14 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         </div>
       </div>
 
-      <div className={classes.formSection}>
+      <div className={editorClasses.formSection}>
         <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h6'>
           Properties
         </Typography>
-        <div className={classes.booleanFields}>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Transitive</span>
-            <FormControl className={classes.selectField} fullWidth variant='outlined'>
+        <div className={editorClasses.booleanFields}>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Transitive</span>
+            <FormControl className={editorClasses.selectField} fullWidth variant='outlined'>
               <InputLabel>Transitive</InputLabel>
               <Select
                 label='Transitive'
@@ -669,9 +499,9 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
               </Select>
             </FormControl>
           </div>
-          <div className={classes.formRow}>
-            <span className={classes.label}>Intransitive</span>
-            <FormControl className={classes.selectField} fullWidth variant='outlined'>
+          <div className={editorClasses.formRow}>
+            <span className={editorClasses.label}>Intransitive</span>
+            <FormControl className={editorClasses.selectField} fullWidth variant='outlined'>
               <InputLabel>Intransitive</InputLabel>
               <Select
                 label='Intransitive'
@@ -688,12 +518,12 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
         </div>
       </div>
 
-      <div className={classes.formSection}>
+      <div className={editorClasses.formSection}>
         <Typography sx={{ marginBottom: 2, color: colors.shibafuGreen }} variant='h6'>
           Sense
         </Typography>
         <TextField
-          className={classes.senseField}
+          className={editorClasses.senseField}
           fullWidth
           label='Sense'
           multiline
@@ -703,12 +533,10 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
           variant='outlined'
         />
       </div>
-
-      {/* Create/Cancel buttons at bottom for create mode */}
       {isCreateMode && (
-        <div className={classes.editorActions}>
+        <div className={editorClasses.editorActions}>
           <Button
-            className={classes.saveButton}
+            className={editorClasses.saveButton}
             disabled={saveWordMutation.isPending}
             onClick={handleSave}
             type='button'
@@ -716,7 +544,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
             {saveWordMutation.isPending ? 'Creating...' : 'Create'}
           </Button>
           <Button
-            className={classes.cancelButton}
+            className={editorClasses.cancelButton}
             disabled={saveWordMutation.isPending}
             onClick={handleCancel}
             type='button'
@@ -725,7 +553,7 @@ const VerbEditor = ({ wordId = null }: VerbEditorProps) => {
           </Button>
         </div>
       )}
-    </Root>
+    </WordEditorContainer>
   )
 }
 

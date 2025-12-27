@@ -15,7 +15,11 @@ interface VerbDetailProps {
 }
 
 const VerbDetail = ({ wordId }: VerbDetailProps) => {
-  const { data: word, isLoading, error } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
+  const {
+    data: word,
+    isLoading,
+    error,
+  } = useWordDetail(wordId ? parseInt(wordId, NUMBERS.DECIMAL_RADIX) : null)
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -40,13 +44,18 @@ const VerbDetail = ({ wordId }: VerbDetailProps) => {
       {verbWord.conjugation && <VerbMainFormRow conjugation={verbWord.conjugation} />}
       <WordTypeDisplay types={types} />
       {verbWord.conjugation && (
-        <VerbConjFormRow conjugation={verbWord.conjugation} group={verbWord.group} word={verbWord.word} />
+        <VerbConjFormRow
+          conjugation={verbWord.conjugation}
+          group={verbWord.group}
+          word={verbWord.word}
+        />
       )}
       <WordSense {...verbWord} />
-      {verbWord.conjugation && <VerbConjFormAdditional conjugation={verbWord.conjugation} />}
+      {verbWord.conjugation && (
+        <VerbConjFormAdditional conjugation={verbWord.conjugation} />
+      )}
     </WordDetailContainer>
   )
 }
 
 export default VerbDetail
-

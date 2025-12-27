@@ -9,12 +9,12 @@ import { useSelector } from 'react-redux'
 import { sendGet } from 'src/utils/requests'
 import endpoints from 'src/constants/endpoints'
 import resourceTypes from 'src/constants/resourceTypes'
-import { TIME, HTTP_STATUS, ARRAY } from 'src/constants/numbers'
+import { TIME } from 'src/constants/times'
+import { HTTP_STATUS } from 'src/constants/httpStatus'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { ResourceTypeKey } from 'src/types'
 import { parseVerbProp, parseAdjProp } from 'src/utils/jisho'
-import jisho from 'src/singletons/jisho'
 import camelCase from 'camelcase-keys'
 import {
   WordDupeResult,
@@ -63,7 +63,6 @@ const aggregateJisho = ({
     }>
   }
 
-  // Build slug options with all data
   const slugOptions: JishoSlugOption[] = []
 
   if (casedRaw?.data) {
@@ -74,11 +73,7 @@ const aggregateJisho = ({
       }>
       const senses = (item.senses ?? []) as JishoSense[]
 
-      if (
-        item.slug &&
-        japanese.length > ARRAY.EMPTY_LENGTH &&
-        senses.length > ARRAY.EMPTY_LENGTH
-      ) {
+      if (item.slug && japanese.length > 0 && senses.length > 0) {
         const processedSenses = senses.map((sense: JishoSense) => {
           const baseSense = {
             definitions: sense.englishDefinitions || [],
@@ -120,8 +115,7 @@ const aggregateJisho = ({
 
   result.slugOptions = slugOptions
 
-  // Keep backward compatibility with old format
-  const firstItem = casedRaw?.data?.[ARRAY.FIRST_INDEX]
+  const firstItem = casedRaw?.data?.[0]
   const senses: JishoSense[] = (firstItem?.senses as JishoSense[]) ?? []
 
   result.wordOptions = (firstItem?.japanese ?? []) as Array<{
@@ -150,7 +144,6 @@ const aggregateJisho = ({
     }
 
     case resourceTypes.NOUN.key: {
-      // TODO: Add tag management if/when available
       result.definitionOptions = senses.map((t: JishoSense) => ({
         definitions: t.englishDefinitions || [],
       }))
@@ -188,8 +181,7 @@ const fetchWordDupe = async ({
     throw response.error
   }
 
-  // The response is the data directly when successful
-  return response as unknown as WordDupeResult as WordDupeResult
+  return response as unknown as WordDupeResult
 }
 
 const fetchWordSearch = async ({
@@ -204,7 +196,15 @@ const fetchWordSearch = async ({
     throw new Error('Target resource is not searchable')
   }
 
-  const raw = (await jisho.searchForPhrase(word)) as unknown as JishoRawResponse
+  const response = await sendGet<JishoRawResponse>({
+    url: endpoints.getJishoSearchUrl(word),
+  })
+
+  if (response.error) {
+    throw response.error
+  }
+
+  const raw = response as unknown as JishoRawResponse
   const result = aggregateJisho({
     raw,
     typeKey,

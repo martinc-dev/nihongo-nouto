@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'
 import { sendGet } from 'src/utils/requests'
 import endpoints from 'src/constants/endpoints'
 import resourceTypes from 'src/constants/resourceTypes'
-import { DEFAULT_WORD_LIST_LIMIT } from 'src/constants/pagination'
-import { TIME, NUMBERS, ARRAY } from 'src/constants/numbers'
+import { PAGINATION } from 'src/constants/pagination'
+import { TIME } from 'src/constants/times'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { ResourceTypeKey } from 'src/types'
@@ -22,8 +22,8 @@ interface UseWordListParams {
 
 const fetchWordList = async (
   typeKey: ResourceTypeKey,
-  page: number = NUMBERS.DEFAULT_PAGE,
-  limit: number = DEFAULT_WORD_LIST_LIMIT,
+  page: number = PAGINATION.DEFAULT_PAGE,
+  limit: number = PAGINATION.DEFAULT_WORD_LIST_LIMIT,
   orderBy: string = 'id',
   isAsc: boolean = true,
   filters: string[] = [],
@@ -34,7 +34,7 @@ const fetchWordList = async (
   }
 
   const filterParams =
-    filters.length > ARRAY.EMPTY_LENGTH
+    filters.length > 0
       ? `&filters=${filters.map(encodeURIComponent).join('&filters=')}`
       : ''
   const url = `${endpoints.getWordsUrl({ typeKey })}?page=${page}&limit=${limit}&orderBy=${orderBy}&asc=${isAsc}${filterParams}`
@@ -46,21 +46,16 @@ const fetchWordList = async (
     throw response.error
   }
 
-  // When successful, sendGet returns the camelCased body directly
-  // The response IS the PaginatedResponse object (after camelCase transformation)
-  // Similar to useWordDetail where response is cast directly to WordDetail
-  // But ApiResponse<T> means response has properties of T, so response.data and response.pagination exist
   const paginatedResponse = (response as unknown as PaginatedResponse<WordListItem>) || {
     data: [],
     pagination: {
-      total: ARRAY.EMPTY_LENGTH,
-      page: NUMBERS.DEFAULT_PAGE,
-      limit: DEFAULT_WORD_LIST_LIMIT,
-      totalPages: ARRAY.EMPTY_LENGTH,
+      total: 0,
+      page: PAGINATION.DEFAULT_PAGE,
+      limit: PAGINATION.DEFAULT_WORD_LIST_LIMIT,
+      totalPages: 0,
     },
   }
 
-  // Validate response structure
   if (!paginatedResponse || typeof paginatedResponse !== 'object') {
     throw new Error('Invalid response from API')
   }
@@ -73,7 +68,7 @@ const fetchWordList = async (
     throw new Error('Invalid pagination format in API response')
   }
 
-  // Transform isIconjugation to isIConjugation
+  // Transform isIconjugation to isIConjugation, camelCase issue ¯\_(ツ)_/¯
   const transformedData = paginatedResponse.data.map(
     (t: WordListItem & { isIconjugation?: boolean }) => {
       if (t.isIconjugation !== undefined) {
@@ -103,8 +98,8 @@ export const useWordList = (
     getCurrentContentType(state),
   )
   const {
-    page = NUMBERS.DEFAULT_PAGE,
-    limit = DEFAULT_WORD_LIST_LIMIT,
+    page = PAGINATION.DEFAULT_PAGE,
+    limit = PAGINATION.DEFAULT_WORD_LIST_LIMIT,
     orderBy = 'id',
     isAsc = true,
     filters = [],

@@ -32,14 +32,13 @@
     "redux-saga": "^1.3.0",
     "reselect": "^5.1.1",
     "sequelize": "^6.37.5",
-    "unofficial-jisho-api": "^2.3.4",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "lint": "eslint src/ server/ --ext .js,.jsx,.ts,.tsx", 
+    "lint": "eslint src/ server/ --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint src/ server/ --ext .js,.jsx,.ts,.tsx --fix",
     "type-check": "tsc --noEmit",
     "prettier:fix": "prettier --write '**/@(*.js|*.jsx|*.ts|*.tsx|*.md|*.json|*.scss)'",
