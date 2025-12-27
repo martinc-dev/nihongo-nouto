@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  db:
+    image: mariadb:10.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: nihongo-nouto
+      MYSQL_USER: nn_user
+      MYSQL_PASSWORD: nn_password
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./devnotes/nihongo_nouto_backup/note/nihongo-nouto_2025-12-24.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: on-failure:10
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: nihongo-nouto
+      DB_USER: nn_user
+      DB_PASSWORD: nn_password
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
+
