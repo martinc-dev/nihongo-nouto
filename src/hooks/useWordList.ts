@@ -115,10 +115,7 @@ export const useWordList = (
 
       return fetchWordList(currentContentType, page, limit, orderBy, isAsc, filters)
     },
-    enabled:
-      enabled &&
-      !!currentContentType &&
-      (resourceTypes[currentContentType]?.isMain ?? false),
+    enabled: enabled && !!currentContentType,
     staleTime: TIME.FIVE_MINUTES_MS,
   })
 }

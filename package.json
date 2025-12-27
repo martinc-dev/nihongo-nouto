@@ -43,6 +43,7 @@
     "type-check": "tsc --noEmit",
     "prettier:fix": "prettier --write '**/@(*.js|*.jsx|*.ts|*.tsx|*.md|*.json|*.scss)'",
     "serve:dev": "nodemon --watch ./server --exec ts-node --project ./server/tsconfig.json ./server/app/index.ts",
+    "dev": "concurrently --kill-others-on-fail \"yarn serve:dev\" \"PORT=3001 yarn start\"",
     "check": "npm run lint && npm run prettier:fix"
   },
   "eslintConfig": {
@@ -51,6 +52,7 @@
       "react-app/jest"
     ]
   },
+  "proxy": "http://localhost:3000",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -80,6 +82,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
     "@typescript-eslint/parser": "^8.18.2",
+    "concurrently": "^9.2.1",
     "craco-alias": "^3.0.1",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",

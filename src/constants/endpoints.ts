@@ -16,13 +16,13 @@ interface GetWordDupeSearchUrlParams {
 
 const endpoints = {
   getWordsUrl: ({ typeKey }: GetWordsUrlParams): string =>
-    `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}`,
+    `/api/${resourceTypes[typeKey].path}`,
   getWordUrl: ({ typeKey, id }: GetWordUrlParams): string =>
-    `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}/${id}`,
+    `/api/${resourceTypes[typeKey].path}/${id}`,
   getWordDupeSearchUrl: ({ typeKey }: GetWordDupeSearchUrlParams): string =>
-    `${process.env.REACT_APP_API_HOST || ''}/api/${resourceTypes[typeKey].path}/search`,
+    `/api/${resourceTypes[typeKey].path}/search`,
   getJishoSearchUrl: (keyword: string): string =>
-    `${process.env.REACT_APP_API_HOST || ''}/api/jisho/${keyword}`,
+    `/api/jisho/${keyword}`,
 }
 
 
