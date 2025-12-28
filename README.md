@@ -24,7 +24,7 @@ yarn install
    ```bash
    cp .env_example .env
    ```
-2. Open `.env` and modify the NODE_ENV values (development vs production), and other values if needed (the defaults usually work for local development).
+2. Open `.env` and modify the NODE_ENV values (development vs production), db creds, and other values if needed (the defaults usually work for local development).
 
 The application reads configuration from this `.env` file.
 
