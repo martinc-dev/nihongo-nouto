@@ -17,6 +17,8 @@ interface CRUDEndpoints {
   updateOne: (req: Request, res: Response) => Promise<void>
   deleteOne: (req: Request, res: Response) => Promise<void>
   getMultipleByWord: (req: Request, res: Response) => Promise<void>
+  importWords: (req: Request, res: Response) => Promise<void>
+  exportWords: (req: Request, res: Response) => Promise<void>
 }
 
 const registerCRUDEndpoints = ({
@@ -27,10 +29,15 @@ const registerCRUDEndpoints = ({
   updateOne,
   deleteOne,
   getMultipleByWord,
+  importWords,
+  exportWords,
 }: CRUDEndpoints): Router => {
   const router = Router()
 
   if (isSearchable) router.get('/search', (req, res) => getMultipleByWord(req, res))
+
+  router.post('/import', (req, res) => importWords(req, res))
+  router.get('/export', (req, res) => exportWords(req, res))
 
   router.get('/', (req, res) => getMultiple(req, res))
   router.get('/:id', (req, res) => getOne(req, res))

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react'
 
 import { useWordSearch } from 'src/hooks/useWordSearch'
-import { JishoWordOption, JishoSlugOption, ApiError } from 'src/types/words'
+import { JishoSlugOption, JishoWordOption, ApiError } from 'src/types/words'
 
 export interface WordFromJishoData {
   word: string
@@ -23,6 +23,11 @@ interface UseWordFromJishoResult {
   availableSenses: Array<{
     definitions: string[]
     partsOfSpeech: string[]
+    verbType?: string | null
+    verbClassification?: string | null
+    verbIsTransitive?: boolean
+    verbIsInTransitive?: boolean
+    adjType?: string | null
   }>
 }
 
@@ -116,3 +121,5 @@ export const useWordFromJisho = (): UseWordFromJishoResult => {
     availableSenses,
   }
 }
+
+export * from './useWordDupe'

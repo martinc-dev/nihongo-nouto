@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { InternalServiceError } from '../constants/exceptions'
 import { logError } from '../utils/logger'
+import { parseCSV, toCSV } from '../utils/csv'
 import { NounTagRel, NounTag } from '../models'
 import { NounTagService } from '../services/NounTagService'
 import { NounTagRelService } from '../services/NounTagRelService'
@@ -72,6 +73,148 @@ export class NounController extends BaseController {
         throw new InternalServiceError({ message: 'Cannot find new record' })
 
       res.json(result.rows[0].dataValues)
+    } catch (error) {
+      logError(error)
+      this.handleError(error, res)
+    }
+  }
+
+  exportWords = async (req: Request, res: Response): Promise<void> => {
+    try {
+      // For NounController, we want to export tags as well
+      const result = await this.service.queryAsync({
+        limit: 0,
+        options: this.queryOption,
+      })
+
+      if (!result || !result.rows) {
+        res.header('Content-Type', 'text/csv').send('')
+
+        return
+      }
+
+      const rows = result.rows.map(r => {
+        const vals = r.dataValues
+        const cleanVals: Record<string, unknown> = {}
+
+        // Handle standard fields
+        for (const key in vals) {
+          const val = vals[key]
+
+          if (
+            val === null ||
+            val === undefined ||
+            key === 'nounTagRel' ||
+            key === 'nounTag'
+          ) {
+            // Skip relation objects in main loop
+          } else if (typeof val !== 'object') {
+            cleanVals[key] = val
+          } else if (val instanceof Date) {
+            cleanVals[key] = val.toISOString()
+          } else {
+            cleanVals[key] = ''
+          }
+        }
+
+        // Handle noun tags
+        if (vals.nounTagRel && Array.isArray(vals.nounTagRel)) {
+          const tagIds = vals.nounTagRel
+            .map(
+              (
+                rel: InstanceType<typeof NounTagRel> & {
+                  nounTag?: InstanceType<typeof NounTag>
+                },
+              ) => rel.nounTag?.dataValues.id || rel.dataValues?.tagId,
+            )
+            .filter((id: number | undefined) => id)
+            .join(',')
+
+          cleanVals['tag_ids'] = tagIds
+        } else {
+          cleanVals['tag_ids'] = ''
+        }
+
+        return cleanVals
+      })
+
+      const csv = toCSV(rows)
+
+      res.header('Content-Type', 'text/csv')
+      res.attachment('export.csv')
+      res.send(csv)
+    } catch (error) {
+      logError(error)
+      this.handleError(error, res)
+    }
+  }
+
+  importWords = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const csvContent = req.body
+
+      if (typeof csvContent !== 'string') {
+        throw new InternalServiceError({ message: 'Invalid CSV content' })
+      }
+
+      const records = parseCSV(csvContent)
+
+      let successCount = 0
+      let failCount = 0
+      let skippedCount = 0
+
+      // TODO: Needs a queue for this
+      // Process sequentially to avoid database locking issues with tags
+      for (const record of records) {
+        try {
+          // Duplication check
+          if (record.word && record.sense) {
+            // eslint-disable-next-line no-await-in-loop
+            const existing = await this.service.queryAsync({
+              conditionKV: {
+                word: record.word as string,
+                sense: record.sense as string,
+              },
+              limit: 1,
+            })
+
+            // eslint-disable-next-line max-depth
+            if (existing?.count) {
+              skippedCount++
+              continue
+            }
+          }
+
+          // Process tag_ids if present
+          let tagIds: number[] = []
+
+          if (record.tag_ids) {
+            tagIds = String(record.tag_ids)
+              .split(',')
+              .map(id => parseInt(id.trim(), 10))
+              .filter(id => !isNaN(id))
+          }
+
+          // eslint-disable-next-line no-await-in-loop
+          await this.service.insertNoun({
+            word: record.word as string,
+            hiragana: record.hiragana as string,
+            sense: record.sense as string,
+            tagIds,
+          })
+          successCount++
+        } catch (e) {
+          logError(e)
+          failCount++
+        }
+      }
+
+      res.json({
+        message: 'Import completed',
+        success: successCount,
+        failed: failCount,
+        skipped: skippedCount,
+      })
     } catch (error) {
       logError(error)
       this.handleError(error, res)

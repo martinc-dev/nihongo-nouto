@@ -49,7 +49,11 @@ const SplashScreen = () => {
       <Typography className={classes.title} component='h1' variant='h2'>
         Nihongo Nouto
       </Typography>
-      <Typography component='h2' sx={{ color: 'text.primary', fontWeight: 'bold' }} variant='h4'>
+      <Typography
+        component='h2'
+        sx={{ color: 'text.primary', fontWeight: 'bold' }}
+        variant='h4'
+      >
         日本語ノート
       </Typography>
       <Typography className={classes.subtitle} variant='h6'>

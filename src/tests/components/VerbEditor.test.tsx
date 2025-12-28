@@ -7,16 +7,14 @@ import { theme } from '../../themes/theme'
 import VerbEditor from '../../components/WordDashboard/verb/VerbEditor'
 import { useWordDetail, useSaveWordDetail } from '../../hooks/useWordDetail'
 import { useVerbFromJisho } from '../../hooks/useVerbFromJisho'
+import { useWordDupe } from '../../hooks/useWordDupe'
 
 // Mock hooks
 jest.mock('../../hooks/useWordDetail')
-jest.mock('../../hooks/useWordDetail')
 jest.mock('../../hooks/useVerbFromJisho')
+jest.mock('../../hooks/useWordDupe')
 
-// Mock child components if necessary (WordTitle is simple enough to render, but WordEditorContainer needs theme)
-// We need to wrap with ThemeProvider or mock WordEditorContainer.
-// Since WordEditorContainer uses MUI styled, it needs a theme.
-// But we can just mock it to render children for simplicity in unit test of Editor logic.
+// Mock child components if necessary
 jest.mock('../../components/WordDashboard/WordEditorContainer', () => {
   return {
     __esModule: true,
@@ -30,6 +28,7 @@ jest.mock('../../components/WordDashboard/WordEditorContainer', () => {
       formField: 'form-field',
       saveButton: 'save-button',
       cancelButton: 'cancel-button',
+      selectField: 'select-field',
     },
   }
 })
@@ -62,13 +61,16 @@ describe('VerbEditor', () => {
       availableSenses: [],
     }
     ;(useVerbFromJisho as jest.Mock).mockReturnValue(mockUseVerbFromJisho)
+    ;(useWordDupe as jest.Mock).mockReturnValue({
+      refetch: jest.fn().mockResolvedValue({ data: { data: [] } }),
+    })
   })
 
   it('should render create form when no wordId', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <VerbEditor />
       </MemoryRouter>,
     )
@@ -88,19 +90,16 @@ describe('VerbEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: mockWord, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter initialEntries={['/verb/1']}>
+      <MemoryRouter
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+        initialEntries={['/verb/1']}
+      >
         <Routes>
           <Route element={<VerbEditor />} path='/verb/:wordId' />
         </Routes>
       </MemoryRouter>,
     )
 
-    // Wait for form to populate (useEffect)
-    // Actually react-testing-library handles effects.
-    // Check if values are there.
-    // Note: MUI Select input is tricky to query by label directly sometimes, but TextField is okay.
-
-    // Check if "Save" button is present (implies edit mode layout)
     expect(screen.getByText('Save')).toBeInTheDocument()
   })
 
@@ -116,7 +115,7 @@ describe('VerbEditor', () => {
     ;(useVerbFromJisho as jest.Mock).mockReturnValue(mockUseVerbFromJisho)
 
     const { rerender } = renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <VerbEditor />
       </MemoryRouter>,
     )
@@ -124,16 +123,11 @@ describe('VerbEditor', () => {
     // Trigger re-render explicitly to ensure hook update
     rerender(
       <ThemeProvider theme={theme}>
-        <MemoryRouter>
+        <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
           <VerbEditor />
         </MemoryRouter>
       </ThemeProvider>,
     )
-
-    // The useEffect should update state.
-    // We need to re-render to pick up the new hook return value if we changed it,
-    // But here we set it before render.
-    // Let's verify input values.
 
     expect(screen.getByDisplayValue('JishoWord')).toBeInTheDocument()
     expect(screen.getByDisplayValue('JishoReading')).toBeInTheDocument()
@@ -143,7 +137,7 @@ describe('VerbEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <VerbEditor />
       </MemoryRouter>,
     )

@@ -98,7 +98,7 @@
     "max-depth": [
       "warn",
       {
-        "max": 3,
+        "max": 4,
       },
     ],
     "max-lines": [
@@ -159,7 +159,10 @@
     "no-magic-numbers": [
       "warn",
       {
-        "ignore": [-1, 0.5, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 24, 60, 200, 401, 403, 400, 404, 422, 500, 1000],
+        "ignore": [
+          -1, 0.5, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 24, 60, 200, 401, 403, 400, 404, 422,
+          500, 1000,
+        ],
       },
     ],
     "no-mixed-operators": 2,
@@ -170,12 +173,7 @@
     "no-new-func": 2,
     "no-new-wrappers": 2,
     "no-param-reassign": 2,
-    "no-plusplus": [
-      "error",
-      {
-        "allowForLoopAfterthoughts": true,
-      },
-    ],
+    "no-plusplus": 0,
     "no-proto": 2,
     "no-redeclare": 2,
     "no-return-assign": 2,

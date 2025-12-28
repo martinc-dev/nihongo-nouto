@@ -1,6 +1,8 @@
+/* eslint-disable max-lines */
 import { Request, Response } from 'express'
 import { Op } from 'sequelize'
 import { logError } from '../utils/logger'
+import { parseCSV, toCSV } from '../utils/csv'
 import { NotFoundError, InternalServiceError } from '../constants/exceptions'
 import { BaseService } from '../services/BaseService'
 
@@ -47,15 +49,21 @@ export abstract class BaseController {
       throw new NotFoundError({ message: 'Not a searchable resource' })
 
     try {
-      const { word } = req.query
+      const { word, sense } = req.query
       const limit = Math.abs(parseInt((req.query?.limit as string) ?? '0', 10))
       const page = Math.abs(parseInt((req.query?.page as string) ?? '0', 10))
       const orderBy = (req.query?.orderBy as string) ?? 'id'
       const isAsc = ((req.query?.asc as string) ?? 'false').toLowerCase() === 'true'
       const option = this.queryOption ? { options: this.queryOption } : null
 
+      const conditionKV: Record<string, unknown> = { word }
+
+      if (sense) {
+        conditionKV.sense = sense
+      }
+
       const result = await this.service.queryAsync({
-        conditionKV: { word },
+        conditionKV,
         limit,
         page,
         orderBy,
@@ -283,6 +291,123 @@ export abstract class BaseController {
       await this.service.removeAsync({ conditionKV: { id } })
 
       res.json('OK')
+    } catch (error) {
+      logError(error)
+      this.handleError(error, res)
+    }
+  }
+
+  exportWords = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const result = await this.service.queryAsync({ limit: 0 })
+
+      if (!result || !result.rows) {
+        res.header('Content-Type', 'text/csv').send('')
+
+        return
+      }
+
+      const rows = result.rows.map(r => {
+        const vals = r.dataValues
+        const cleanVals: Record<string, unknown> = {}
+
+        for (const key in vals) {
+          const val = vals[key]
+
+          if (val === null || val === undefined) {
+            cleanVals[key] = ''
+          } else if (typeof val !== 'object') {
+            cleanVals[key] = val
+          } else if (val instanceof Date) {
+            cleanVals[key] = val.toISOString()
+          }
+        }
+
+        return cleanVals
+      })
+
+      const csv = toCSV(rows)
+
+      res.header('Content-Type', 'text/csv')
+      res.attachment('export.csv')
+      res.send(csv)
+    } catch (error) {
+      logError(error)
+      this.handleError(error, res)
+    }
+  }
+
+  importWords = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const csvContent = req.body
+
+      if (typeof csvContent !== 'string') {
+        throw new InternalServiceError({ message: 'Invalid CSV content' })
+      }
+
+      const records = parseCSV(csvContent)
+
+      let successCount = 0
+      let failCount = 0
+      let skippedCount = 0
+
+      // TODO: Needs a queue for this
+      for (const record of records) {
+        try {
+          const fieldKV = this.editableFields
+            ? Object.keys(record)
+                .filter(key => this.editableFields!.includes(key))
+                .reduce(
+                  (obj, key) => {
+                    obj[key] = record[key]
+
+                    return obj
+                  },
+                  {} as Record<string, unknown>,
+                )
+            : record
+
+          if (Object.keys(fieldKV).length === 0) {
+            failCount++
+            continue
+          }
+
+          // Duplication check
+          if (fieldKV.word) {
+            // eslint-disable-next-line no-await-in-loop
+            const existing = await this.service.queryAsync({
+              conditionKV: {
+                word: fieldKV.word,
+                sense: fieldKV.sense,
+              },
+              limit: 1,
+            })
+
+            // eslint-disable-next-line max-depth
+            if (existing?.count) {
+              skippedCount++
+              continue
+            }
+          }
+
+          // eslint-disable-next-line no-await-in-loop
+          await this.service.createAsync({
+            fieldKV,
+            editableFields: this.editableFields,
+          })
+          successCount++
+        } catch (e) {
+          logError(e)
+          failCount++
+        }
+      }
+
+      res.json({
+        message: 'Import completed',
+        success: successCount,
+        failed: failCount,
+        skipped: skippedCount,
+      })
     } catch (error) {
       logError(error)
       this.handleError(error, res)

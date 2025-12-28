@@ -11,6 +11,11 @@ import { useWordList } from '../../hooks/useWordList'
 
 // Mock dependencies
 jest.mock('../../hooks/useWordList')
+jest.mock('@tanstack/react-query', () => ({
+  useQueryClient: jest.fn().mockReturnValue({
+    invalidateQueries: jest.fn(),
+  }),
+}))
 jest.mock('../../utils/localStorage', () => ({
   getNumber: jest.fn().mockReturnValue(1),
   setNumber: jest.fn(),
@@ -25,7 +30,7 @@ const renderWordList = (storeState: any) => {
   return render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <MemoryRouter>
+        <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
           <WordList />
         </MemoryRouter>
       </ThemeProvider>

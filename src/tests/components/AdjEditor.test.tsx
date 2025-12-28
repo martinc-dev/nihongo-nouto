@@ -8,10 +8,12 @@ import { theme } from '../../themes/theme'
 import AdjEditor from '../../components/WordDashboard/adj/AdjEditor'
 import { useWordDetail, useSaveWordDetail } from '../../hooks/useWordDetail'
 import { useAdjFromJisho } from '../../hooks/useAdjFromJisho'
+import { useWordDupe } from '../../hooks/useWordDupe'
 
 // Mock hooks
 jest.mock('../../hooks/useWordDetail')
 jest.mock('../../hooks/useAdjFromJisho')
+jest.mock('../../hooks/useWordDupe')
 
 // Mock Search Input
 jest.mock('src/components/WordDashboard/editor/WordSearchInput', () =>
@@ -72,13 +74,16 @@ describe('AdjEditor', () => {
       availableSenses: [],
     }
     ;(useAdjFromJisho as jest.Mock).mockReturnValue(mockUseAdjFromJisho)
+    ;(useWordDupe as jest.Mock).mockReturnValue({
+      refetch: jest.fn().mockResolvedValue({ data: { data: [] } }),
+    })
   })
 
   it('should render create form', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <AdjEditor />
       </MemoryRouter>,
     )
@@ -90,7 +95,7 @@ describe('AdjEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <AdjEditor />
       </MemoryRouter>,
     )
@@ -116,7 +121,7 @@ describe('AdjEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <AdjEditor />
       </MemoryRouter>,
     )
@@ -153,7 +158,7 @@ describe('AdjEditor', () => {
     ;(useAdjFromJisho as jest.Mock).mockReturnValue(mockUseAdjFromJisho)
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <AdjEditor />
       </MemoryRouter>,
     )
@@ -176,7 +181,10 @@ describe('AdjEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: mockWord, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter initialEntries={['/adj/123']}>
+      <MemoryRouter
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+        initialEntries={['/adj/123']}
+      >
         <AdjEditor wordId='123' />
       </MemoryRouter>,
     )

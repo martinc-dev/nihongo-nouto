@@ -10,10 +10,11 @@ import ListItemText from '@mui/material/ListItemText'
 import Checkbox from '@mui/material/Checkbox'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import AddIcon from '@mui/icons-material/Add'
 import SortIcon from '@mui/icons-material/Sort'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+
+import WordListActionButtons from './WordListActionButtons'
 
 const PREFIX = 'WordListTableHead'
 
@@ -242,14 +243,8 @@ const WordListTableHead = ({
           </List>
         </Menu>
       </div>
-      <Button
-        className={classes.button}
-        onClick={onCreateClick}
-        size='small'
-        startIcon={<AddIcon />}
-      >
-        Create
-      </Button>
+
+      <WordListActionButtons onCreateClick={onCreateClick} />
     </Root>
   )
 }

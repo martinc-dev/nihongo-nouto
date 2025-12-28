@@ -22,7 +22,7 @@ describe('Header', () => {
     render(
       <Provider store={store}>
         <ThemeProvider theme={mockTheme}>
-          <MemoryRouter>
+          <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
             <Header />
           </MemoryRouter>
         </ThemeProvider>

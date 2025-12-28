@@ -12,6 +12,7 @@ import InputLabel from '@mui/material/InputLabel'
 
 import { useWordDetail, useSaveWordDetail } from 'src/hooks/useWordDetail'
 import { useWordFromJisho } from 'src/hooks/useWordFromJisho'
+import { useWordDupe } from 'src/hooks/useWordDupe'
 import { OtherWord, JishoSlugOption, JishoWordOption } from 'src/types/words'
 import WordTitle from 'src/components/WordDashboard/WordTitle'
 import { colors } from 'src/themes/colors'
@@ -50,11 +51,17 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
 
   const [searchInputValue, setSearchInputValue] = useState('')
   const [selectedSenseIndex, setSelectedSenseIndex] = useState<number | null>(null)
+  const [dupeError, setDupeError] = useState<string | null>(null)
 
   const [formData, setFormData] = useState<Partial<OtherWord>>({
     word: '',
     hiragana: '',
     sense: '',
+  })
+
+  // Setup dupe check query (initially disabled)
+  const { refetch: checkDupe } = useWordDupe(formData.word, formData.sense, {
+    enabled: false,
   })
 
   useEffect(() => {
@@ -85,6 +92,31 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
       ...prev,
       [field]: value,
     }))
+    // Clear error when user changes value, until they blur again
+    setDupeError(null)
+  }
+
+  const handleBlur = async () => {
+    if (formData.word && formData.sense) {
+      const result = await checkDupe()
+
+      if (result.data?.data) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const dupes = result.data.data.filter((item: any) => {
+          if (actualWordId) {
+            return String(item.id) !== String(actualWordId)
+          }
+
+          return true
+        })
+
+        if (dupes.length > 0) {
+          setDupeError('This word/sense combination already exists.')
+        } else {
+          setDupeError(null)
+        }
+      }
+    }
   }
 
   const handleSave = () => {
@@ -318,7 +350,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
           <div className={editorClasses.editorActions}>
             <Button
               className={editorClasses.saveButton}
-              disabled={saveWordMutation.isPending || !actualWordId}
+              disabled={saveWordMutation.isPending || !actualWordId || !!dupeError}
               onClick={handleSave}
               type='button'
             >
@@ -342,8 +374,11 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
             <span className={editorClasses.label}>Word</span>
             <TextField
               className={editorClasses.formField}
+              error={!!dupeError}
               fullWidth
+              helperText={dupeError}
               label='Word'
+              onBlur={handleBlur}
               onChange={e => handleFieldChange('word', e.target.value)}
               value={formData.word || ''}
               variant='outlined'
@@ -375,9 +410,12 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
         </Typography>
         <TextField
           className={editorClasses.senseField}
+          error={!!dupeError}
           fullWidth
+          helperText={dupeError}
           label='Sense'
           multiline
+          onBlur={handleBlur}
           onChange={e => handleFieldChange('sense', e.target.value)}
           rows={UI_DIMENSIONS.FORM_FIELD_ROWS}
           value={formData.sense || ''}
@@ -388,7 +426,7 @@ const OtherEditor = ({ wordId = null }: OtherEditorProps) => {
         <div className={editorClasses.editorActions}>
           <Button
             className={editorClasses.saveButton}
-            disabled={saveWordMutation.isPending}
+            disabled={saveWordMutation.isPending || !!dupeError}
             onClick={handleSave}
             type='button'
           >

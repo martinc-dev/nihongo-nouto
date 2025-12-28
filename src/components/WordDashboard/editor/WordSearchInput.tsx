@@ -71,28 +71,34 @@ const WordSearchInput = ({
           sx={{ '& .MuiOutlinedInput-input': { color: colors.shibafuGreen } }}
         />
       )}
-      renderOption={(props, option) => (
-        <Box
-          component='li'
-          sx={{
-            '&.MuiBox-root.MuiAutocomplete-option': { justifyContent: 'space-between' },
-          }}
-          {...props}
-        >
-          <Typography
-            sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_LARGE, color: colors.shibafuGreen }}
-            variant='subtitle1'
+      renderOption={(props, option) => {
+        // eslint-disable-next-line react/prop-types
+        const { key, ...otherProps } = props
+
+        return (
+          <Box
+            component='li'
+            key={key}
+            sx={{
+              '&.MuiBox-root.MuiAutocomplete-option': { justifyContent: 'space-between' },
+            }}
+            {...otherProps}
           >
-            {typeof option === 'string' ? option : option.word}
-          </Typography>
-          <Typography
-            sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_MEDIUM }}
-            variant='subtitle1'
-          >
-            {typeof option === 'string' ? '' : option.reading}
-          </Typography>
-        </Box>
-      )}
+            <Typography
+              sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_LARGE, color: colors.shibafuGreen }}
+              variant='subtitle1'
+            >
+              {typeof option === 'string' ? option : option.word}
+            </Typography>
+            <Typography
+              sx={{ fontSize: UI_DIMENSIONS.FONT_SIZE_MEDIUM }}
+              variant='subtitle1'
+            >
+              {typeof option === 'string' ? '' : option.reading}
+            </Typography>
+          </Box>
+        )
+      }}
       sx={{ width: UI_DIMENSIONS.WORD_SEARCH_INPUT_WIDTH }}
       value={{ word }}
     />
