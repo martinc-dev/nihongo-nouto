@@ -77,7 +77,7 @@ The `docker-compose.yml` file sets up two services:
     *   `public/`
     *   `craco.config.js`
     *   `tsconfig.json`
-    *   `devnotes/nihongo_nouto_backup/note/nihongo-nouto_2025-12-24.sql` (Initial DB Seed)
+    *   `nihongo-nouto_db_seed_v100.sql` (Initial DB Seed)
 
 2.  **Configure Environment (Optional)**:
     You can customize the environment variables in `docker-compose.yml` if you want to change passwords or ports.
@@ -106,7 +106,7 @@ The `docker-compose.yml` file sets up two services:
 ### Database Persistence & Backups
 
 *   **Persistence**: Database data is stored in a Docker volume named `db_data`. This ensures data persists even if you restart or remove containers.
-*   **Initial Seed**: The `docker-compose.yml` is configured to automatically seed the database with `nihongo-nouto_2025-12-24.sql` on the **first run only** (when the volume is empty).
+*   **Initial Seed**: The `docker-compose.yml` is configured to automatically seed the database with `nihongo-nouto_db_seed_v100.sql` on the **first run only** (when the volume is empty).
 
 ### Updating the Application
 
