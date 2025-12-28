@@ -20,21 +20,13 @@ yarn install
 ### 2. Configuration
 
 **Environment Variables:**
-This project uses environment variables for configuration. You can set them in `server/env.ts` directly for dev (though creating a `.env` file or environment variables is preferred for production).
+1. Copy the example environment file:
+   ```bash
+   cp .env_example .env
+   ```
+2. Open `.env` and modify the NODE_ENV values (development vs production), and other values if needed (the defaults usually work for local development).
 
-Example default configuration (`server/env.ts`):
-```typescript
-  server: {
-    port: Number(process.env.PORT) || 3000,
-  },
-  database: {
-    username: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'nihongo-nouto',
-    host: process.env.DB_HOST || 'localhost',
-    port: Number(process.env.DB_PORT) || 3306,
-    name: process.env.DB_NAME || 'nihongo-nouto',
-  },
-```
+The application reads configuration from this `.env` file.
 
 ### 3. Running Development Server
 
@@ -67,28 +59,15 @@ The `docker-compose.yml` file sets up two services:
 
 ### Deploying to a Local Server / NAS
 
-1.  **Transfer Files**: Copy the project files to your server (e.g., via SSH, SCP, or Git). You primarily need:
-    *   `Dockerfile`
-    *   `docker-compose.yml`
-    *   `package.json`
-    *   `yarn.lock`
-    *   `server/`
-    *   `src/`
-    *   `public/`
-    *   `craco.config.js`
-    *   `tsconfig.json`
-    *   `nihongo-nouto_db_seed_v100.sql` (Initial DB Seed)
-
-2.  **Configure Environment (Optional)**:
-    You can customize the environment variables in `docker-compose.yml` if you want to change passwords or ports.
+1.  **Transfer Files**: Copy the project files to your server (e.g., via SSH, SCP, or Git).
+2.  **Configure Environment**:
+    Create a `.env` file from the example:
     
-    ```yaml
-    environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
-      - MYSQL_USER=nn_user
-      - MYSQL_PASSWORD=nn_password
-      - MYSQL_DATABASE=nihongo-nouto
+    ```bash
+    cp .env_example .env
     ```
+    
+    Edit `.env` to set your desired passwords, ports, and database settings. The `docker-compose.yml` file will automatically pick up these values.
 
 3.  **Build and Run**:
     Navigate to the directory containing `docker-compose.yml` on your server and run:
