@@ -1,34 +1,22 @@
-import {
-  useQuery,
-  useMutation,
-  UseQueryResult,
-  UseMutationResult,
-} from '@tanstack/react-query'
+import { useMutation, UseMutationResult } from '@tanstack/react-query'
 import { useSelector } from 'react-redux'
+import camelCase from 'camelcase-keys'
 
 import { sendGet } from 'src/utils/requests'
 import endpoints from 'src/constants/endpoints'
 import resourceTypes from 'src/constants/resourceTypes'
-import { TIME } from 'src/constants/times'
 import { HTTP_STATUS } from 'src/constants/httpStatus'
 import { getCurrentContentType } from 'src/selectors/nav'
 import { RootState } from 'src/types/redux'
 import { ResourceTypeKey } from 'src/types'
 import { parseVerbProp, parseAdjProp } from 'src/utils/jisho'
-import camelCase from 'camelcase-keys'
 import {
-  WordDupeResult,
   JishoRawResponse,
   JishoWordSearchResult,
   JishoSense,
   JishoSlugOption,
   ApiError,
 } from 'src/types/words'
-
-interface FetchWordDupeParams {
-  typeKey: ResourceTypeKey
-  word: string
-}
 
 interface FetchWordSearchParams {
   typeKey: ResourceTypeKey
@@ -160,30 +148,6 @@ const aggregateJisho = ({
   return result
 }
 
-const fetchWordDupe = async ({
-  typeKey,
-  word,
-}: FetchWordDupeParams): Promise<WordDupeResult> => {
-  if (!word) {
-    throw new Error('No word defined within dupe search')
-  }
-
-  if (!typeKey || !(resourceTypes[typeKey]?.isMain ?? false)) {
-    throw new Error('Target resource is not searchable')
-  }
-
-  const response = await sendGet<WordDupeResult>({
-    url: endpoints.getWordDupeSearchUrl({ typeKey }),
-    data: { word },
-  })
-
-  if (response.error) {
-    throw response.error
-  }
-
-  return response as unknown as WordDupeResult
-}
-
 const fetchWordSearch = async ({
   typeKey,
   word,
@@ -216,30 +180,6 @@ const fetchWordSearch = async ({
   }
 
   return result
-}
-
-export const useWordDupe = (
-  word: string | null | undefined,
-): UseQueryResult<WordDupeResult, ApiError> => {
-  const currentContentType = useSelector((state: RootState) =>
-    getCurrentContentType(state),
-  )
-
-  return useQuery({
-    queryKey: ['wordDupe', currentContentType, word],
-    queryFn: () => {
-      if (!currentContentType || !word) {
-        throw new Error('Missing content type or word')
-      }
-
-      return fetchWordDupe({ typeKey: currentContentType, word })
-    },
-    enabled:
-      !!currentContentType &&
-      !!word &&
-      (resourceTypes[currentContentType]?.isMain ?? false),
-    staleTime: TIME.FIVE_MINUTES_MS,
-  })
 }
 
 export const useWordSearch = (): UseMutationResult<

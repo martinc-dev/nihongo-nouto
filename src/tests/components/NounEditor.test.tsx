@@ -7,10 +7,12 @@ import { theme } from '../../themes/theme'
 import NounEditor from '../../components/WordDashboard/noun/NounEditor'
 import { useWordDetail, useSaveWordDetail } from '../../hooks/useWordDetail'
 import { useWordFromJisho } from '../../hooks/useWordFromJisho'
+import { useWordDupe } from '../../hooks/useWordDupe'
 
 // Mock hooks
 jest.mock('../../hooks/useWordDetail')
 jest.mock('../../hooks/useWordFromJisho')
+jest.mock('../../hooks/useWordDupe')
 
 // Mock container
 jest.mock('../../components/WordDashboard/WordEditorContainer', () => ({
@@ -27,6 +29,7 @@ jest.mock('../../components/WordDashboard/WordEditorContainer', () => ({
     cancelButton: 'cancel-button',
     tagsContainer: 'tags-container',
     tagChip: 'tag-chip',
+    selectField: 'select-field',
   },
 }))
 
@@ -58,13 +61,16 @@ describe('NounEditor', () => {
       availableSenses: [],
     }
     ;(useWordFromJisho as jest.Mock).mockReturnValue(mockUseWordFromJisho)
+    ;(useWordDupe as jest.Mock).mockReturnValue({
+      refetch: jest.fn().mockResolvedValue({ data: { data: [] } }),
+    })
   })
 
   it('should render create form correctly', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <NounEditor />
       </MemoryRouter>,
     )
@@ -77,7 +83,7 @@ describe('NounEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <NounEditor />
       </MemoryRouter>,
     )
@@ -105,7 +111,10 @@ describe('NounEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: mockNoun, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter initialEntries={['/noun/1']}>
+      <MemoryRouter
+        future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+        initialEntries={['/noun/1']}
+      >
         <Routes>
           <Route element={<NounEditor />} path='/noun/:wordId' />
         </Routes>
@@ -120,7 +129,7 @@ describe('NounEditor', () => {
     ;(useWordDetail as jest.Mock).mockReturnValue({ data: null, isLoading: false })
 
     renderWithTheme(
-      <MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
         <NounEditor />
       </MemoryRouter>,
     )

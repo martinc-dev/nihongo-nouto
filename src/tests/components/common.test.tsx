@@ -21,7 +21,9 @@ const renderWithProviders = (ui: React.ReactElement) => {
   return render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
-        <MemoryRouter>{ui}</MemoryRouter>
+        <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+          {ui}
+        </MemoryRouter>
       </ThemeProvider>
     </Provider>,
   )

@@ -9,10 +9,18 @@ import {
   useDeleteWordDetail,
 } from '../../hooks/useWordDetail'
 import * as requests from '../../utils/requests'
-import { BrowserRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 
 // Mock requests
 jest.mock('../../utils/requests')
+
+// Mock useNavigate
+const mockNavigate = jest.fn()
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}))
 
 const mockStore = configureStore([])
 const queryClient = new QueryClient({
@@ -26,7 +34,9 @@ const queryClient = new QueryClient({
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <Provider store={mockStore({ nav: { currentContentType: 'NOUN' } })}>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        {children}
+      </MemoryRouter>
     </QueryClientProvider>
   </Provider>
 )

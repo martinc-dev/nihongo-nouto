@@ -61,7 +61,10 @@ const renderApp = (initialRoute = '/') => {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <MemoryRouter initialEntries={[initialRoute]}>
+          <MemoryRouter
+            future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+            initialEntries={[initialRoute]}
+          >
             <App />
           </MemoryRouter>
         </ThemeProvider>

@@ -9,6 +9,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(express.text({ type: 'text/csv', limit: '50mb' }))
 app.get('/status', (_req: Request, res: Response) => res.status(200).json('OK'))
 
 app.use('/api', router)

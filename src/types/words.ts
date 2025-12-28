@@ -167,7 +167,7 @@ export interface JishoWordSearchResult {
   slugOptions?: JishoSlugOption[]
 }
 
-export type WordDupeResult = WordListItem[]
+export type WordDupeResult = PaginatedResponse<WordListItem>
 
 export interface SearchData {
   wordOptions?: JishoWordOption[]

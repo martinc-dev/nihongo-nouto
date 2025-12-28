@@ -27,7 +27,9 @@ const renderWithProviders = (
 
   return render(
     <Provider store={store}>
-      <MemoryRouter>{ui}</MemoryRouter>
+      <MemoryRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        {ui}
+      </MemoryRouter>
     </Provider>,
   )
 }

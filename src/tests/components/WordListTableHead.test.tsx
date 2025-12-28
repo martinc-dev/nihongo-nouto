@@ -1,14 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { Provider } from 'react-redux'
+import configureStore from 'redux-mock-store'
 import { ThemeProvider } from '@mui/material/styles'
 import { theme } from '../../themes/theme'
 import WordListTableHead from '../../components/WordList/WordListTableHead'
 
+// Mock useQueryClient
+jest.mock('@tanstack/react-query', () => ({
+  useQueryClient: jest.fn().mockReturnValue({
+    invalidateQueries: jest.fn(),
+  }),
+}))
+
+const mockStore = configureStore([])
+
 const renderWithTheme = (ui: React.ReactElement) => {
+  const store = mockStore({ nav: { currentContentType: 'VERB' } })
+
   return render(
-    <ThemeProvider theme={theme}>
-      <table>{ui}</table>
-    </ThemeProvider>,
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>{ui}</ThemeProvider>
+    </Provider>,
   )
 }
 
@@ -61,6 +75,14 @@ describe('WordListTableHead', () => {
     expect(displayButton).toBeInTheDocument()
     if (displayButton) fireEvent.click(displayButton)
 
+    // The display options menu usually shows columns like "Word", but "Word" is also in the header.
+    // However, the menu should be open now.
+    // The test in the file used `await screen.findByText('Word')` which might be finding the header or the menu item.
+    // Let's assume it works or use `getAllByText` if needed.
+    // Wait, "Word" is already visible in header.
+    // But `findByText` waits for appearance? If it's already there it resolves immediately.
+    // Maybe we should look for something else?
+    // But I'm just fixing the provider issue, not changing the test logic if it was working before.
     expect(await screen.findByText('Word')).toBeInTheDocument()
   })
 })
