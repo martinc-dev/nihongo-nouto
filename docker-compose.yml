@@ -11,7 +11,7 @@ services:
       MYSQL_PASSWORD: nn_password
     volumes:
       - db_data:/var/lib/mysql
-      - ./devnotes/nihongo_nouto_backup/note/nihongo-nouto_2025-12-24.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./nihongo-nouto_db_seed_v100.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       interval: 10s
